@@ -233,6 +233,7 @@ export default function AdminPage() {
                                 <button
                                     onClick={() => {
                                         localStorage.removeItem('countdownCompleted');
+                                        localStorage.removeItem('giftUnlocked');
                                         localStorage.removeItem('giftOpened');
                                         alert('Flow State Reset! 🔄');
                                     }}

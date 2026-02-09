@@ -31,10 +31,11 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
             document.cookie.includes('admin_bypass=true')
 
         const savedUnlock = localStorage.getItem('giftUnlocked') === 'true'
-        const now = new Date()
-        const target = new Date(targetDate)
 
-        if (savedUnlock || now >= target || (isPreview && isAdmin)) {
+        // ONLY skip if explicitly saved or admin preview. 
+        // We move the date check (now >= target) to the timer effect 
+        // to support the "run once then unlock" behavior for late-comers.
+        if (savedUnlock || (isPreview && isAdmin)) {
             setIsGiftUnlocked(true)
         }
 
