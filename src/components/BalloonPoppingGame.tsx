@@ -19,7 +19,7 @@ export default function BalloonPoppingGame() {
     const [score, setScore] = useState(0)
     const [gameOver, setGameOver] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
-    const requestRef = useRef<number>()
+    const requestRef = useRef<number | null>(null)
     const nextId = useRef(0)
 
     const SPAWN_RATE = 1000 // ms

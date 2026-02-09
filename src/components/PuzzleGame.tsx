@@ -151,7 +151,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, onComplete }: Puz
                                 key={tileId}
                                 layout
                                 onClick={() => handleTileClick(visualIndex)}
-                                whileHover={{ scale: 0.98, brightness: 1.1 }}
+                                whileHover={{ scale: 0.98, filter: "brightness(1.1)" }}
                                 whileTap={{ scale: 0.95 }}
                                 className="relative cursor-pointer rounded-lg overflow-hidden border border-white/10 shadow-lg group"
                                 style={{

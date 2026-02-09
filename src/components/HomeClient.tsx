@@ -89,7 +89,7 @@ interface Song {
     url: string;
 }
 
-export default function HomeClient({ content, gallery, playlist }: { content: Content, gallery: GalleryItem[], playlist: Song[] }) {
+export default function HomeClient({ content, gallery, playlist, skipIntro = false }: { content: Content, gallery: GalleryItem[], playlist: Song[], skipIntro?: boolean }) {
     const { setIsPlaying, setMusicPaused, setUnlocked, isUnlocked } = useMusic()
     const router = useRouter()
     const [playing, setPlaying] = useState(false)

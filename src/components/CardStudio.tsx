@@ -25,7 +25,7 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                shapes: ['heart'],
+                shapes: ['circle'],
                 colors: ['#ec4899', '#db2777', '#f472b6']
             });
             confetti({
@@ -33,7 +33,7 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                shapes: ['heart'],
+                shapes: ['circle'],
                 colors: ['#ec4899', '#db2777', '#f472b6']
             });
 

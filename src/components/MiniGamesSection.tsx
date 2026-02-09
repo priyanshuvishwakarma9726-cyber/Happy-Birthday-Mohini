@@ -83,7 +83,7 @@ export default function MiniGamesSection({ gallery, content, flags }: Props) {
                         >
                             <div className="w-full max-w-sm"><Candle /></div>
                             <div className="w-full max-w-sm rotate-2 hover:rotate-0 transition-transform">
-                                <ScratchCard secretWish={content.message_body ? "Open your heart... ❤️" : "You are magical! ✨"} />
+                                <ScratchCard prizeText={content.message_body ? "Open your heart... ❤️" : "You are magical! ✨"} content={content} />
                             </div>
                             <div className="flex flex-col items-center gap-4">
                                 <ChaosButton />
