@@ -12,9 +12,9 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
     const { setUnlocked, setIsPlaying, restartMusic } = useMusic()
 
     // States
+    const [mounted, setMounted] = useState(false)
     const [isGiftUnlocked, setIsGiftUnlocked] = useState(false)
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
-    const [verifying, setVerifying] = useState(true)
     const [loading, setLoading] = useState(false)
 
     // Admin States
@@ -36,12 +36,11 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
         const savedUnlock = localStorage.getItem('giftUnlocked') === 'true'
 
         // giftUnlocked is ONLY true on load if previously saved OR it's an intentional admin preview.
-        // Public users MUST see the countdown initially if not already saved.
         if (savedUnlock || isAdmin) {
             setIsGiftUnlocked(true)
         }
 
-        setVerifying(false)
+        setMounted(true)
         router.prefetch('/home')
         setIsPlaying(false)
     }, [targetDate, router, setIsPlaying])
@@ -135,7 +134,7 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
         }, 1200)
     }
 
-    if (verifying || loading) return <PremiumLoader />
+    if (!mounted || loading) return <PremiumLoader />
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center p-4 text-center cursor-default overflow-hidden relative font-sans text-white bg-black">
