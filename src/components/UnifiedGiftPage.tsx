@@ -26,16 +26,18 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
         // 1. Initial State Check
         const params = new URLSearchParams(window.location.search)
         const isPreview = params.get('preview') === 'true'
-        const isAdmin =
+
+        // Stricter admin check
+        const isAdmin = isPreview && (
             localStorage.getItem('admin_auth') === 'true' ||
-            document.cookie.includes('admin_bypass=true')
+            document.cookie.split(';').some(c => c.trim() === 'admin_bypass=true')
+        )
 
         const savedUnlock = localStorage.getItem('giftUnlocked') === 'true'
 
-        // ONLY skip if explicitly saved or admin preview. 
-        // We move the date check (now >= target) to the timer effect 
-        // to support the "run once then unlock" behavior for late-comers.
-        if (savedUnlock || (isPreview && isAdmin)) {
+        // giftUnlocked is ONLY true on load if previously saved OR it's an intentional admin preview.
+        // Public users MUST see the countdown initially if not already saved.
+        if (savedUnlock || isAdmin) {
             setIsGiftUnlocked(true)
         }
 
@@ -49,30 +51,28 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
 
         const timer = setInterval(() => {
             const now = new Date()
-            let target = new Date(targetDate)
+            let baseDate = new Date(targetDate)
 
-            // 1. Fallback / Validation: If invalid date, default to upcoming March 30
-            if (isNaN(target.getTime())) {
-                target = new Date(now.getFullYear(), 2, 30)
+            // 1. Fallback / Validation: If invalid date, default to March 30
+            if (isNaN(baseDate.getTime())) {
+                baseDate = new Date(now.getFullYear(), 2, 30)
             }
 
-            // 2. Logic: If the date provided is in the past, assume it's for the upcoming next year
-            // (e.g. if target is 30 March 2025 and today is Feb 2026, target becomes 30 March 2026)
-            if (now > target) {
-                // Try increasing year until it's in the future
-                const targetMonth = target.getMonth()
-                const targetDay = target.getDate()
-                target = new Date(now.getFullYear(), targetMonth, targetDay)
-                if (now > target) {
-                    target.setFullYear(now.getFullYear() + 1)
-                }
-            }
+            // 2. Logic: Always target the birthday in the CURRENT year.
+            // This ensures if it's currently Feb and birthday is March, we show the countdown.
+            // If it's currently April and birthday was March, diff will be 0 and it unlocks.
+            const tMonth = baseDate.getMonth()
+            const tDay = baseDate.getDate()
+            const target = new Date(now.getFullYear(), tMonth, tDay)
 
             const diff = Math.max(0, (target.getTime() - now.getTime()) / 1000)
 
             if (diff <= 0) {
+                // Birthday is today or has passed this year
                 setIsGiftUnlocked(true)
                 localStorage.setItem('giftUnlocked', 'true')
+                // Set cookie for middleware bypass
+                document.cookie = "gift_unlocked=true; path=/; max-age=31536000"
                 clearInterval(timer)
                 return
             }
@@ -110,6 +110,7 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
                 headers: { 'Content-Type': 'application/json' }
             })
             if (res.ok) {
+                // Force reload to apply cookie and bypass middleware
                 window.location.href = '/admin'
             } else {
                 alert('Nah, wrong password! 😜')
@@ -118,12 +119,20 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
     }
 
     const handleOpenGift = () => {
-        setLoading(true)
+        // 1. Persist state
         localStorage.setItem('giftOpened', 'true')
+        document.cookie = "gift_unlocked=true; path=/; max-age=31536000"
+
+        // 2. Prep music & transition
+        setLoading(true)
         restartMusic()
         setIsPlaying(true)
         setUnlocked(true)
-        setTimeout(() => router.push('/home'), 1200)
+
+        // 3. Navigate with slight delay for transition feel
+        setTimeout(() => {
+            router.push('/home')
+        }, 1200)
     }
 
     if (verifying || loading) return <PremiumLoader />
@@ -209,14 +218,6 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
                             </motion.div>
                         )}
 
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 2, duration: 2 }}
-                            className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-white/20 text-xs select-none whitespace-nowrap"
-                        >
-                            Type "mohini" to unlock instantly (Admin only)
-                        </motion.div>
                     </motion.div>
                 ) : (
                     <motion.div

@@ -235,6 +235,7 @@ export default function AdminPage() {
                                         localStorage.removeItem('countdownCompleted');
                                         localStorage.removeItem('giftUnlocked');
                                         localStorage.removeItem('giftOpened');
+                                        document.cookie = "gift_unlocked=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC";
                                         alert('Flow State Reset! 🔄');
                                     }}
                                     className="p-4 rounded-xl border border-blue-500/30 bg-blue-500/10 text-blue-400 text-[10px] font-black uppercase tracking-widest hover:bg-blue-500/20 transition-all"

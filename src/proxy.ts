@@ -15,13 +15,15 @@ export default function proxy(request: NextRequest) {
         return NextResponse.next()
     }
 
-    const adminBypass = request.cookies.get('admin_bypass')
-    const isAdmin = adminBypass?.value === 'true'
-
     // 2. Normalize pathname (remove trailing slash for comparison)
     const normalizedPath = pathname.endsWith('/') && pathname !== '/'
         ? pathname.slice(0, -1)
         : pathname
+
+    const adminBypass = request.cookies.get('admin_bypass')
+    const giftUnlocked = request.cookies.get('gift_unlocked')
+    const isAdmin = adminBypass?.value === 'true'
+    const isUnlockedByCookie = giftUnlocked?.value === 'true'
 
     // 3. Date Logic: Locked until March 30th (IST)
     const now = new Date()
@@ -34,8 +36,8 @@ export default function proxy(request: NextRequest) {
     const isLocked = (currentMonth < 2) || (currentMonth === 2 && currentDay < 30)
 
     // 4. Access Logic
-    // Admin always allowed
-    if (normalizedPath.startsWith('/admin') || isAdmin) {
+    // Admin or Unlocked users allowed everywhere
+    if (normalizedPath.startsWith('/admin') || isAdmin || isUnlockedByCookie) {
         return NextResponse.next()
     }
 
