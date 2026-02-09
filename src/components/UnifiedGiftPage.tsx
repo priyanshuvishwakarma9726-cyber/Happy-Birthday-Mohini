@@ -49,7 +49,25 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
 
         const timer = setInterval(() => {
             const now = new Date()
-            const target = new Date(targetDate)
+            let target = new Date(targetDate)
+
+            // 1. Fallback / Validation: If invalid date, default to upcoming March 30
+            if (isNaN(target.getTime())) {
+                target = new Date(now.getFullYear(), 2, 30)
+            }
+
+            // 2. Logic: If the date provided is in the past, assume it's for the upcoming next year
+            // (e.g. if target is 30 March 2025 and today is Feb 2026, target becomes 30 March 2026)
+            if (now > target) {
+                // Try increasing year until it's in the future
+                const targetMonth = target.getMonth()
+                const targetDay = target.getDate()
+                target = new Date(now.getFullYear(), targetMonth, targetDay)
+                if (now > target) {
+                    target.setFullYear(now.getFullYear() + 1)
+                }
+            }
+
             const diff = Math.max(0, (target.getTime() - now.getTime()) / 1000)
 
             if (diff <= 0) {

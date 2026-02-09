@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 async function getGiftData() {
     try {
-        const rows: any = await query('SELECT key_name, value FROM site_content WHERE key_name IN ("intro_audio_url", "recipient_name", "birthday_date")');
+        const rows: any = await query('SELECT key_name, value FROM site_content WHERE key_name IN ("intro_audio_url", "recipient_name", "birthday_date", "bi-thday_date")');
         const data: Record<string, string> = {};
         if (Array.isArray(rows)) {
             rows.forEach(r => data[r.key_name] = r.value);
@@ -19,11 +19,14 @@ async function getGiftData() {
 
 export default async function GiftPage() {
     const data = await getGiftData()
+    // Prioritize birthday_date then bi-thday_date
+    const finalDate = data.birthday_date || data['bi-thday_date'] || ""
+
     return (
         <UnifiedGiftPage
             introAudioUrl={data.intro_audio_url}
             recipientName={data.recipient_name || "Mohini"}
-            targetDate={data.birthday_date || "2025-03-30T00:00"}
+            targetDate={finalDate}
         />
     )
 }
