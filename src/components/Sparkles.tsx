@@ -19,7 +19,7 @@ interface Sparkle {
 const DEFAULT_COLOR = '#FFC700';
 const generateSparkle = (color: string = DEFAULT_COLOR): Sparkle => {
     const sparkle = {
-        id: String(random(10000, 99999)),
+        id: `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`,
         createdAt: Date.now(),
         color,
         size: random(10, 20),
@@ -39,15 +39,16 @@ export const Sparkles = ({ color = DEFAULT_COLOR, children, ...delegated }: { co
         const interval = setInterval(() => {
             const now = Date.now();
             const sparkle = generateSparkle(color);
-            const nextSparkles = sparkles.filter((sp) => {
-                const delta = now - sp.createdAt;
-                return delta < 750;
+            setSparkles(prev => {
+                const nextSparkles = prev.filter((sp) => {
+                    const delta = now - sp.createdAt;
+                    return delta < 750;
+                });
+                return [...nextSparkles, sparkle];
             });
-            nextSparkles.push(sparkle);
-            setSparkles(nextSparkles);
-        }, 200); // Frequency of sparkles from 50 to 1000
+        }, 200);
         return () => clearInterval(interval);
-    }, [sparkles, color]);
+    }, [color]);
 
     return (
         <span className="relative inline-block" {...delegated}>

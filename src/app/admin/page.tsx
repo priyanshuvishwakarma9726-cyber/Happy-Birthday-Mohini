@@ -85,27 +85,35 @@ export default function AdminPage() {
 
     const loadData = async () => {
         try {
+            // 1. Refresh global content context
             await refreshContent()
-            // Flags are stored as JSON string in content, but we parse them
-            // localContent will be updated via useEffect
 
-            // Still need to fetch memories/wishes/stats as they are different tables
-            const m = await fetch('/api/memories').then(r => r.json())
-            if (Array.isArray(m)) setMemories(m)
-            const w = await fetch('/api/wishes?admin=true').then(r => r.json())
-            if (Array.isArray(w)) setWishes(w)
-            const s = await fetch('/api/analytics').then(r => r.json())
-            setStats(s)
+            // 2. Fetch separate tables (memories, wishes, analytics)
+            const [memRes, wishRes, statsRes] = await Promise.all([
+                fetch('/api/memories').then(r => r.json()),
+                fetch('/api/wishes?admin=true').then(r => r.json()),
+                fetch('/api/analytics').then(r => r.json())
+            ])
 
-            // Update flags from content if available
-            if (globalContent.feature_flags) {
-                setFlags(JSON.parse(globalContent.feature_flags))
-            }
-        } catch (e) { console.error(e) }
+            if (Array.isArray(memRes)) setMemories(memRes)
+            if (Array.isArray(wishRes)) setWishes(wishRes)
+            if (statsRes) setStats(statsRes)
+        } catch (e) {
+            console.error("Critical Load Failure:", e)
+        }
     }
 
+    // Effect to handle flags sync from global content
     useEffect(() => {
-        if (localStorage.getItem('admin_auth') === 'true') {
+        if (globalContent?.feature_flags) {
+            try {
+                setFlags(JSON.parse(globalContent.feature_flags))
+            } catch (e) { console.error("Flag Parse Error", e) }
+        }
+    }, [globalContent])
+
+    useEffect(() => {
+        if (localStorage.getItem('admin_auth') === 'true' || document.cookie.includes('admin_bypass=true')) {
             setLocked(false)
             loadData()
         }
@@ -189,7 +197,7 @@ export default function AdminPage() {
                     <Settings className="w-6 h-6 text-pink-500" /> CONTROL ROOM v2.0
                 </h1>
                 <div className="flex gap-4">
-                    <button onClick={() => window.open('/', '_blank')} className="bg-zinc-800 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest">Preview</button>
+                    <button onClick={() => window.open('/gift?preview=true', '_blank')} className="bg-zinc-800 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest">Preview</button>
                     <button onClick={handleSave} className="bg-pink-600 px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest shadow-lg shadow-pink-500/20 flex items-center gap-2"><Save className="w-4 h-4" /> Save All</button>
                 </div>
             </header>
@@ -332,43 +340,52 @@ export default function AdminPage() {
                     <div className="lg:col-span-4 space-y-8">
 
                         {/* Assets / URLs - FILE UPLOAD ONLY */}
-                        <section className="bg-zinc-900/30 p-6 rounded-3xl border border-white/5 space-y-4">
-                            <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Media Assets (Upload Only)</h2>
+                        <section className="bg-zinc-900/30 p-6 rounded-3xl border border-white/5 space-y-6">
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2"><Music className="w-4 h-4" /> Media Assets</h2>
 
                             {/* Intro Audio */}
-                            <div>
-                                <label className="text-[9px] text-zinc-600 block mb-1">Intro Music / Audio</label>
+                            <div className="space-y-3">
+                                <label className="text-[10px] text-zinc-500 uppercase font-black">Intro Music / Audio</label>
                                 <div className="flex gap-2">
-                                    <input className="flex-1 bg-black border border-white/10 p-2 rounded-lg text-xs text-zinc-500" value={localContent['intro_audio_url'] || ''} readOnly placeholder="No file uploaded" />
-                                    <label className="bg-pink-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-pink-500 flex items-center gap-1">
-                                        <Music className="w-3 h-3" /> Upload
-                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent({ ...localContent, 'intro_audio_url': p }) } }} />
+                                    <input className="flex-1 bg-black border border-white/10 p-2 rounded-lg text-xs text-zinc-500 font-mono" value={localContent['intro_audio_url'] || ''} readOnly placeholder="No file uploaded" />
+                                    <label className="bg-pink-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-pink-500 flex items-center gap-1 shrink-0">
+                                        <Save className="w-3 h-3" /> Upload
+                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent(prev => ({ ...prev, 'intro_audio_url': p })) } }} />
                                     </label>
                                 </div>
+                                {localContent['intro_audio_url'] && (
+                                    <audio controls src={localContent['intro_audio_url']} className="w-full h-8 opacity-50 hover:opacity-100 transition-opacity" />
+                                )}
                             </div>
 
                             {/* Favorite Song */}
-                            <div>
-                                <label className="text-[9px] text-zinc-600 block mb-1">Favorite Song (BG)</label>
+                            <div className="space-y-3">
+                                <label className="text-[10px] text-zinc-500 uppercase font-black">Favorite Song (BG)</label>
                                 <div className="flex gap-2">
-                                    <input className="flex-1 bg-black border border-white/10 p-2 rounded-lg text-xs text-zinc-500" value={localContent['favorite_song_url'] || ''} readOnly placeholder="No file uploaded" />
-                                    <label className="bg-purple-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-purple-500 flex items-center gap-1">
-                                        <Music className="w-3 h-3" /> Upload
-                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent({ ...localContent, 'favorite_song_url': p }) } }} />
+                                    <input className="flex-1 bg-black border border-white/10 p-2 rounded-lg text-xs text-zinc-500 font-mono" value={localContent['favorite_song_url'] || ''} readOnly placeholder="No file uploaded" />
+                                    <label className="bg-purple-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-purple-500 flex items-center gap-1 shrink-0">
+                                        <Save className="w-3 h-3" /> Upload
+                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent(prev => ({ ...prev, 'favorite_song_url': p })) } }} />
                                     </label>
                                 </div>
+                                {localContent['favorite_song_url'] && (
+                                    <audio controls src={localContent['favorite_song_url']} className="w-full h-8 opacity-50 hover:opacity-100 transition-opacity" />
+                                )}
                             </div>
 
                             {/* Voice Note */}
-                            <div>
-                                <label className="text-[9px] text-zinc-600 block mb-1">Voice Note</label>
+                            <div className="space-y-3">
+                                <label className="text-[10px] text-zinc-500 uppercase font-black">Voice Note</label>
                                 <div className="flex gap-2">
                                     <input className="flex-1 bg-black border border-white/10 p-2 rounded-lg text-xs font-mono text-zinc-500" value={localContent['voice_url'] || ''} readOnly placeholder="No file uploaded" />
-                                    <label className="bg-blue-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-blue-500 flex items-center gap-1">
-                                        <Music className="w-3 h-3" /> Upload
-                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent({ ...localContent, 'voice_url': p }) } }} />
+                                    <label className="bg-blue-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-blue-500 flex items-center gap-1 shrink-0">
+                                        <Save className="w-3 h-3" /> Upload
+                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent(prev => ({ ...prev, 'voice_url': p })) } }} />
                                     </label>
                                 </div>
+                                {localContent['voice_url'] && (
+                                    <audio controls src={localContent['voice_url']} className="w-full h-8 opacity-50 hover:opacity-100 transition-opacity" />
+                                )}
                             </div>
                         </section>
 

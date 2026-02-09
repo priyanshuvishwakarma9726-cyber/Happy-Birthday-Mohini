@@ -1,5 +1,5 @@
 import { query } from '@/lib/db'
-import GiftClient from '@/components/GiftClient'
+import UnifiedGiftPage from '@/components/UnifiedGiftPage'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
@@ -20,10 +20,10 @@ async function getGiftData() {
 export default async function GiftPage() {
     const data = await getGiftData()
     return (
-        <GiftClient
+        <UnifiedGiftPage
             introAudioUrl={data.intro_audio_url}
             recipientName={data.recipient_name || "Mohini"}
-            targetDate={data.birthday_date || "2025-10-18T00:00"}
+            targetDate={data.birthday_date || "2025-03-30T00:00"}
         />
     )
 }
