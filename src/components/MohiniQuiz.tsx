@@ -106,10 +106,18 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
         }
     }, [quizData])
 
-    const handleAnswer = (option: string) => {
-        if (feedback) return // Prevent multiple clicks
+    const [isTransitioning, setIsTransitioning] = useState(false)
 
-        const isCorrect = option === questions[current].a
+    // Reset transition state when question changes
+    useEffect(() => {
+        setIsTransitioning(false)
+    }, [current])
+
+    const handleAnswer = (option: string) => {
+        const activeQuestion = questions[current]
+        if (feedback || !activeQuestion) return // Prevent multiple clicks
+
+        const isCorrect = option === activeQuestion.a
         if (isCorrect) {
             setScore(prev => prev + 1)
             confetti({
@@ -121,12 +129,15 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
         }
 
         setFeedback({
-            msg: isCorrect ? questions[current].correct : questions[current].wrong,
+            msg: isCorrect ? activeQuestion.correct : activeQuestion.wrong,
             isCorrect
         })
     }
 
     const handleNext = () => {
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+
         setFeedback(null)
         if (current < questions.length - 1) {
             setCurrent(prev => prev + 1)
@@ -150,6 +161,9 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
         if (percentage >= 40) return "Okay okay, thoda effort dikha 😏"
         return "Tumhe Mohini pe research karni padegi 😭"
     }
+
+    // Safety check for active question
+    const activeQuestion = questions[current]
 
     if (!quizStarted) {
         return (
@@ -199,6 +213,9 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
             </div>
         )
     }
+
+    // Guard against index out of bounds during transition or empty data
+    if (!activeQuestion) return null;
 
     return (
         <div className="w-full max-w-xl mx-auto p-8 md:p-12 bg-zinc-900/80 backdrop-blur-xl rounded-[4rem] border-2 border-white/5 shadow-2xl relative overflow-hidden min-h-[500px] flex flex-col justify-between">
@@ -256,10 +273,10 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
                         className="flex-1 flex flex-col justify-center space-y-8"
                     >
                         <h3 className="text-2xl md:text-3xl font-black text-white text-center leading-tight">
-                            {questions[current].q}
+                            {activeQuestion.q}
                         </h3>
                         <div className="grid grid-cols-1 gap-4">
-                            {questions[current].options.map((opt, idx) => (
+                            {activeQuestion.options.map((opt, idx) => (
                                 <button
                                     key={idx}
                                     onClick={() => handleAnswer(opt)}
