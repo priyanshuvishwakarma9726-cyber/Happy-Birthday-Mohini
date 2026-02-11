@@ -61,3 +61,13 @@ CREATE TABLE IF NOT EXISTS wishbox (
     auto_reply TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS love_story (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    subtitle VARCHAR(255),
+    description TEXT,
+    icon VARCHAR(255),
+    order_index INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

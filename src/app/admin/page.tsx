@@ -79,6 +79,7 @@ export default function AdminPage() {
     const [memories, setMemories] = useState<any[]>([])
     const [wishes, setWishes] = useState<any[]>([])
     const [wishboxWishes, setWishboxWishes] = useState<any[]>([])
+    const [storyCards, setStoryCards] = useState<any[]>([])
     const [stats, setStats] = useState<any>({})
     const [uploading, setUploading] = useState(false)
     const [newKey, setNewKey] = useState('')
@@ -89,18 +90,20 @@ export default function AdminPage() {
             // 1. Refresh global content context
             await refreshContent()
 
-            // 2. Fetch separate tables (memories, wishes, analytics)
-            const [memRes, wishRes, statsRes, wishboxRes] = await Promise.all([
+            // 2. Fetch separate tables (memories, wishes, analytics, etc)
+            const [memRes, wishRes, statsRes, wishboxRes, storyRes] = await Promise.all([
                 fetch('/api/memories').then(r => r.json()),
                 fetch('/api/wishes?admin=true').then(r => r.json()),
                 fetch('/api/analytics').then(r => r.json()),
-                fetch('/api/wishbox').then(r => r.json())
+                fetch('/api/wishbox').then(r => r.json()),
+                fetch('/api/love-story').then(r => r.json())
             ])
 
             if (Array.isArray(memRes)) setMemories(memRes)
             if (Array.isArray(wishRes)) setWishes(wishRes)
             if (statsRes) setStats(statsRes)
             if (Array.isArray(wishboxRes)) setWishboxWishes(wishboxRes)
+            if (Array.isArray(storyRes)) setStoryCards(storyRes)
         } catch (e) {
             console.error("Critical Load Failure:", e)
         }
@@ -319,6 +322,58 @@ export default function AdminPage() {
                                     <label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Quiz Questions (JSON Array)</label>
                                     <textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-64 font-mono text-[10px]" value={localContent['quiz_data'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'quiz_data': e.target.value })} />
                                 </div>
+                            </div>
+                        </section>
+
+                        {/* Love Story Editor */}
+                        <section className="bg-rose-900/10 p-8 rounded-3xl border border-rose-500/20 space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-xl font-bold flex items-center gap-2 text-rose-400"><Heart className="w-5 h-5" /> Love Story Editor</h2>
+                                <button onClick={() => {
+                                    const newStory = { title: "New Chapter", subtitle: "DATE", description: "Write your story...", icon: 'heart', order_index: storyCards.length }
+                                    fetch('/api/love-story', { method: 'POST', body: JSON.stringify(newStory), headers: { 'Content-Type': 'application/json' } })
+                                        .then(() => fetch('/api/love-story').then(r => r.json()).then(setStoryCards))
+                                }} className="bg-rose-600 px-3 py-1.5 rounded-lg text-xs font-bold uppercase hover:bg-rose-500">+ Add Card</button>
+                            </div>
+
+                            <div className="grid gap-4">
+                                {storyCards.map((card, i) => (
+                                    <div key={card.id} className="bg-black/40 p-4 rounded-2xl border border-rose-500/10 flex gap-4 items-start group">
+                                        <div className="text-2xl pt-1 select-none">{card.order_index + 1}</div>
+                                        <div className="flex-1 space-y-2">
+                                            <div className="flex gap-2">
+                                                <input className="bg-transparent border-b border-rose-500/30 w-1/3 text-xs font-black uppercase text-rose-400 focus:border-rose-500 outline-none" value={card.subtitle} onChange={e => {
+                                                    const updated = storyCards.map(c => c.id === card.id ? { ...c, subtitle: e.target.value } : c);
+                                                    setStoryCards(updated);
+                                                }} placeholder="SUBTITLE (e.g. 2023)" />
+                                                <input className="bg-transparent border-b border-white/10 w-2/3 font-bold focus:border-rose-500 outline-none" value={card.title} onChange={e => {
+                                                    const updated = storyCards.map(c => c.id === card.id ? { ...c, title: e.target.value } : c);
+                                                    setStoryCards(updated);
+                                                }} placeholder="Title" />
+                                            </div>
+                                            <textarea className="w-full bg-transparent text-sm text-zinc-400 resize-none h-16 border-b border-white/5 focus:border-rose-500 outline-none" value={card.description} onChange={e => {
+                                                const updated = storyCards.map(c => c.id === card.id ? { ...c, description: e.target.value } : c);
+                                                setStoryCards(updated);
+                                            }} placeholder="Story description..." />
+                                            <div className="flex justify-between items-center text-[10px] text-zinc-600">
+                                                <select className="bg-black border border-white/10 rounded p-1" value={card.icon} onChange={e => {
+                                                    const updated = storyCards.map(c => c.id === card.id ? { ...c, icon: e.target.value } : c);
+                                                    setStoryCards(updated);
+                                                }}>
+                                                    <option value="sparkles">Sparkles</option>
+                                                    <option value="heart">Heart</option>
+                                                    <option value="ring">Ring</option>
+                                                    <option value="rocket">Rocket</option>
+                                                    <option value="message">Message</option>
+                                                </select>
+                                                <div className="space-x-2">
+                                                    <button onClick={() => fetch('/api/love-story', { method: 'PUT', body: JSON.stringify(card), headers: { 'Content-Type': 'application/json' } }).then(() => alert('Saved!'))} className="bg-green-600/20 text-green-500 px-2 py-1 rounded hover:bg-green-600 hover:text-white transition">Save</button>
+                                                    <button onClick={() => { if (confirm('Delete?')) fetch('/api/love-story', { method: 'DELETE', body: JSON.stringify({ id: card.id }), headers: { 'Content-Type': 'application/json' } }).then(() => setStoryCards(p => p.filter(x => x.id !== card.id))) }} className="text-red-500 hover:text-white hover:bg-red-500 px-2 py-1 rounded transition">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </section>
 
