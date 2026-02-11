@@ -1,11 +1,31 @@
 import { NextResponse } from 'next/server'
-import cloudinary from '@/lib/cloudinary'
+import { v2 as cloudinary } from 'cloudinary'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
+// Configure Cloudinary directly here to ensure envs are loaded
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true,
+})
+
 export async function POST(req: Request) {
     try {
+        // 1. Runtime Validation for Environment Variables
+        if (!process.env.CLOUDINARY_CLOUD_NAME ||
+            !process.env.CLOUDINARY_API_KEY ||
+            !process.env.CLOUDINARY_API_SECRET) {
+            console.error("Cloudinary Env Vars Missing:", {
+                cloud_name: !!process.env.CLOUDINARY_CLOUD_NAME,
+                api_key: !!process.env.CLOUDINARY_API_KEY,
+                api_secret: !!process.env.CLOUDINARY_API_SECRET
+            })
+            return NextResponse.json({ error: 'Server Configuration Error: Missing Cloudinary Credentials' }, { status: 500 })
+        }
+
         const formData = await req.formData()
         const file = formData.get('file') as File
 
