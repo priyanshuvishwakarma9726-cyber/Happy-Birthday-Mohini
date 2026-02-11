@@ -33,6 +33,7 @@ import DigitalCake from '@/components/DigitalCake'
 import ScratchCard from '@/components/ScratchCard'
 import { useMusic } from '@/context/MusicContext'
 import BirthdayCakePopup from '@/components/BirthdayCakePopup'
+import WishBox from '@/components/WishBox'
 
 // Types
 interface Content {
@@ -294,6 +295,11 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                     body={content.long_letter_body}
                     gallery={localGallery.slice(0, 4)}
                 />
+            )}
+
+            {/* BIRTHDAY WISH BOX */}
+            {playing && flags.show_wishes && (
+                <WishBox />
             )}
 
             {/* MEDIA */}
