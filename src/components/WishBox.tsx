@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, Sparkles, Heart } from 'lucide-react'
 import confetti from 'canvas-confetti'
@@ -10,10 +10,46 @@ interface WishData {
     createdAt: string;
 }
 
+// Typing Animation Component
+const TypingText = ({ text, delay = 500 }: { text: string, delay?: number }) => {
+    const [displayedText, setDisplayedText] = useState('')
+    const [started, setStarted] = useState(false)
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setStarted(true)
+        }, delay)
+        return () => clearTimeout(timeout)
+    }, [delay])
+
+    useEffect(() => {
+        if (!started) return
+
+        let i = 0
+        const interval = setInterval(() => {
+            setDisplayedText(text.slice(0, i + 1))
+            i++
+            if (i >= text.length) clearInterval(interval)
+        }, 50) // Typing speed
+
+        return () => clearInterval(interval)
+    }, [text, started])
+
+    return (
+        <span className="inline-block">
+            {displayedText}
+            {displayedText.length < text.length && (
+                <span className="inline-block w-0.5 h-6 ml-1 bg-pink-500 animate-pulse align-middle" />
+            )}
+        </span>
+    )
+}
+
 export default function WishBox() {
     const [wish, setWish] = useState('')
     const [loading, setLoading] = useState(false)
     const [result, setResult] = useState<WishData | null>(null)
+    const resultRef = useRef<HTMLDivElement>(null)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -30,12 +66,41 @@ export default function WishBox() {
             if (data.success) {
                 setResult(data.data)
                 setWish('')
-                confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#ec4899', '#8b5cf6', '#fbbf24']
-                })
+
+                // 1. Confetti Burst
+                const duration = 3000;
+                const end = Date.now() + duration;
+
+                const frame = () => {
+                    confetti({
+                        particleCount: 2,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0, y: 0.5 },
+                        colors: ['#ec4899', '#ffffff'],
+                        shapes: ['heart'] as any, // Heart shape!
+                        scalar: 2 // Make them bigger for impact
+                    });
+                    confetti({
+                        particleCount: 2,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1, y: 0.5 },
+                        colors: ['#ec4899', '#ffffff'],
+                        shapes: ['heart'] as any,
+                        scalar: 2
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                };
+                frame();
+
+                // Smooth scroll to result after render
+                setTimeout(() => {
+                    resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                }, 100)
             }
         } catch (error) {
             console.error(error)
@@ -46,10 +111,19 @@ export default function WishBox() {
 
     return (
         <section className="py-20 px-4 relative overflow-hidden bg-zinc-950">
-            {/* Background Sparkles */}
-            <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-pink-900 via-zinc-950 to-zinc-950" />
+            {/* 3. Soft Heartbeat Background Effect */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
+                <motion.div
+                    animate={{ scale: [1, 1.1, 1], opacity: [0.05, 0.1, 0.05] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-[800px] h-[800px] bg-pink-600/10 rounded-full blur-[100px]"
+                />
+            </div>
 
-            <div className="max-w-3xl mx-auto relative z-10">
+            {/* Background Sparkles */}
+            <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-pink-900 via-zinc-950 to-zinc-950 z-0" />
+
+            <div className="max-w-3xl mx-auto relative z-10" ref={resultRef}>
                 <div className="text-center mb-12 space-y-4">
                     <span className="inline-block px-4 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-sm font-bold tracking-widest uppercase">
                         Make a Wish ✨
@@ -125,9 +199,10 @@ export default function WishBox() {
                                     </div>
                                 </div>
 
-                                <div className="bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-8 rounded-[2rem] border border-pink-500/20 shadow-inner">
+                                <div className="bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-8 rounded-[2rem] border border-pink-500/20 shadow-inner min-h-[150px] flex items-center justify-center">
                                     <p className="text-2xl md:text-3xl font-serif text-white leading-relaxed">
-                                        {result.autoReply}
+                                        {/* 2. Typing Animation */}
+                                        <TypingText text={result.autoReply} delay={500} />
                                     </p>
                                 </div>
 
