@@ -40,7 +40,7 @@ export default function DigitalCake({ content }: { content?: any }) {
                 {wished ? "Your Wish is Granted! ✨" : "Make a Wish & Blow the Candles! 🎂"}
             </h3>
 
-            <div className="relative mt-8">
+            <div className="relative mt-24">
                 {/* Cake Base */}
                 <div className="w-64 h-32 bg-pink-300 rounded-t-lg relative shadow-lg">
                     <div className="absolute top-0 left-0 w-full h-8 bg-pink-400 rounded-t-lg opacity-50" />

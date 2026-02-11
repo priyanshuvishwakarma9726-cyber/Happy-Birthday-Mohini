@@ -268,9 +268,6 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                             {/* Row 2: Digital Cake & Scratch Card */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-zinc-900/40 p-8 rounded-3xl border border-white/5">
                                 <div className="text-center space-y-4">
-                                    <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-400">
-                                        Make a Wish! 🎂
-                                    </h3>
                                     <DigitalCake content={content} />
                                 </div>
                                 <div className="text-center space-y-8">
