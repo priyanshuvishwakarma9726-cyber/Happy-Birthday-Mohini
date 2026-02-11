@@ -58,6 +58,7 @@ const DEFAULT_FLAGS: FeatureFlags = {
 }
 
 import { useContent } from '@/context/ContentContext'
+import { CMS_CATEGORIES } from '@/lib/cms-config'
 
 export default function AdminPage() {
     const { content: globalContent, updateContent, refreshContent } = useContent()
@@ -252,76 +253,43 @@ export default function AdminPage() {
                         </section>
 
                         {/* GOD MODE TEXT REGISTRY */}
-                        <section className="bg-zinc-900/30 p-8 rounded-3xl border border-white/5 space-y-6">
-                            <h2 className="text-xl font-bold flex items-center gap-2 text-yellow-400"><Compass className="w-5 h-5" /> God Mode Registry (Advanced)</h2>
-                            <div className="bg-black/40 p-4 rounded-xl max-h-96 overflow-y-auto space-y-2">
-                                {Object.entries(localContent).map(([k, v]) => (
-                                    <div key={k} className="flex items-center gap-2 group">
-                                        <div className="w-1/3">
-                                            <p className="text-[10px] font-mono text-zinc-500 truncate" title={k}>{k}</p>
+                        {/* DYNAMIC CMS EDITOR */}
+                        {CMS_CATEGORIES.map(section => (
+                            <section key={section.id} className="bg-zinc-900/30 p-8 rounded-3xl border border-white/5 space-y-6">
+                                <h2 className="text-xl font-bold flex items-center gap-2 text-pink-400">
+                                    <section.icon className="w-5 h-5" /> {section.title}
+                                </h2>
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {section.keys.map(field => (
+                                        <div key={field.key} className={field.type === 'textarea' ? 'col-span-2' : ''}>
+                                            <label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">{field.label}</label>
+                                            {field.type === 'textarea' ? (
+                                                <textarea
+                                                    className="w-full bg-black border border-white/10 p-3 rounded-xl h-32 focus:border-pink-500 outline-none text-sm leading-relaxed"
+                                                    value={localContent[field.key] || ''}
+                                                    onChange={e => setLocalContent({ ...localContent, [field.key]: e.target.value })}
+                                                />
+                                            ) : (
+                                                <input
+                                                    className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-pink-500 outline-none text-sm"
+                                                    value={localContent[field.key] || ''}
+                                                    onChange={e => setLocalContent({ ...localContent, [field.key]: e.target.value })}
+                                                />
+                                            )}
                                         </div>
-                                        <input
-                                            className="flex-1 bg-transparent border-b border-white/10 text-xs p-1 focus:border-yellow-500 outline-none font-mono text-yellow-100"
-                                            value={v || ''}
-                                            onChange={(e) => setLocalContent({ ...localContent, [k]: e.target.value })}
-                                        />
-                                        <button onClick={() => handleDeleteKey(k)} className="opacity-0 group-hover:opacity-100 text-red-500 hover:bg-red-500/20 p-1 rounded"><Trash2 className="w-3 h-3" /></button>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="flex gap-2">
-                                <input className="bg-black border border-white/10 p-2 rounded-lg text-xs flex-1" placeholder="New Key (e.g. ui_btn_label)" value={newKey} onChange={e => setNewKey(e.target.value)} />
-                                <input className="bg-black border border-white/10 p-2 rounded-lg text-xs flex-1" placeholder="Value" value={newValue} onChange={e => setNewValue(e.target.value)} />
-                                <button onClick={addNewKey} className="bg-yellow-600/20 text-yellow-500 px-4 rounded-lg text-xs font-bold uppercase hover:bg-yellow-600 hover:text-white transition-all">+ Add</button>
-                            </div>
-                        </section>
+                                    ))}
+                                </div>
+                            </section>
+                        ))}
 
-                        <section className="bg-zinc-900/30 p-8 rounded-3xl border border-white/5 space-y-6">
-                            <h2 className="text-xl font-bold flex items-center gap-2 text-blue-400"><Settings className="w-5 h-5" /> Section Titles</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                {['recipient_name', 'gallery_title', 'wishes_title', 'social_title', 'social_subtitle', 'gift_shop_title', 'gift_shop_subtitle', 'message_title', 'media_title', 'audio_title'].map(field => (
-                                    <div key={field}><label className="text-[10px] text-zinc-500 uppercase font-black">{field.replace('_', ' ')}</label><input className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-blue-500 outline-none" value={localContent[field] || ''} onChange={e => setLocalContent({ ...localContent, [field]: e.target.value })} /></div>
-                                ))}
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black text-pink-500">Birthday Date & Time</label><input type="datetime-local" className="w-full bg-black border border-pink-500/50 p-3 rounded-xl focus:border-pink-500 outline-none text-white" value={localContent['birthday_date'] || ''} onChange={e => setLocalContent({ ...localContent, 'birthday_date': e.target.value })} /></div>
-                            </div>
-                        </section>
-
-                        {/* 2. Hero & Core Text */}
-                        <section className="bg-zinc-900/30 p-8 rounded-3xl border border-white/5 space-y-6">
-                            <h2 className="text-xl font-bold flex items-center gap-2 text-pink-400"><Heart className="w-5 h-5" /> Main Content</h2>
-                            <div className="space-y-4">
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black">Hero Title</label><input className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-pink-500 outline-none" value={localContent['hero_title'] || ''} onChange={e => setLocalContent({ ...localContent, 'hero_title': e.target.value })} /></div>
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black">Hero Subtitle</label><input className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-pink-500 outline-none" value={localContent['hero_subtitle'] || ''} onChange={e => setLocalContent({ ...localContent, 'hero_subtitle': e.target.value })} /></div>
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black">Main Message</label><textarea className="w-full bg-black border border-white/10 p-3 rounded-xl h-32 focus:border-pink-500 outline-none" value={localContent['message_body'] || ''} onChange={e => setLocalContent({ ...localContent, 'message_body': e.target.value })} /></div>
-                            </div>
-                        </section>
-
-                        {/* 3. Love Letter & AI Poem Dictionary */}
-                        <section className="grid md:grid-cols-2 gap-8">
-                            <div className="bg-pink-900/10 p-8 rounded-3xl border border-pink-500/20 space-y-4">
-                                <h3 className="font-bold text-pink-400 flex items-center gap-2 uppercase tracking-widest text-sm"><MessageSquareHeart /> Love Letter</h3>
-                                <input className="w-full bg-black/40 border border-pink-500/20 p-3 rounded-xl text-sm" placeholder="Title..." value={localContent['long_letter_title'] || ''} onChange={e => setLocalContent({ ...localContent, 'long_letter_title': e.target.value })} />
-                                <textarea className="w-full bg-black/40 border border-pink-500/20 p-3 rounded-xl h-64 text-sm font-serif" placeholder="Body..." value={localContent['long_letter_body'] || ''} onChange={e => setLocalContent({ ...localContent, 'long_letter_body': e.target.value })} />
-                            </div>
-                            <div className="bg-purple-900/10 p-8 rounded-3xl border border-purple-500/20 space-y-4">
-                                <h3 className="font-bold text-purple-400 flex items-center gap-2 uppercase tracking-widest text-sm"><Sparkles /> AI Poet Dictionary (JSON)</h3>
-                                <textarea className="w-full bg-black/40 border border-purple-500/20 p-4 rounded-xl h-[330px] font-mono text-[10px]" value={localContent['romantic_dict'] || '{}'} onChange={e => setLocalContent({ ...localContent, 'romantic_dict': e.target.value })} />
-                                <p className="text-[9px] text-zinc-600 italic">Format: {"{ \"word\": \"poem replacement\" }"}</p>
-                            </div>
-                        </section>
-
-                        {/* 4. Games & Pitara Data */}
+                        {/* ADVANCED - JSON CONFIGS */}
                         <section className="bg-indigo-900/10 p-8 rounded-3xl border border-indigo-500/20 space-y-8">
-                            <h2 className="text-xl font-bold flex items-center gap-2 text-indigo-400"><Compass /> Game Engines & Pitara</h2>
+                            <h2 className="text-xl font-bold flex items-center gap-2 text-indigo-400"><Compass /> Advanced Logic (JSON)</h2>
                             <div className="grid md:grid-cols-2 gap-8">
-                                <div>
-                                    <label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Pitara Predictions (JSON Array)</label>
-                                    <textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-64 font-mono text-[10px]" value={localContent['future_goals'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'future_goals': e.target.value })} />
-                                </div>
-                                <div>
-                                    <label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Quiz Questions (JSON Array)</label>
-                                    <textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-64 font-mono text-[10px]" value={localContent['quiz_data'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'quiz_data': e.target.value })} />
-                                </div>
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Romantic Dictionary</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['romantic_dict'] || '{}'} onChange={e => setLocalContent({ ...localContent, 'romantic_dict': e.target.value })} /></div>
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Pitara Goals</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['future_goals'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'future_goals': e.target.value })} /></div>
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Quiz Data</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['quiz_data'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'quiz_data': e.target.value })} /></div>
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Cake Wishes</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['cake_wishes'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'cake_wishes': e.target.value })} /></div>
                             </div>
                         </section>
 
@@ -377,22 +345,6 @@ export default function AdminPage() {
                             </div>
                         </section>
 
-                        {/* Extra Feature Text Edits */}
-                        <section className="grid grid-cols-2 gap-8">
-                            <div className="bg-zinc-900/30 p-6 rounded-3xl border border-white/5 space-y-4">
-                                <h3 className="font-bold text-white text-xs uppercase tracking-widest">Scratch Card Prize</h3>
-                                <input className="w-full bg-black border border-white/10 p-3 rounded-xl text-sm" value={localContent['scratch_card_prize'] || ''} onChange={e => setLocalContent({ ...localContent, 'scratch_card_prize': e.target.value })} />
-                            </div>
-                            <div className="bg-zinc-900/30 p-6 rounded-3xl border border-white/5 space-y-4">
-                                <h3 className="font-bold text-white text-xs uppercase tracking-widest text-pink-400">Cake Wishes (JSON)</h3>
-                                <textarea className="w-full bg-black border border-white/10 p-3 rounded-xl text-[10px] font-mono h-24" value={localContent['cake_wishes'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'cake_wishes': e.target.value })} />
-                            </div>
-                            <div className="bg-zinc-900/30 p-6 rounded-3xl border border-white/5 space-y-4 col-span-2">
-                                <h3 className="font-bold text-white text-xs uppercase tracking-widest text-pink-400">Hidden Messages (Love Popups)</h3>
-                                <textarea className="w-full bg-black border border-white/10 p-3 rounded-xl text-[10px] font-mono h-24" value={localContent['love_messages'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'love_messages': e.target.value })} />
-                                <p className="text-[9px] text-zinc-600 italic">Format: ["Message 1", "Message 2"]</p>
-                            </div>
-                        </section>
 
                     </div>
 

@@ -37,6 +37,7 @@ import WishBox from '@/components/WishBox'
 
 // Types
 interface Content {
+    [key: string]: string | undefined;
     hero_title?: string;
     hero_subtitle?: string;
     message_body?: string;
@@ -209,7 +210,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-sm md:text-base mb-8 animate-pulse backdrop-blur-sm">
                         <Stars className="w-4 h-4" />
-                        <span>Scroll Down for More!</span>
+                        <span>{content.scroll_down_text || "Scroll Down for More!"}</span>
                     </div>
 
                     <h1 className="text-5xl md:text-7xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-pink-100 to-zinc-500 mb-6 tracking-tighter whitespace-pre-line leading-[1.1] relative select-none cursor-pointer" onClick={handleHeartClick}>
@@ -244,7 +245,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                     className="absolute bottom-10 animate-bounce cursor-pointer z-50 text-white"
                     onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
                 >
-                    <p className="text-zinc-500 text-sm">Scroll Karo 👇</p>
+                    <p className="text-zinc-500 text-sm">{content.scroll_karo_text || "Scroll Karo 👇"}</p>
                 </motion.div>
             </section>
 
@@ -272,10 +273,10 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                 </div>
                                 <div className="text-center space-y-8">
                                     <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400">
-                                        Your Surprise Gift 🎁
+                                        {content.surprise_title || "Your Surprise Gift 🎁"}
                                     </h3>
-                                    <ScratchCard prizeText="One Free 'Yes' Day! (Valid Forever) 💖" content={content} />
-                                    <p className="text-sm text-zinc-500 italic">Scratch to reveal your gift!</p>
+                                    <ScratchCard prizeText={content.scratch_prize || "One Free 'Yes' Day! (Valid Forever) 💖"} content={content} />
+                                    <p className="text-sm text-zinc-500 italic">{content.scratch_prompt || "Scratch to reveal your gift!"}</p>
                                 </div>
                             </div>
                         </div>
@@ -305,7 +306,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                     <div className="max-w-4xl mx-auto space-y-12">
                         {content.video_url && (
                             <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-                                <h2 className="text-3xl font-bold text-center mb-8 text-white">{content.media_title || "Our Memories 🎥"}</h2>
+                                <h2 className="text-3xl font-bold text-center mb-8 text-white">{content.video_title || content.media_title || "Our Memories 🎥"}</h2>
                                 <VideoPlayer url={content.video_url} play={playing} onPlayChange={handleMediaPlay} />
                             </motion.div>
                         )}
@@ -356,7 +357,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                         <div className="text-lg md:text-xl text-zinc-300 leading-loose space-y-6 font-light whitespace-pre-wrap text-left md:text-center">
                             {content.message_body || "Happy Birthday Mohini! 🎉"}
                         </div>
-                        <p className="font-handwriting text-4xl text-pink-400 mt-12 transform -rotate-2 inline-block drop-shadow-lg">- YOUR LOVE</p>
+                        <p className="font-handwriting text-4xl text-pink-400 mt-12 transform -rotate-2 inline-block drop-shadow-lg">- {content.message_sender || "YOUR LOVE"}</p>
                     </div>
                 </div>
             </section>
@@ -366,9 +367,9 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
             {/* FOOTER & SECRET VAULT TRIGGER */}
             <footer className="py-12 text-center border-t border-zinc-900 mt-20 bg-black relative">
                 <p className="text-zinc-600 text-sm flex items-center justify-center gap-2">
-                    Made with
+                    {content.footer_text || "Made with"}
                     <button onClick={() => setShowSecretVault(true)} className="hover:scale-125 transition-transform"><Heart className="w-4 h-4 fill-pink-600 text-pink-600 animate-pulse" /></button>
-                    for Mohini
+                    {content.footer_for || "for Mohini"}
                 </p>
             </footer>
 
@@ -389,8 +390,8 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                     <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <Lock className="w-8 h-8 text-zinc-400" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-white">Secret Vault 🔒</h3>
-                                    <p className="text-zinc-400 text-sm">Enter your Birth Date (DDMM) to unlock.</p>
+                                    <h3 className="text-2xl font-bold text-white">{content.secret_vault_title || "Secret Vault 🔒"}</h3>
+                                    <p className="text-zinc-400 text-sm">{content.secret_vault_hint || "Enter your Birth Date (DDMM) to unlock."}</p>
                                     <div className="flex gap-2 justify-center">
                                         <input
                                             type="password"
@@ -414,10 +415,10 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                         <Key className="w-8 h-8 text-green-400" />
                                     </div>
                                     <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
-                                        SURPRISE! 🎉
+                                        {content.secret_vault_success_title || "SURPRISE! 🎉"}
                                     </h3>
                                     <p className="text-zinc-300 text-lg italic leading-relaxed">
-                                        "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖"
+                                        "{content.secret_vault_success_msg || "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖"}"
                                     </p>
                                     <div className="p-4 bg-zinc-950 rounded border border-zinc-800 text-left text-xs font-mono text-green-400">
                                         <p>{`> SECRET_LEVEL_UNLOCKED: TRUE`}</p>

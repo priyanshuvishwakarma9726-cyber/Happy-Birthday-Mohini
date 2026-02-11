@@ -4,13 +4,18 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 interface ContentContextType {
     content: Record<string, string>
     refreshContent: () => Promise<void>
-    updateContent: (newContent: Record<string, string>) => void
+    updateContent: (newContent: React.SetStateAction<Record<string, string>>) => void
     isLoading: boolean
 }
 
-const ContentContext = createContext<ContentContextType | undefined>(undefined)
+const ContentContext = createContext<ContentContextType>({
+    content: {},
+    refreshContent: async () => { },
+    updateContent: () => { },
+    isLoading: false
+})
 
-export function ContentProvider({ children, initialContent = {} }: { children: ReactNode, initialContent?: Record<string, string> }) {
+export function ContentProvider({ children, initialContent = {} as Record<string, string> }: { children: ReactNode, initialContent?: Record<string, string> }) {
     const [content, setContent] = useState<Record<string, string>>(initialContent)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -27,8 +32,8 @@ export function ContentProvider({ children, initialContent = {} }: { children: R
         }
     }
 
-    const updateContent = (newContent: Record<string, string>) => {
-        setContent(prev => ({ ...prev, ...newContent }))
+    const updateContent = (newContent: React.SetStateAction<Record<string, string>>) => {
+        setContent(newContent)
     }
 
     // Initial Fetch (if initialContent is empty or stale)
