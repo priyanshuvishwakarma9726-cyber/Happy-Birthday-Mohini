@@ -12,8 +12,7 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
     const { setUnlocked, setIsPlaying, restartMusic } = useMusic()
 
     // States
-    const [mounted, setMounted] = useState(false)
-    const [isGiftUnlocked, setIsGiftUnlocked] = useState(false)
+    const [pageState, setPageState] = useState<'loading' | 'countdown' | 'gift'>('loading')
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
     const [loading, setLoading] = useState(false)
 
@@ -23,54 +22,49 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
     const [password, setPassword] = useState('')
 
     useEffect(() => {
-        // 1. Initial State Check
+        // 1. Decision Logic
         const params = new URLSearchParams(window.location.search)
         const isPreview = params.get('preview') === 'true'
-
-        // Stricter admin check
-        const isAdmin = isPreview && (
+        const isAdmin = (
             localStorage.getItem('admin_auth') === 'true' ||
             document.cookie.split(';').some(c => c.trim() === 'admin_bypass=true')
         )
-
+        const shouldSkipByAdmin = isPreview && isAdmin
         const savedUnlock = localStorage.getItem('giftUnlocked') === 'true'
 
-        // giftUnlocked is ONLY true on load if previously saved OR it's an intentional admin preview.
-        if (savedUnlock || isAdmin) {
-            setIsGiftUnlocked(true)
+        const now = new Date()
+        const bday = new Date(targetDate)
+        const target = isNaN(bday.getTime()) ? new Date(now.getFullYear(), 2, 30) : bday
+        const currentTarget = new Date(now.getFullYear(), target.getMonth(), target.getDate())
+        const isDatePassed = now >= currentTarget
+
+        if (shouldSkipByAdmin || savedUnlock || isDatePassed) {
+            setPageState('gift')
+            if (!shouldSkipByAdmin && isDatePassed) {
+                localStorage.setItem('giftUnlocked', 'true')
+                document.cookie = "gift_unlocked=true; path=/; max-age=31536000"
+            }
+        } else {
+            setPageState('countdown')
         }
 
-        setMounted(true)
         router.prefetch('/home')
         setIsPlaying(false)
     }, [targetDate, router, setIsPlaying])
 
     useEffect(() => {
-        if (isGiftUnlocked) return;
+        if (pageState !== 'countdown') return;
 
         const timer = setInterval(() => {
             const now = new Date()
             let baseDate = new Date(targetDate)
-
-            // 1. Fallback / Validation: If invalid date, default to March 30
-            if (isNaN(baseDate.getTime())) {
-                baseDate = new Date(now.getFullYear(), 2, 30)
-            }
-
-            // 2. Logic: Always target the birthday in the CURRENT year.
-            // This ensures if it's currently Feb and birthday is March, we show the countdown.
-            // If it's currently April and birthday was March, diff will be 0 and it unlocks.
-            const tMonth = baseDate.getMonth()
-            const tDay = baseDate.getDate()
-            const target = new Date(now.getFullYear(), tMonth, tDay)
-
+            if (isNaN(baseDate.getTime())) baseDate = new Date(now.getFullYear(), 2, 30)
+            const target = new Date(now.getFullYear(), baseDate.getMonth(), baseDate.getDate())
             const diff = Math.max(0, (target.getTime() - now.getTime()) / 1000)
 
             if (diff <= 0) {
-                // Birthday is today or has passed this year
-                setIsGiftUnlocked(true)
+                setPageState('gift')
                 localStorage.setItem('giftUnlocked', 'true')
-                // Set cookie for middleware bypass
                 document.cookie = "gift_unlocked=true; path=/; max-age=31536000"
                 clearInterval(timer)
                 return
@@ -84,7 +78,7 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
             })
         }, 1000)
         return () => clearInterval(timer)
-    }, [isGiftUnlocked, targetDate])
+    }, [pageState, targetDate])
 
     // Keyboard listener for secret "mohini"
     useEffect(() => {
@@ -134,14 +128,14 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
         }, 1200)
     }
 
-    if (!mounted || loading) return <PremiumLoader />
+    if (pageState === 'loading' || loading) return <PremiumLoader />
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center p-4 text-center cursor-default overflow-hidden relative font-sans text-white bg-black">
             <DayNightBackground />
 
             <AnimatePresence mode="wait">
-                {!isGiftUnlocked ? (
+                {pageState === 'countdown' ? (
                     <motion.div
                         key="countdown"
                         initial={{ opacity: 1 }}

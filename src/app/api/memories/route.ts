@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db'
-import { unlink } from 'fs/promises'
-import path from 'path'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
     try {
@@ -105,16 +105,6 @@ export async function DELETE(req: Request) {
     try {
         const { id } = await req.json();
         if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
-
-        // Get file path before deleting
-        const rows: any = await query('SELECT file_path FROM memories WHERE id = ?', [id]);
-        if (rows.length > 0) {
-            const filePath = rows[0].file_path;
-            if (filePath && filePath.startsWith('/uploads/')) {
-                const fullPath = path.join(process.cwd(), 'public', filePath);
-                await unlink(fullPath).catch(() => { });
-            }
-        }
 
         await query('DELETE FROM memories WHERE id = ?', [id]);
         return NextResponse.json({ success: true });

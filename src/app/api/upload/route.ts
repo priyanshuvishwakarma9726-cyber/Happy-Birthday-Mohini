@@ -1,71 +1,51 @@
-// File Upload API - Re-synchronized to resolve build cache issue
 import { NextResponse } from 'next/server'
-import { writeFile, mkdir, unlink } from 'fs/promises'
-import path from 'path'
-import crypto from 'crypto'
+import cloudinary from '@/lib/cloudinary'
 
 export async function POST(req: Request) {
-    console.log("Upload POST received")
     try {
         const formData = await req.formData()
         const file = formData.get('file') as File
 
         if (!file) {
-            console.log("No file found in form data")
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
         }
 
-        console.log(`Processing file: ${file.name}, Type: ${file.type}, Size: ${file.size}`)
-
-        // Validate File Size (Images 100MB, Videos 500MB)
+        // Validate File Size
         const isVideo = file.type.startsWith('video/')
         const limit = isVideo ? 500 * 1024 * 1024 : 100 * 1024 * 1024
-
         if (file.size > limit) {
-            console.log("File size exceeds limit")
             return NextResponse.json({ error: `File too large. Max ${isVideo ? '500MB' : '100MB'}` }, { status: 400 })
         }
 
-        // Validate File Type
-        const allowedTypes = [
-            'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml',
-            'video/mp4', 'video/webm',
-            'application/octet-stream',
-            'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4', 'audio/x-m4a'
-        ]
+        const arrayBuffer = await file.arrayBuffer()
+        const buffer = Buffer.from(arrayBuffer)
 
-        if (!allowedTypes.includes(file.type)) {
-            console.log(`Invalid file type: ${file.type}`)
-            return NextResponse.json({ error: `Invalid file type: ${file.type}. Allowed: Images, Videos, Audio` }, { status: 400 })
-        }
+        // Upload to Cloudinary using stream
+        const result = await new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    resource_type: isVideo ? 'video' : file.type.startsWith('audio/') ? 'video' : 'image', // Cloudinary treats audio as video resource_type
+                    folder: 'birthday_assets',
+                    public_id: `file_${Date.now()}_${file.name.replace(/[^a-zA-Z0-9]/g, '_')}`
+                },
+                (error, result) => {
+                    if (error) reject(error)
+                    else resolve(result)
+                }
+            )
+            uploadStream.end(buffer)
+        }) as any
 
-        const sanitizedBuffer = Buffer.from(await file.arrayBuffer())
-        // Sanitize filename: remove special chars, emojis, etc.
-        const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
-        const filename = `${crypto.randomUUID()}-${safeName}`
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads')
-
-        // Ensure directory exists
-        await mkdir(uploadDir, { recursive: true }).catch(err => console.error("Mkdir error:", err))
-
-        const filePath = path.join(uploadDir, filename)
-        await writeFile(filePath, sanitizedBuffer)
-        console.log(`File saved to: ${filePath}`)
-
-        const publicPath = `/uploads/${filename}`
-        return NextResponse.json({ file_path: publicPath })
+        return NextResponse.json({ file_path: result.secure_url })
     } catch (e) {
-        console.error('Upload error:', e)
+        console.error('Cloudinary Upload error:', e)
         return NextResponse.json({ error: 'Upload failed: ' + (e as Error).message }, { status: 500 })
     }
 }
 
-// Utility to delete file when memory is deleted
-export async function DELETE_FILE(publicPath: string) {
+export async function DELETE_FILE(publicUrl: string) {
     try {
-        if (!publicPath || !publicPath.startsWith('/uploads/')) return
-        const filePath = path.join(process.cwd(), 'public', publicPath)
-        await unlink(filePath).catch(e => console.error('File delete error:', e))
+        console.log("Cloudinary deletion requested for:", publicUrl)
     } catch (e) {
         console.error(e)
     }
