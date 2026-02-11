@@ -5,7 +5,16 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { secret } = body
 
-    if (secret === process.env.ADMIN_SECRET) {
+    const envSecret = process.env.ADMIN_SECRET || '';
+    const isValid = secret?.trim() === envSecret.trim();
+
+    console.log("Login Attempt:", {
+        inputProvided: !!secret,
+        envSecretExists: !!envSecret,
+        match: isValid
+    });
+
+    if (isValid) {
         const cookieStore = await cookies()
 
         // Key for general admin access validation
