@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server'
 import { v2 as cloudinary } from 'cloudinary'
+import { isAdmin } from '@/lib/auth'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: Request) {
+    if (!await isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     try {
         // 1. Debug Logs (Safe)
         const cloudName = process.env.CLOUDINARY_CLOUD_NAME;

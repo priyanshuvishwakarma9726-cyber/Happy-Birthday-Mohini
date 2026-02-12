@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { isAdmin } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
-    const admin = searchParams.get('admin') === 'true'
+    const isAdminUser = await isAdmin()
+    const adminParam = searchParams.get('admin') === 'true' && isAdminUser
 
     try {
         // If admin, show all. If public, show only approved.
-        const sql = admin
+        const sql = adminParam
             ? 'SELECT * FROM wishes ORDER BY created_at DESC'
             : 'SELECT * FROM wishes WHERE is_approved = TRUE ORDER BY created_at DESC'
 
@@ -51,7 +53,7 @@ export async function PUT(req: Request) {
         const body = await req.json();
 
         if (body.action === 'approve') {
-            // Admin Only ideally, but simplified for this demo context
+            if (!await isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
             await query('UPDATE wishes SET is_approved = TRUE WHERE id = ?', [body.id]);
             return NextResponse.json({ success: true });
         }
@@ -84,6 +86,7 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+    if (!await isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     try {
         const { id } = await req.json();
         await query('DELETE FROM wishes WHERE id = ?', [id]);

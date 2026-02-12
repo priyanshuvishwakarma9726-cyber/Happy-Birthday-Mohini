@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { isAdmin } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,6 +15,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+    if (!await isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     try {
         const { title, url, artist } = await req.json();
         if (!url) return NextResponse.json({ error: 'URL required' }, { status: 400 });
@@ -27,6 +29,7 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+    if (!await isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     try {
         const { id } = await req.json();
         await query('DELETE FROM playlist WHERE id = ?', [id]);

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { isAdmin } from '@/lib/auth'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -96,6 +97,7 @@ export async function GET() {
 }
 
 export async function DELETE(req: Request) {
+    if (!await isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     try {
         const { id } = await req.json();
         if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
