@@ -50,10 +50,13 @@ async function getData(): Promise<HomeData> {
             ? memoriesRows.map((m: any) => ({
                 id: m.id,
                 url: m.file_path,
-                type: m.type as 'image' | 'video',
+                type: (m.type === 'photo' || m.type === 'image') ? 'image' : 'video',
                 caption: m.description || m.title || ""
             }))
             : []
+
+        if (gallery.length === 0) console.warn("No memories found in database");
+        else console.log(`Loaded ${gallery.length} memories`);
 
         const playlist: Song[] = Array.isArray(playlistRows) ? playlistRows : []
 

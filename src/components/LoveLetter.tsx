@@ -46,7 +46,9 @@ export default function LoveLetter({ title, body, gallery }: Props) {
                                         src={img.url}
                                         className="w-full h-full object-cover"
                                         onError={(e) => {
-                                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=400&auto=format&fit=crop";
+                                            const target = e.target as HTMLImageElement;
+                                            target.onerror = null;
+                                            target.src = "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=400&auto=format&fit=crop";
                                         }}
                                     />
                                     <div className="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -99,7 +101,9 @@ export default function LoveLetter({ title, body, gallery }: Props) {
                                         src={img.url}
                                         className="w-full h-full object-cover"
                                         onError={(e) => {
-                                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=400&auto=format&fit=crop";
+                                            const target = e.target as HTMLImageElement;
+                                            target.onerror = null;
+                                            target.src = "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=400&auto=format&fit=crop";
                                         }}
                                     />
                                     <div className="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />

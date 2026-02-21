@@ -37,23 +37,36 @@ export default function GallerySection({ items, title }: { items: GalleryItem[],
                             className="break-inside-avoid relative group rounded-2xl overflow-hidden shadow-xl bg-zinc-900 border border-zinc-800"
                         >
                             {item.type === 'video' ? (
-                                <video
-                                    src={item.url}
-                                    className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
-                                    autoPlay
-                                    muted
-                                    loop
-                                    playsInline
-                                />
+                                <div className="relative group min-h-[200px] bg-zinc-800 flex items-center justify-center overflow-hidden">
+                                    <video
+                                        src={item.url}
+                                        className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        controls={false}
+                                        onError={(e) => {
+                                            const video = e.target as HTMLVideoElement;
+                                            const container = video.parentElement;
+                                            if (container) {
+                                                container.innerHTML = `<img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=600&auto=format&fit=crop" class="w-full h-auto object-cover" />`;
+                                            }
+                                        }}
+                                    />
+                                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+                                </div>
                             ) : (
                                 <img
                                     src={item.url}
                                     alt={item.caption}
-                                    className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
+                                    className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
                                     loading="lazy"
                                     decoding="async"
                                     onError={(e) => {
-                                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=600&auto=format&fit=crop";
+                                        const target = e.target as HTMLImageElement;
+                                        target.onerror = null; // Prevent infinite loop
+                                        target.src = "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=600&auto=format&fit=crop";
                                     }}
                                 />
                             )}
