@@ -75,13 +75,14 @@ export default function AdminPage() {
 
     // Local state for form editing (initialized from global)
     const [localContent, setLocalContent] = useState<Record<string, string>>({})
+    const [isDirty, setIsDirty] = useState(false)
 
-    // Sync global content to local state on load
+    // Sync global content to local state on load or if NO unsaved changes exist
     useEffect(() => {
-        if (globalContent) {
+        if (globalContent && !isDirty) {
             setLocalContent(prev => ({ ...prev, ...globalContent }))
         }
-    }, [globalContent])
+    }, [globalContent, isDirty])
 
     const [flags, setFlags] = useState<FeatureFlags>(DEFAULT_FLAGS)
     const [memories, setMemories] = useState<any[]>([])
@@ -119,12 +120,12 @@ export default function AdminPage() {
 
     // Effect to handle flags sync from global content
     useEffect(() => {
-        if (globalContent?.feature_flags) {
+        if (globalContent?.feature_flags && !isDirty) {
             try {
                 setFlags(JSON.parse(globalContent.feature_flags))
             } catch (e) { console.error("Flag Parse Error", e) }
         }
-    }, [globalContent])
+    }, [globalContent, isDirty])
 
     useEffect(() => {
         if (localStorage.getItem('admin_auth') === 'true' || document.cookie.includes('admin_bypass=true')) {
@@ -147,10 +148,21 @@ export default function AdminPage() {
         } else alert('Access Denied 🚫')
     }
 
+    const handleLocalChange = (key: string, value: string) => {
+        setLocalContent(prev => ({ ...prev, [key]: value }))
+        if (!isDirty) setIsDirty(true)
+    }
+
+    const handleFlagToggle = (key: keyof FeatureFlags) => {
+        setFlags(prev => ({ ...prev, [key]: !prev[key] }))
+        if (!isDirty) setIsDirty(true)
+    }
+
     const handleSave = async () => {
         // Save everything in localContent
         const res = await fetch('/api/content', { method: 'POST', body: JSON.stringify(localContent), headers: { 'Content-Type': 'application/json' } })
         if (res.ok) {
+            setIsDirty(false) // Allow sync again after save
             alert('God Mode Sync Complete! ⚡')
             refreshContent() // Trigger global update
         }
@@ -238,7 +250,7 @@ export default function AdminPage() {
                                 {Object.keys(flags).filter(k => typeof flags[k as keyof FeatureFlags] === 'boolean').map(key => (
                                     <button
                                         key={key}
-                                        onClick={() => setFlags({ ...flags, [key]: !flags[key as keyof FeatureFlags] })}
+                                        onClick={() => handleFlagToggle(key as keyof FeatureFlags)}
                                         className={`p-4 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${flags[key as keyof FeatureFlags] ? 'bg-green-500/10 border-green-500/30 text-green-400' : 'bg-red-500/10 border-red-500/30 text-red-400'}`}
                                     >
                                         {key.replace('show_', '')}
@@ -274,13 +286,13 @@ export default function AdminPage() {
                                                 <textarea
                                                     className="w-full bg-black border border-white/10 p-3 rounded-xl h-32 focus:border-pink-500 outline-none text-sm leading-relaxed"
                                                     value={localContent[field.key] || ''}
-                                                    onChange={e => setLocalContent({ ...localContent, [field.key]: e.target.value })}
+                                                    onChange={e => handleLocalChange(field.key, e.target.value)}
                                                 />
                                             ) : (
                                                 <input
                                                     className="w-full bg-black border border-white/10 p-3 rounded-xl focus:border-pink-500 outline-none text-sm"
                                                     value={localContent[field.key] || ''}
-                                                    onChange={e => setLocalContent({ ...localContent, [field.key]: e.target.value })}
+                                                    onChange={e => handleLocalChange(field.key, e.target.value)}
                                                 />
                                             )}
                                         </div>
@@ -293,10 +305,10 @@ export default function AdminPage() {
                         <section className="bg-indigo-900/10 p-8 rounded-3xl border border-indigo-500/20 space-y-8">
                             <h2 className="text-xl font-bold flex items-center gap-2 text-indigo-400"><Compass /> Special Logic & AI (JSON Data)</h2>
                             <div className="grid md:grid-cols-2 gap-8">
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">AI Poet: Knowledge Base / Dictionary</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['romantic_dict'] || '{}'} onChange={e => setLocalContent({ ...localContent, 'romantic_dict': e.target.value })} /></div>
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Crystal Ball: Future Goals / Hopes</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['future_goals'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'future_goals': e.target.value })} /></div>
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Roast Quiz: Questions & Logic</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['quiz_data'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'quiz_data': e.target.value })} /></div>
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Digital Cake: Random Wishes List</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['cake_wishes'] || '[]'} onChange={e => setLocalContent({ ...localContent, 'cake_wishes': e.target.value })} /></div>
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">AI Poet: Knowledge Base / Dictionary</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['romantic_dict'] || '{}'} onChange={e => handleLocalChange('romantic_dict', e.target.value)} /></div>
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Crystal Ball: Future Goals / Hopes</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['future_goals'] || '[]'} onChange={e => handleLocalChange('future_goals', e.target.value)} /></div>
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Roast Quiz: Questions & Logic</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['quiz_data'] || '[]'} onChange={e => handleLocalChange('quiz_data', e.target.value)} /></div>
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Digital Cake: Random Wishes List</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['cake_wishes'] || '[]'} onChange={e => handleLocalChange('cake_wishes', e.target.value)} /></div>
                             </div>
                         </section>
 
@@ -369,7 +381,7 @@ export default function AdminPage() {
                                     <input className="flex-1 bg-black border border-white/10 p-2 rounded-lg text-xs text-zinc-500 font-mono" value={localContent['intro_audio_url'] || ''} readOnly placeholder="No file uploaded" />
                                     <label className="bg-pink-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-pink-500 flex items-center gap-1 shrink-0">
                                         <Save className="w-3 h-3" /> Upload
-                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent(prev => ({ ...prev, 'intro_audio_url': p })) } }} />
+                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('intro_audio_url', p) } }} />
                                     </label>
                                 </div>
                                 {localContent['intro_audio_url'] && (
@@ -384,7 +396,7 @@ export default function AdminPage() {
                                     <input className="flex-1 bg-black border border-white/10 p-2 rounded-lg text-xs text-zinc-500 font-mono" value={localContent['favorite_song_url'] || ''} readOnly placeholder="No file uploaded" />
                                     <label className="bg-purple-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-purple-500 flex items-center gap-1 shrink-0">
                                         <Save className="w-3 h-3" /> Upload
-                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent(prev => ({ ...prev, 'favorite_song_url': p })) } }} />
+                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('favorite_song_url', p) } }} />
                                     </label>
                                 </div>
                                 {localContent['favorite_song_url'] && (
@@ -399,7 +411,7 @@ export default function AdminPage() {
                                     <input className="flex-1 bg-black border border-white/10 p-2 rounded-lg text-xs font-mono text-zinc-500" value={localContent['voice_url'] || ''} readOnly placeholder="No file uploaded" />
                                     <label className="bg-blue-600 px-3 py-2 rounded-lg text-xs font-bold cursor-pointer hover:bg-blue-500 flex items-center gap-1 shrink-0">
                                         <Save className="w-3 h-3" /> Upload
-                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent(prev => ({ ...prev, 'voice_url': p })) } }} />
+                                        <input type="file" className="hidden" accept="audio/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('voice_url', p) } }} />
                                     </label>
                                 </div>
                                 {localContent['voice_url'] && (
@@ -551,7 +563,7 @@ export default function AdminPage() {
                                     <span className="text-zinc-700 text-xs font-bold uppercase tracking-widest">No Image</span>
                                 )}
                                 <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-opacity">
-                                    <input type="file" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); setLocalContent({ ...localContent, 'puzzle_image_url': p }) } }} />
+                                    <input type="file" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('puzzle_image_url', p) } }} />
                                     <Camera className="text-white w-8 h-8" />
                                 </label>
                             </div>
