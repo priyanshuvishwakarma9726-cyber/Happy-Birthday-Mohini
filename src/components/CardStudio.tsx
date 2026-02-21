@@ -73,8 +73,8 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                     }
                     .card-wrapper {
                         width: 100%;
-                        min-height: 100vh;
-                        padding: 40px;
+                        height: 100vh;
+                        padding: 20px 40px;
                         box-sizing: border-box;
                         background: #fff;
                         position: relative;
@@ -82,37 +82,39 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                         flex-direction: column;
                         align-items: center;
                         text-align: center;
+                        page-break-after: avoid;
                     }
                     .border-decoration {
                         position: absolute;
-                        top: 10px; bottom: 10px; left: 10px; right: 10px;
+                        top: 15px; bottom: 15px; left: 15px; right: 15px;
                         border: 2px solid #fce7f3;
                         pointer-events: none;
                     }
                     .header {
-                        margin-top: 20px;
-                        margin-bottom: 30px;
+                        margin-top: 10px;
+                        margin-bottom: 5px;
                     }
                     .title {
                         font-family: 'Dancing Script', cursive;
-                        font-size: 64px;
+                        font-size: 52px;
                         color: #db2777;
                         margin: 0;
                     }
                     .recipient {
                         font-family: 'Playfair Display', serif;
-                        font-size: 28px;
+                        font-size: 24px;
                         color: #4b5563;
-                        margin-top: 5px;
+                        margin-top: 0;
                         font-weight: 700;
                     }
                     .image-container {
-                        width: 300px;
-                        height: 300px;
-                        border-radius: 15px;
+                        width: 260px;
+                        height: 260px;
+                        border-radius: 50%;
                         overflow: hidden;
-                        border: 10px solid #fdf2f8;
-                        margin: 20px 0;
+                        border: 8px solid #fdf2f8;
+                        margin: 10px 0;
+                        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                     }
                     .image-container img {
                         width: 100%;
@@ -121,30 +123,36 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                     }
                     .letter-content {
                         font-family: 'Playfair Display', serif;
-                        font-size: 18px;
-                        line-height: 1.6;
+                        font-size: 15px;
+                        line-height: 1.45;
                         color: #374151;
-                        max-width: 90%;
-                        margin: 30px 0;
+                        max-width: 85%;
+                        margin: 10px 0;
                         white-space: pre-wrap;
                         font-style: italic;
                     }
                     .footer {
                         margin-top: auto;
-                        padding-bottom: 20px;
+                        padding-bottom: 10px;
                     }
                     .heart-icon {
                         color: #db2777;
-                        font-size: 24px;
+                        font-size: 20px;
+                        margin-bottom: 2px;
                     }
                     .signature {
                         font-family: 'Dancing Script', cursive;
-                        font-size: 24px;
+                        font-size: 22px;
                         color: #db2777;
+                        margin: 0;
                     }
                     @media print {
-                        @page { margin: 10mm; }
+                        @page { 
+                            margin: 5mm;
+                            size: portrait;
+                        }
                         body { padding: 0; }
+                        .card-wrapper { height: auto; min-height: 95vh; }
                     }
                 </style>
             </head>
