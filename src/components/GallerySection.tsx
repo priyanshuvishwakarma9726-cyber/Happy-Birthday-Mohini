@@ -52,6 +52,9 @@ export default function GallerySection({ items, title }: { items: GalleryItem[],
                                     className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
                                     loading="lazy"
                                     decoding="async"
+                                    onError={(e) => {
+                                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=600&auto=format&fit=crop";
+                                    }}
                                 />
                             )}
                             {item.caption && (

@@ -32,19 +32,28 @@ export default function LoveLetter({ title, body, gallery }: Props) {
                 <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20">
 
                     {/* Left Polaroids (Floating) */}
-                    <div className="hidden lg:flex flex-col gap-8 w-1/3">
+                    <div className="hidden lg:flex flex-col gap-12 w-1/3">
                         {gallery.slice(0, 2).map((img, i) => (
                             <motion.div
                                 key={i}
                                 initial={{ opacity: 0, x: -50, rotate: -5 }}
                                 whileInView={{ opacity: 1, x: 0, rotate: i % 2 === 0 ? -6 : 4 }}
                                 transition={{ delay: i * 0.2 }}
-                                className="bg-white p-3 pb-12 shadow-2xl transform hover:scale-105 hover:rotate-0 transition-transform duration-500"
+                                className="bg-white p-4 pb-14 shadow-[0_10px_30px_rgba(0,0,0,0.3)] transform hover:scale-110 hover:rotate-0 transition-all duration-500 relative group"
                             >
-                                <div className="aspect-square bg-zinc-100 overflow-hidden filter sepia-[0.3]">
-                                    <img src={img.url} className="w-full h-full object-cover" />
+                                <div className="aspect-square bg-zinc-100 overflow-hidden filter sepia-[0.2] relative">
+                                    <img
+                                        src={img.url}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=400&auto=format&fit=crop";
+                                        }}
+                                    />
+                                    <div className="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
-                                <p className="font-handwriting text-zinc-600 text-center mt-4 transform -rotate-2 text-xl">{img.caption || '❤️'}</p>
+                                <p className="font-handwriting text-zinc-600 text-center mt-6 transform -rotate-1 text-2xl">
+                                    {img.caption || 'For You ❤️'}
+                                </p>
                             </motion.div>
                         ))}
                     </div>
@@ -76,19 +85,28 @@ export default function LoveLetter({ title, body, gallery }: Props) {
                     </motion.div>
 
                     {/* Right Polaroids */}
-                    <div className="hidden lg:flex flex-col gap-8 w-1/3">
+                    <div className="hidden lg:flex flex-col gap-12 w-1/3">
                         {gallery.slice(2, 4).map((img, i) => (
                             <motion.div
                                 key={i}
                                 initial={{ opacity: 0, x: 50, rotate: 5 }}
                                 whileInView={{ opacity: 1, x: 0, rotate: i % 2 === 0 ? 6 : -4 }}
                                 transition={{ delay: 0.2 + (i * 0.2) }}
-                                className="bg-white p-3 pb-12 shadow-2xl transform hover:scale-105 hover:rotate-0 transition-transform duration-500"
+                                className="bg-white p-4 pb-14 shadow-[0_10px_30px_rgba(0,0,0,0.3)] transform hover:scale-110 hover:rotate-0 transition-all duration-500 relative group"
                             >
-                                <div className="aspect-square bg-zinc-100 overflow-hidden filter sepia-[0.3]">
-                                    <img src={img.url} className="w-full h-full object-cover" />
+                                <div className="aspect-square bg-zinc-100 overflow-hidden filter sepia-[0.2] relative">
+                                    <img
+                                        src={img.url}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?q=80&w=400&auto=format&fit=crop";
+                                        }}
+                                    />
+                                    <div className="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
-                                <p className="font-handwriting text-zinc-600 text-center mt-4 transform -rotate-2 text-xl">{img.caption || '✨'}</p>
+                                <p className="font-handwriting text-zinc-600 text-center mt-6 transform -rotate-1 text-2xl">
+                                    {img.caption || 'Forever ✨'}
+                                </p>
                             </motion.div>
                         ))}
                     </div>
