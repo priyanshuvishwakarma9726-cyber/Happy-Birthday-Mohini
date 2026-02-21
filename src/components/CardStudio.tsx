@@ -91,29 +91,29 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                         pointer-events: none;
                     }
                     .header {
-                        margin-top: 10px;
-                        margin-bottom: 5px;
+                        margin-top: 5px;
+                        margin-bottom: 2px;
                     }
                     .title {
                         font-family: 'Dancing Script', cursive;
-                        font-size: 52px;
+                        font-size: 44px;
                         color: #db2777;
                         margin: 0;
                     }
                     .recipient {
                         font-family: 'Playfair Display', serif;
-                        font-size: 24px;
+                        font-size: 20px;
                         color: #4b5563;
-                        margin-top: 0;
+                        margin-top: -5px;
                         font-weight: 700;
                     }
                     .image-container {
-                        width: 260px;
-                        height: 260px;
+                        width: 220px;
+                        height: 220px;
                         border-radius: 50%;
                         overflow: hidden;
-                        border: 8px solid #fdf2f8;
-                        margin: 10px 0;
+                        border: 6px solid #fdf2f8;
+                        margin: 5px 0;
                         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                     }
                     .image-container img {
@@ -123,26 +123,26 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                     }
                     .letter-content {
                         font-family: 'Playfair Display', serif;
-                        font-size: 15px;
-                        line-height: 1.45;
+                        font-size: 14px;
+                        line-height: 1.4;
                         color: #374151;
-                        max-width: 85%;
-                        margin: 10px 0;
+                        max-width: 88%;
+                        margin: 5px 0;
                         white-space: pre-wrap;
                         font-style: italic;
                     }
                     .footer {
                         margin-top: auto;
-                        padding-bottom: 10px;
+                        padding-bottom: 5px;
                     }
                     .heart-icon {
                         color: #db2777;
-                        font-size: 20px;
-                        margin-bottom: 2px;
+                        font-size: 18px;
+                        margin-bottom: 0px;
                     }
                     .signature {
                         font-family: 'Dancing Script', cursive;
-                        font-size: 22px;
+                        font-size: 20px;
                         color: #db2777;
                         margin: 0;
                     }
@@ -152,7 +152,11 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                             size: portrait;
                         }
                         body { padding: 0; }
-                        .card-wrapper { height: auto; min-height: 95vh; }
+                        .card-wrapper { 
+                            height: 100vh;
+                            overflow: hidden;
+                            page-break-inside: avoid;
+                        }
                     }
                 </style>
             </head>
