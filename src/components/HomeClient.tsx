@@ -262,13 +262,6 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                 </motion.div>
             </section>
 
-            {/* GALLERY - MOVED UP TO BE MORE VISIBLE */}
-            {playing && flags.show_gallery && (
-                <>
-                    <GallerySection items={localGallery} title={content.gallery_title} />
-                    <SectionDivider />
-                </>
-            )}
 
             {/* MINI GAMES ARCADE */}
             {playing && flags.show_games && (
@@ -308,6 +301,11 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
                     <SectionDivider />
                 </>
+            )}
+
+            {/* GALLERY - POSITIONED ABOVE LETTER */}
+            {playing && flags.show_gallery && (
+                <GallerySection items={localGallery} title={content.gallery_title} />
             )}
 
             {/* LOVE LETTER */}

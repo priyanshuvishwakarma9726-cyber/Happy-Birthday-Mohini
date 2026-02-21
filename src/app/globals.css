@@ -62,3 +62,24 @@ textarea {
   -ms-user-select: text;
   user-select: text;
 }
+/* Utilities for Animations */
+.clip-path-envelope-flap {
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #db277733;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #db2777;
+}
