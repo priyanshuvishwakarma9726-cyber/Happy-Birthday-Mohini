@@ -92,6 +92,7 @@ export default function AdminPage() {
     const [wishboxWishes, setWishboxWishes] = useState<any[]>([])
     const [storyCards, setStoryCards] = useState<any[]>([])
     const [stats, setStats] = useState<any>({})
+    const [proposalAnswer, setProposalAnswer] = useState<{ answer: string | null; created_at?: string } | null>(null)
     const [uploading, setUploading] = useState(false)
     const [newKey, setNewKey] = useState('')
     const [newValue, setNewValue] = useState('')
@@ -102,17 +103,19 @@ export default function AdminPage() {
             await refreshContent()
 
             // 2. Fetch separate tables (memories, wishes, analytics, etc)
-            const [memRes, wishRes, statsRes, storyRes] = await Promise.all([
+            const [memRes, wishRes, statsRes, storyRes, propRes] = await Promise.all([
                 fetch('/api/memories').then(r => r.json()),
                 fetch('/api/wishes?admin=true').then(r => r.json()),
                 fetch('/api/analytics').then(r => r.json()),
-                fetch('/api/love-story').then(r => r.json())
+                fetch('/api/love-story').then(r => r.json()),
+                fetch('/api/proposal').then(r => r.json())
             ])
 
             if (Array.isArray(memRes)) setMemories(memRes)
             if (Array.isArray(wishRes)) setWishes(wishRes)
             if (statsRes) setStats(statsRes)
             if (Array.isArray(storyRes)) setStoryCards(storyRes)
+            if (propRes) setProposalAnswer(propRes)
         } catch (e) {
             console.error("Critical Load Failure:", e)
         }
@@ -229,6 +232,31 @@ export default function AdminPage() {
             </header>
 
             <main className="max-w-7xl mx-auto p-6 md:p-12 space-y-12">
+                {/* PROPOSAL RESULT - HIGH VISIBILITY */}
+                {proposalAnswer?.answer && (
+                    <motion.section
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`p-1 flex items-center justify-between rounded-[2rem] shadow-2xl ${proposalAnswer.answer === 'Yes' ? 'bg-gradient-to-r from-green-500 to-emerald-600' : 'bg-gradient-to-r from-red-500 to-rose-600'}`}
+                    >
+                        <div className="bg-black/20 backdrop-blur-md w-full m-1 p-8 rounded-[1.8rem] flex items-center justify-between">
+                            <div className="flex items-center gap-6">
+                                <div className={`w-20 h-20 rounded-full flex items-center justify-center shadow-xl ${proposalAnswer.answer === 'Yes' ? 'bg-green-500 shadow-green-500/50' : 'bg-red-500 shadow-red-500/50'}`}>
+                                    {proposalAnswer.answer === 'Yes' ? <CheckCircle className="w-12 h-12 text-white" /> : <X className="w-12 h-12 text-white" />}
+                                </div>
+                                <div className="space-y-1">
+                                    <h2 className="text-3xl font-black uppercase tracking-tighter">Secret Vault Decision</h2>
+                                    <p className="text-zinc-400 text-sm font-bold uppercase tracking-widest">{proposalAnswer.created_at ? new Date(proposalAnswer.created_at).toLocaleString() : 'Just now'}</p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[10px] uppercase font-black tracking-[0.3em] mb-2 opacity-50">She chose:</p>
+                                <p className="text-7xl font-black italic tracking-tighter">{proposalAnswer.answer.toUpperCase()}!</p>
+                            </div>
+                        </div>
+                    </motion.section>
+                )}
+
                 {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {['views', 'heart_clicks', 'snake_unlocked', 'wish_reactions'].map(key => (

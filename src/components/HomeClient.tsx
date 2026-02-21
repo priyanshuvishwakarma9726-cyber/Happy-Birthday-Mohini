@@ -162,6 +162,26 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
     const [showSecretVault, setShowSecretVault] = useState(false)
     const [secretCode, setSecretCode] = useState('')
     const [vaultUnlocked, setVaultUnlocked] = useState(false)
+    const [proposalAnswer, setProposalAnswer] = useState<string | null>(null)
+
+    const handleProposal = async (ans: 'Yes' | 'No') => {
+        setProposalAnswer(ans)
+        try {
+            await fetch('/api/proposal', {
+                method: 'POST',
+                body: JSON.stringify({ answer: ans }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            if (ans === 'Yes') {
+                confetti({
+                    particleCount: 200,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#ec4899', '#ff0000', '#ffffff']
+                })
+            }
+        } catch (e) { console.error(e) }
+    }
 
     // Coordination for Background Music
     const handleMediaPlay = (playing: boolean) => {
@@ -447,6 +467,35 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                     <p className="text-zinc-300 text-lg italic leading-relaxed">
                                         "{content.secret_vault_success_msg || "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖"}"
                                     </p>
+
+                                    {!proposalAnswer ? (
+                                        <div className="flex gap-4 pt-4">
+                                            <button
+                                                onClick={() => handleProposal('Yes')}
+                                                className="flex-1 bg-green-600 hover:bg-green-500 text-white font-black py-4 rounded-xl shadow-lg hover:scale-[1.05] transition-all flex items-center justify-center gap-2"
+                                            >
+                                                <Heart className="w-5 h-5 fill-current" /> YES!
+                                            </button>
+                                            <button
+                                                onClick={() => handleProposal('No')}
+                                                className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 font-bold py-4 rounded-xl transition-all"
+                                            >
+                                                NO... 💔
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <motion.div
+                                            initial={{ scale: 0.9, opacity: 0 }}
+                                            animate={{ scale: 1, opacity: 1 }}
+                                            className="p-6 bg-white/5 rounded-2xl border border-white/10"
+                                        >
+                                            <p className="text-sm uppercase font-black tracking-widest text-zinc-500 mb-2">Your Answer Recorded</p>
+                                            <p className={`text-3xl font-black ${proposalAnswer === 'Yes' ? 'text-green-400' : 'text-red-400'}`}>
+                                                {proposalAnswer === 'Yes' ? 'I SAID YES! 💍' : 'Not yet... 🥀'}
+                                            </p>
+                                        </motion.div>
+                                    )}
+
                                     <div className="p-4 bg-zinc-950 rounded border border-zinc-800 text-left text-xs font-mono text-green-400">
                                         <p>{`> SECRET_LEVEL_UNLOCKED: TRUE`}</p>
                                         <p>{`> HAPPINESS_LEVEL: INFINITY`}</p>
