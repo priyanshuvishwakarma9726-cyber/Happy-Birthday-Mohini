@@ -4,34 +4,42 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mic, Check, Sparkles, MessageSquareHeart } from 'lucide-react'
 
-// Simple 'AI' replacement dictionary
-const DEFAULT_DICT: Record<string, string> = {
-    "happy birthday": "On this glorious day of your existence,",
-    "love you": "cherish you eternally",
-    "beautiful": "radiant like the moon",
-    "amazing": "breathtakingly magical",
-    "happy": "overjoyed",
-    "wish": "manifest my deepest desire",
-    "good": "divine",
-    "best": "most exquisite",
-    "friend": "soul companion",
-    "party": "celebration of life",
-    "cake": "sweetest delight",
-    "gift": "token of my affection",
-    "mohini": "Mohini, my muse,", // Personalize
-}
+// Sophisticated Client-Side 'AI' Engine (Free & API-less)
+const POETIC_ENGINE = {
+    vocab: {
+        "love": ["adore you with every fiber of my being", "cherish our soul's connection", "worship the very air you breathe", "hold you in the highest sanctity of my heart"],
+        "happy": ["overjoyed with celestial bliss", "radiating with infinite joy", "bathed in the golden glow of euphoria", "dancing in a sea of pure delight"],
+        "birthday": ["anniversary of your cosmic arrival", "magnificent day you entered this world", "celebration of the miracle that is you", "day the stars aligned to create perfection"],
+        "beautiful": ["ethereal as a dream", "more radiant than a thousand suns", "a masterpiece crafted by divine hands", "stunning beyond the reach of human words"],
+        "always": ["until the stars cease to shine", "for all eternity and a day more", "through every heartbeat of time", "as long as the universe continues to expand"],
+        "forever": ["across the endless horizons of destiny", "into the infinite reaches of time", "beyond the boundaries of forever", "until the oceans dry and mountains crumble"],
+        "miss": ["yearn for your presence like the earth yearns for rain", "ache for the warmth of your smile", "feel a void that only you can fill", "count every second until we meet again"],
+        "together": ["intertwined like two vines in a garden of paradise", "as one single heartbeat in two bodies", "on a journey through the constellations of fate", "unified in a tapestry of shared dreams"],
+        "smile": ["the light that guides me through the darkest nights", "a curve that sets the whole world straight", "a symphony of joy for my weary soul", "the most precious treasure I have ever beheld"],
+        "heart": ["the sacred temple of my love", "the compass that always points to you", "a vessel overflowing with devotion", "the sanctuary where you will always reside"],
+        "amazing": ["extraordinary beyond measure", "a celestial wonder that defies logic", "magnificent in every conceivable way", "breath-taking like a sunset on the edge of the world"],
+        "best": ["the most exquisite soul I have ever known", "the pinnacle of human grace", "unrivaled in beauty and kindness", "the greatest blessing life has ever bestowed upon me"],
+        "sweet": ["tender as a rose petal in the morning dew", "delicate and nourishing to my spirit", "more intoxicating than the finest honey", "a gentle whisper of grace in a loud world"],
+        "mohini": ["Mohini, my muse and my moonlight", "Mohini, the queen of my quiet moments", "Mohini, the melody that my heart hums", "Mohini, my most cherished blessing"],
+    } as Record<string, string[]>,
+
+    connectors: [
+        " In the quiet whispers of my soul,",
+        " Within the chambers of my deepest thoughts,",
+        " As the moon chases the sun across the sky,",
+        " With a devotion that knows no bounds,",
+        " Under the watchful eyes of the angels,",
+        " In this beautiful journey called life,",
+    ],
+
+    structures: [
+        "{connector} I want to say that {p1}. You are {p2} and I will {p3} {p4}.",
+        "My dearest, {p1}. To me, you are {p2}. I promise to {p3} {p4}. {connector}",
+        "Every time I think of you, I feel {p1}. You remain {p2}, and my only wish is to {p3} {p4}.",
+    ]
+};
 
 export default function RomanticAI({ content }: { content?: any }) {
-    const dict = (() => {
-        try {
-            if (!content?.romantic_dict) return DEFAULT_DICT;
-            const parsed = JSON.parse(content.romantic_dict);
-            return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : DEFAULT_DICT;
-        } catch (e) {
-            console.warn("RomanticAI: Failed to parse romantic_dict, using default dictionary.");
-            return DEFAULT_DICT;
-        }
-    })();
     const [text, setText] = useState('')
     const [listening, setListening] = useState(false)
     const [output, setOutput] = useState('')
@@ -74,14 +82,36 @@ export default function RomanticAI({ content }: { content?: any }) {
     const romanticize = () => {
         setIsProcessing(true)
         setTimeout(() => {
-            let polished = text.toLowerCase()
-            Object.keys(dict).forEach(key => {
-                const regex = new RegExp(`\\b${key}\\b`, 'gi')
-                polished = polished.replace(regex, dict[key])
-            })
-            // Capitalize first letter
-            polished = polished.charAt(0).toUpperCase() + polished.slice(1)
-            setOutput(polished)
+            const inputLower = text.toLowerCase();
+            const words = inputLower.split(/\s+/);
+
+            // Extract identified keys from input
+            const foundKeys = Object.keys(POETIC_ENGINE.vocab).filter(key =>
+                inputLower.includes(key)
+            );
+
+            // Select 3 unique poetic phrases based on found keys or defaults
+            const getPhrase = (index: number) => {
+                const key = foundKeys[index] || Object.keys(POETIC_ENGINE.vocab)[Math.floor(Math.random() * Object.keys(POETIC_ENGINE.vocab).length)];
+                const phrases = POETIC_ENGINE.vocab[key];
+                return phrases[Math.floor(Math.random() * phrases.length)];
+            };
+
+            const p1 = getPhrase(0);
+            const p2 = getPhrase(1);
+            const p3 = getPhrase(2);
+            const p4 = getPhrase(3);
+            const connector = POETIC_ENGINE.connectors[Math.floor(Math.random() * POETIC_ENGINE.connectors.length)];
+            const structure = POETIC_ENGINE.structures[Math.floor(Math.random() * POETIC_ENGINE.structures.length)];
+
+            let polished = structure
+                .replace('{connector}', connector)
+                .replace('{p1}', p1)
+                .replace('{p2}', p2)
+                .replace('{p3}', p3)
+                .replace('{p4}', p4);
+
+            setOutput(polished);
             setIsProcessing(false)
         }, 1500) // Fake AI delay
     }
