@@ -48,7 +48,9 @@ export const CMS_CATEGORIES = [
         icon: Gift,
         keys: [
             { key: 'gift_shop_title', label: 'Shop Section Title', type: 'text' },
-            { key: 'gift_shop_subtitle', label: 'Shop Section Subtitle', type: 'text' }
+            { key: 'gift_shop_subtitle', label: 'Shop Section Subtitle', type: 'text' },
+            { key: 'card_message', label: 'Printable Card: Special Message', type: 'textarea' },
+            { key: 'card_image_url', label: 'Printable Card: Image URL (Upload Below)', type: 'text' }
         ]
     },
     {

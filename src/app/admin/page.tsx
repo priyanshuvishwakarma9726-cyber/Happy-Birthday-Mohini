@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, Unlock, Settings, Eye, EyeOff, Save, Trash2, CheckCircle, AlertTriangle, Camera, Music, Sparkles, MessageSquareHeart, Heart, Gift, Compass } from 'lucide-react'
+import { Lock, Unlock, Settings, Eye, EyeOff, Save, Trash2, CheckCircle, AlertTriangle, Camera, Music, Sparkles, MessageSquareHeart, Heart, Gift, Compass, Image as ImageIcon, PenTool } from 'lucide-react'
 
 // Types
 interface Content {
@@ -564,6 +564,23 @@ export default function AdminPage() {
                                 <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-opacity">
                                     <input type="file" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('puzzle_image_url', p) } }} />
                                     <Camera className="text-white w-8 h-8" />
+                                </label>
+                            </div>
+                        </section>
+
+                        {/* Printable Card Image Preview */}
+                        <section className="bg-zinc-900/30 p-4 rounded-3xl border border-white/5 space-y-3">
+                            <h3 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2"><ImageIcon className="w-4 h-4" /> Printable Card Photo</h3>
+                            <div className="aspect-square bg-black rounded-2xl overflow-hidden border border-white/10 relative group flex items-center justify-center">
+                                {localContent['card_image_url'] ? (
+                                    <img src={localContent['card_image_url']} className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-zinc-700 text-xs font-bold uppercase tracking-widest">No Card Image</span>
+                                )}
+                                <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-opacity">
+                                    <input type="file" className="hidden" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('card_image_url', p) } }} />
+                                    <PenTool className="text-white w-8 h-8" />
+                                    <span className="text-white text-[10px] uppercase font-bold mt-2">Update Card Photo</span>
                                 </label>
                             </div>
                         </section>

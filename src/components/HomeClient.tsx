@@ -361,8 +361,8 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
             {playing && flags.show_wishes && (
                 <CardStudio
                     recipientName={content.recipient_name || content.hero_title?.split('\n')[1]?.replace('❤️', '').trim() || "Mohini"}
-                    letterBody={content.long_letter_body || content.message_body || "Happy Birthday!"}
-                    heroImage={localGallery[0]?.url}
+                    letterBody={content.card_message || content.long_letter_body || "Happy Birthday!"}
+                    heroImage={content.card_image_url || localGallery[0]?.url}
                     title={content.gift_shop_title}
                     subtitle={content.gift_shop_subtitle}
                 />
