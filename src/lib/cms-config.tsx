@@ -13,22 +13,6 @@ export const CMS_CATEGORIES = [
         ]
     },
     {
-        id: 'wishbox',
-        title: 'Magic Wish Box (Auto-Reply Section)',
-        icon: Sparkles,
-        keys: [
-            { key: 'wishbox_title', label: 'Floating Badge (e.g. MAGIC)', type: 'text' },
-            { key: 'wishbox_heading', label: 'Box Heading', type: 'text' },
-            { key: 'wishbox_subheading', label: 'Box Sub-heading / Description', type: 'textarea' },
-            { key: 'wishbox_input_label', label: 'Input Field Label', type: 'text' },
-            { key: 'wishbox_placeholder', label: 'Input Placeholder Hint', type: 'text' },
-            { key: 'wishbox_btn_text', label: 'Submit Button Text', type: 'text' },
-            { key: 'wishbox_success_title', label: 'Reply Box: Success Title', type: 'text' },
-            { key: 'wishbox_success_sender', label: 'Reply Box: Sender Name', type: 'text' },
-            { key: 'wishbox_again_btn', label: 'Back/Reset Button Text', type: 'text' }
-        ]
-    },
-    {
         id: 'surprise',
         title: 'Gift & Scratch Cards',
         icon: Gift,

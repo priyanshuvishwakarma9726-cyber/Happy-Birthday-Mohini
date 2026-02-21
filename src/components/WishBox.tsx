@@ -45,6 +45,24 @@ const TypingText = ({ text, delay = 500 }: { text: string, delay?: number }) => 
     )
 }
 
+// Sophisticated Client-Side 'Universe AI' Engine (Free & API-less)
+const WISH_ENGINE = {
+    responses: [
+        "The stars have aligned for this. Your wish is not just a dream, it's a future reality being woven right now. ✨",
+        "The universe hears you, Mohini. This beautiful intention of yours has been etched into the cosmic fabric. It shall be. ❤️",
+        "A wish made with such a pure heart never goes unheard. Watch as the magic unfolds in the coming days... 🌟",
+        "Your magic is growing. This wish is the seed of something truly breathtaking. Believe in the impossible. 🦋",
+        "The cosmos whispers: 'Yes'. Your vibration today is matching the life you've always dreamed of. 💫",
+        "Something even better than what you asked for is on its way. Trust the timing of your life. 🪐",
+        "You are the architect of your own magic. This wish is your blueprint. Every atom is working to make it happen for you! 🌈"
+    ],
+    generateReply: (message: string) => {
+        // Simple logic to select a response based on message length or random
+        const index = Math.abs(message.length + Math.floor(Math.random() * 10)) % WISH_ENGINE.responses.length;
+        return WISH_ENGINE.responses[index];
+    }
+};
+
 import { useContent } from '@/context/ContentContext'
 
 export default function WishBox() {
@@ -59,57 +77,52 @@ export default function WishBox() {
         if (!wish.trim()) return
 
         setLoading(true)
-        try {
-            const res = await fetch('/api/wishbox', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: wish })
+        // Simulate 'AI' Processing
+        setTimeout(() => {
+            const autoReply = WISH_ENGINE.generateReply(wish);
+            setResult({
+                message: wish,
+                autoReply: autoReply,
+                createdAt: new Date().toLocaleTimeString()
             })
-            const data = await res.json()
-            if (data.success) {
-                setResult(data.data)
-                setWish('')
-
-                // 1. Confetti Burst
-                const duration = 3000;
-                const end = Date.now() + duration;
-
-                const frame = () => {
-                    confetti({
-                        particleCount: 2,
-                        angle: 60,
-                        spread: 55,
-                        origin: { x: 0, y: 0.5 },
-                        colors: ['#ec4899', '#ffffff'],
-                        shapes: ['heart'] as any, // Heart shape!
-                        scalar: 2 // Make them bigger for impact
-                    });
-                    confetti({
-                        particleCount: 2,
-                        angle: 120,
-                        spread: 55,
-                        origin: { x: 1, y: 0.5 },
-                        colors: ['#ec4899', '#ffffff'],
-                        shapes: ['heart'] as any,
-                        scalar: 2
-                    });
-
-                    if (Date.now() < end) {
-                        requestAnimationFrame(frame);
-                    }
-                };
-                frame();
-
-                // Smooth scroll to result after render
-                setTimeout(() => {
-                    resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-                }, 100)
-            }
-        } catch (error) {
-            console.error(error)
-        } finally {
+            setWish('')
             setLoading(false)
-        }
+
+            // 1. Confetti Burst
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            const frame = () => {
+                confetti({
+                    particleCount: 2,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.5 },
+                    colors: ['#ec4899', '#ffffff'],
+                    shapes: ['heart'] as any,
+                    scalar: 2
+                });
+                confetti({
+                    particleCount: 2,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.5 },
+                    colors: ['#ec4899', '#ffffff'],
+                    shapes: ['heart'] as any,
+                    scalar: 2
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            };
+            frame();
+
+            // Smooth scroll to result
+            setTimeout(() => {
+                resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            }, 100)
+        }, 2000)
     }
 
     return (

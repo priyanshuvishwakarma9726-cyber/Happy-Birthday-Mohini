@@ -245,6 +245,43 @@ export default function AdminPage() {
                     {/* Left Panel: Content & Logic */}
                     <div className="lg:col-span-8 space-y-12">
 
+                        {/* EXPLICIT PRINTABLE CARD SECTION (ABSOLUTE TOP) */}
+                        <section className="bg-gradient-to-br from-pink-600/30 to-purple-600/30 p-10 rounded-[3rem] border-4 border-pink-500/50 space-y-6 shadow-[0_0_50px_rgba(236,72,153,0.3)] transform hover:scale-[1.01] transition-all">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-3xl font-black flex items-center gap-4 text-white tracking-tighter">
+                                    <Printer className="w-10 h-10 text-pink-500 animate-bounce" /> PRINTABLE CARD GIFT
+                                </h2>
+                                <span className="bg-white text-pink-600 text-xs font-black px-4 py-1 rounded-full uppercase tracking-widest animate-pulse">Critical Priority</span>
+                            </div>
+                            <p className="text-zinc-200 text-lg font-medium">Edit the special photo and deep message for the physical card gift.</p>
+
+                            <div className="grid grid-cols-1 gap-8">
+                                <div className="space-y-3">
+                                    <label className="text-xs text-pink-300 uppercase font-black tracking-widest flex items-center gap-2"><PenTool className="w-4 h-4" /> 1. Deep Emotional Message</label>
+                                    <textarea
+                                        className="w-full bg-black/80 border-2 border-pink-500/20 p-6 rounded-[2rem] h-52 focus:border-pink-500 outline-none text-lg leading-relaxed text-white shadow-2xl"
+                                        placeholder="Write your heart out here. This message will be printed on the card..."
+                                        value={localContent['card_message'] || ''}
+                                        onChange={e => handleLocalChange('card_message', e.target.value)}
+                                    />
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-8 items-end">
+                                    <div className="space-y-3">
+                                        <label className="text-xs text-pink-300 uppercase font-black tracking-widest flex items-center gap-2"><ImageIcon className="w-4 h-4" /> 2. Photo URL</label>
+                                        <input
+                                            className="w-full bg-black/80 border-2 border-pink-500/20 p-4 rounded-xl focus:border-pink-500 outline-none text-xs font-mono text-zinc-400"
+                                            value={localContent['card_image_url'] || ''}
+                                            onChange={e => handleLocalChange('card_image_url', e.target.value)}
+                                        />
+                                    </div>
+                                    <label className="bg-white text-pink-600 px-8 py-5 rounded-2xl text-sm font-black cursor-pointer hover:bg-pink-50 transition-all active:scale-95 flex items-center justify-center gap-3 shadow-xl uppercase">
+                                        <ImageIcon className="w-6 h-6" /> Upload Gift Photo
+                                        <input type="file" className="hidden" accept="image/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('card_image_url', p) } }} />
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+
                         {/* 1. Global Features */}
                         <section className="space-y-6">
                             <h2 className="text-xl font-bold flex items-center gap-2"><Sparkles className="text-yellow-500 w-5 h-5" /> Global Logic</h2>
@@ -273,42 +310,6 @@ export default function AdminPage() {
                             </div>
                         </section>
 
-                        {/* EXPLICIT PRINTABLE CARD SECTION (MOVED TO TOP FOR VISIBILITY) */}
-                        <section className="bg-gradient-to-br from-pink-600/20 to-purple-600/20 p-8 rounded-3xl border-2 border-pink-500/50 space-y-6 shadow-[0_0_30px_rgba(236,72,153,0.2)]">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-2xl font-black flex items-center gap-3 text-white">
-                                    <Printer className="w-8 h-8 text-pink-500 animate-pulse" /> PRINTABLE CARD EDITOR
-                                </h2>
-                                <span className="bg-pink-500 text-[10px] font-bold px-2 py-1 rounded-full text-white uppercase tracking-widest">New / Priority</span>
-                            </div>
-                            <p className="text-sm text-zinc-300 font-medium">This section directly controls the photo and message on the "Printable Card" in the Gift Shop.</p>
-
-                            <div className="grid grid-cols-1 gap-6">
-                                <div>
-                                    <label className="text-[10px] text-pink-400 uppercase font-black block mb-2 tracking-widest">1. Card Special Message</label>
-                                    <textarea
-                                        className="w-full bg-black/60 border border-pink-500/30 p-4 rounded-xl h-40 focus:border-pink-500 outline-none text-sm leading-relaxed text-pink-50/90 shadow-inner"
-                                        placeholder="Write a deep, emotional message specifically for the printed card..."
-                                        value={localContent['card_message'] || ''}
-                                        onChange={e => handleLocalChange('card_message', e.target.value)}
-                                    />
-                                </div>
-                                <div className="grid md:grid-cols-2 gap-6 items-end">
-                                    <div>
-                                        <label className="text-[10px] text-pink-400 uppercase font-black block mb-2 tracking-widest">2. Card Photo URL</label>
-                                        <input
-                                            className="w-full bg-black/60 border border-pink-500/30 p-3 rounded-xl focus:border-pink-500 outline-none text-xs font-mono text-zinc-400"
-                                            value={localContent['card_image_url'] || ''}
-                                            onChange={e => handleLocalChange('card_image_url', e.target.value)}
-                                        />
-                                    </div>
-                                    <label className="bg-gradient-to-r from-pink-600 to-pink-500 px-6 py-4 rounded-xl text-xs font-black cursor-pointer hover:shadow-[0_0_20px_rgba(236,72,153,0.4)] flex items-center justify-center gap-2 transition-all active:scale-95 uppercase tracking-tighter">
-                                        <ImageIcon className="w-5 h-5" /> Upload Card Image
-                                        <input type="file" className="hidden" accept="image/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('card_image_url', p) } }} />
-                                    </label>
-                                </div>
-                            </div>
-                        </section>
 
                         {/* GOD MODE TEXT REGISTRY */}
                         {/* DYNAMIC CMS EDITOR */}
