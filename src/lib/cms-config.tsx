@@ -66,6 +66,8 @@ export const CMS_CATEGORIES = [
             { key: 'footer_text', label: 'Footer Bottom Text', type: 'text' },
             { key: 'secret_vault_title', label: 'Vault Box Title', type: 'text' },
             { key: 'secret_vault_hint', label: 'Vault Password Hint (DDMM)', type: 'text' },
+            { key: 'secret_vault_success_title', label: 'Vault: Success Heading (Unlocked)', type: 'text' },
+            { key: 'secret_vault_success_msg', label: 'Vault: The Secret Message', type: 'textarea' },
         ]
     }
 ]
