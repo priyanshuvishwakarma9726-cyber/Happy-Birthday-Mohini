@@ -262,6 +262,22 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                 </motion.div>
             </section>
 
+            {/* GALLERY - MOVED TO TOP */}
+            {playing && flags.show_gallery && (
+                <GallerySection items={localGallery} title={content.gallery_title} />
+            )}
+
+            {/* LOVE LETTER - MOVED TO TOP WITH OPENING ANIMATION */}
+            {playing && flags.show_letter && content.long_letter_body && (
+                <LoveLetter
+                    title={content.long_letter_title || "My Heart's Letter"}
+                    body={content.long_letter_body}
+                    gallery={localGallery.filter(i => i.type === 'image' || (i.type as string) === 'photo').slice(0, 4)}
+                />
+            )}
+
+            <SectionDivider />
+
 
             {/* MINI GAMES ARCADE */}
             {playing && flags.show_games && (
@@ -301,20 +317,6 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
                     <SectionDivider />
                 </>
-            )}
-
-            {/* GALLERY - POSITIONED ABOVE LETTER */}
-            {playing && flags.show_gallery && (
-                <GallerySection items={localGallery} title={content.gallery_title} />
-            )}
-
-            {/* LOVE LETTER */}
-            {playing && flags.show_letter && content.long_letter_body && (
-                <LoveLetter
-                    title={content.long_letter_title || "My Heart's Letter"}
-                    body={content.long_letter_body}
-                    gallery={localGallery.filter(i => i.type === 'image' || (i.type as string) === 'photo').slice(0, 4)}
-                />
             )}
 
             {/* BIRTHDAY WISH BOX */}
