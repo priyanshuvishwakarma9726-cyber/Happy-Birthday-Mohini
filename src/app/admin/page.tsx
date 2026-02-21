@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, Unlock, Settings, Eye, EyeOff, Save, Trash2, CheckCircle, AlertTriangle, Camera, Music, Sparkles, MessageSquareHeart, Heart, Gift, Compass, Image as ImageIcon, PenTool } from 'lucide-react'
+import { Lock, Unlock, Settings, Eye, EyeOff, Save, Trash2, CheckCircle, AlertTriangle, Camera, Music, Sparkles, MessageSquareHeart, Heart, Gift, Compass, Image as ImageIcon, PenTool, Printer } from 'lucide-react'
 
 // Types
 interface Content {
@@ -38,6 +38,8 @@ interface Content {
     media_title: string;
     audio_title: string;
     birthday_date: string;
+    card_message?: string;
+    card_image_url?: string;
 }
 
 interface FeatureFlags {
@@ -300,6 +302,42 @@ export default function AdminPage() {
                                 </div>
                             </section>
                         ))}
+
+                        {/* EXPLICIT PRINTABLE CARD SECTION (Requested for better visibility) */}
+                        <section className="bg-gradient-to-br from-pink-900/20 to-purple-900/20 p-8 rounded-3xl border border-pink-500/30 space-y-6">
+                            <h2 className="text-xl font-bold flex items-center gap-2 text-white">
+                                <Printer className="w-6 h-6 text-pink-500" /> Printable Birthday Card Gift
+                            </h2>
+                            <p className="text-sm text-zinc-400">Customize the special card that your love can print or save as a PDF.</p>
+
+                            <div className="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Card Message (Emotional)</label>
+                                    <textarea
+                                        className="w-full bg-black border border-pink-500/20 p-4 rounded-xl h-40 focus:border-pink-500 outline-none text-sm leading-relaxed"
+                                        placeholder="Write a deep, emotional message specifically for the printed card..."
+                                        value={localContent['card_message'] || ''}
+                                        onChange={e => handleLocalChange('card_message', e.target.value)}
+                                    />
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4 items-center">
+                                    <div>
+                                        <label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Card Image URL</label>
+                                        <input
+                                            className="w-full bg-black border border-pink-500/20 p-3 rounded-xl focus:border-pink-500 outline-none text-xs font-mono"
+                                            value={localContent['card_image_url'] || ''}
+                                            onChange={e => handleLocalChange('card_image_url', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <label className="bg-pink-600 px-6 py-3 rounded-xl text-xs font-bold cursor-pointer hover:bg-pink-500 flex items-center gap-2 shadow-lg shadow-pink-500/20 transition-all active:scale-95">
+                                            <ImageIcon className="w-4 h-4" /> Upload Card Photo
+                                            <input type="file" className="hidden" accept="image/*" onChange={async e => { const f = e.target.files?.[0]; if (f) { const p = await handleFileUpload(f); handleLocalChange('card_image_url', p) } }} />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
 
                         {/* ADVANCED - JSON CONFIGS */}
                         <section className="bg-indigo-900/10 p-8 rounded-3xl border border-indigo-500/20 space-y-8">
