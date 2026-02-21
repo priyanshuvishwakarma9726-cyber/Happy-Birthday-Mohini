@@ -45,45 +45,13 @@ export default function RomanticAI({ content }: { content?: any }) {
     const [output, setOutput] = useState('')
     const [isProcessing, setIsProcessing] = useState(false)
 
-    // Voice Recognition (Browser API)
-    const startListening = () => {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            alert("Your browser doesn't support voice recognition. Try Chrome!")
-            return
-        }
+    const romanticize = (inputText?: string) => {
+        const targetText = inputText || text;
+        if (!targetText) return;
 
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-        const recognition = new SpeechRecognition()
-        recognition.lang = 'en-US'
-        recognition.interimResults = false
-        recognition.maxAlternatives = 1
-
-        recognition.onstart = () => {
-            setListening(true)
-            setText('')
-        }
-
-        recognition.onresult = (event: any) => {
-            const transcript = event.results[0][0].transcript
-            setText(transcript)
-            setListening(false)
-        }
-
-        recognition.onerror = (event: any) => {
-            console.error(event.error)
-            setListening(false)
-        }
-
-        recognition.onend = () => setListening(false)
-
-        recognition.start()
-    }
-
-    const romanticize = () => {
         setIsProcessing(true)
         setTimeout(() => {
-            const inputLower = text.toLowerCase();
-            const words = inputLower.split(/\s+/);
+            const inputLower = targetText.toLowerCase();
 
             // Extract identified keys from input
             const foundKeys = Object.keys(POETIC_ENGINE.vocab).filter(key =>
@@ -114,6 +82,43 @@ export default function RomanticAI({ content }: { content?: any }) {
             setOutput(polished);
             setIsProcessing(false)
         }, 1500) // Fake AI delay
+    }
+
+    // Voice Recognition (Browser API)
+    const startListening = () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert("Your browser doesn't support voice recognition. Try Chrome!")
+            return
+        }
+
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+        const recognition = new SpeechRecognition()
+        recognition.lang = 'en-US'
+        recognition.interimResults = false
+        recognition.maxAlternatives = 1
+
+        recognition.onstart = () => {
+            setListening(true)
+            setText('')
+            setOutput('')
+        }
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript
+            setText(transcript)
+            setListening(false)
+            // Auto-trigger the romanticize engine for 'magic' feel
+            romanticize(transcript)
+        }
+
+        recognition.onerror = (event: any) => {
+            console.error(event.error)
+            setListening(false)
+        }
+
+        recognition.onend = () => setListening(false)
+
+        recognition.start()
     }
 
     return (
