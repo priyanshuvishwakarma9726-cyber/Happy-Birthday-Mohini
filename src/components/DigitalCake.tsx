@@ -7,20 +7,17 @@ const DEFAULT_CAKE_WISHES = [
     "May all your dreams come true, today and always. You deserve the world! 🌏💖"
 ]
 
-// FREE AI ENGINE: NO API KEYS NEEDED
-const CAKE_ENGINE = {
-    intents: ["May your life be as sweet as this cake,", "On this special day, may the universe conspire to bring you joy,", "I wish that every step you take leads to happiness,", "May your heart always be full of love and laughter,", "I hope this year brings you magic you never expected,", "May you always find the strength to shine,"],
-    soul: ["because you are the kindest soul I know.", "just like you bring light to everyone around you.", "and may your beautiful smile never fade away.", "with dreams that take you to the highest peaks.", "and moments that stay in your heart forever.", "because you deserve all the goodness in the world."],
-    closure: ["Happy Birthday, my queen! 👑💖", "Stay precisely as magical as you are. ✨❤️", "The world is better with you in it. 🌏🌸", "I love you beyond words, Mohini! 🌹💎", "Cheers to another year of your greatness! 🥂🎉"]
-};
-
 export default function DigitalCake({ content }: { content?: any }) {
-    const generateWish = () => {
-        const intent = CAKE_ENGINE.intents[Math.floor(Math.random() * CAKE_ENGINE.intents.length)];
-        const soul = CAKE_ENGINE.soul[Math.floor(Math.random() * CAKE_ENGINE.soul.length)];
-        const closure = CAKE_ENGINE.closure[Math.floor(Math.random() * CAKE_ENGINE.closure.length)];
-        return `${intent} ${soul} ${closure}`;
-    };
+    const wishes = (() => {
+        try {
+            if (!content?.cake_wishes) return DEFAULT_CAKE_WISHES;
+            const parsed = JSON.parse(content.cake_wishes);
+            return Array.isArray(parsed) ? (parsed.length > 0 ? parsed : DEFAULT_CAKE_WISHES) : [content.cake_wishes];
+        } catch (e) {
+            console.warn("DigitalCake: Failed to parse cake_wishes, using raw value as single wish.");
+            return content?.cake_wishes ? [content.cake_wishes] : DEFAULT_CAKE_WISHES;
+        }
+    })();
 
     const [currentWish, setCurrentWish] = useState("")
 
@@ -40,7 +37,7 @@ export default function DigitalCake({ content }: { content?: any }) {
     useEffect(() => {
         if (candles.every(c => !c) && !wished) {
             setWished(true)
-            setCurrentWish(generateWish())
+            setCurrentWish(wishes[Math.floor(Math.random() * wishes.length)])
             confetti({
                 particleCount: 150,
                 spread: 70,
@@ -48,7 +45,7 @@ export default function DigitalCake({ content }: { content?: any }) {
                 colors: ['#FFD700', '#FFA500', '#FF4500'] // Gold/Orange fire colors
             })
         }
-    }, [candles])
+    }, [candles, wishes])
 
     return (
         <div className="relative py-12 flex flex-col items-center justify-center">

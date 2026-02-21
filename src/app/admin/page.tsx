@@ -272,6 +272,14 @@ export default function AdminPage() {
                             </div>
                         </section>
 
+                        {/* ADVANCED - JSON CONFIGS (Cake Only) */}
+                        <section className="bg-indigo-900/10 p-8 rounded-3xl border border-indigo-500/20 space-y-8">
+                            <h2 className="text-xl font-bold flex items-center gap-2 text-indigo-400"><Compass /> Special Logic (JSON Data)</h2>
+                            <div className="grid grid-cols-1">
+                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Digital Cake: Random Wishes List (JSON)</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-32 font-mono text-[10px]" value={localContent['cake_wishes'] || '[]'} onChange={e => handleLocalChange('cake_wishes', e.target.value)} /></div>
+                            </div>
+                        </section>
+
 
                         {/* GOD MODE TEXT REGISTRY */}
                         {/* DYNAMIC CMS EDITOR */}
@@ -552,15 +560,15 @@ export default function AdminPage() {
                         </section>
 
                     </div>
-                </div>
+                </div >
 
                 {/* Bottom Bar: Full Width Actions */}
-                <div className="pt-12 border-t border-white/5">
+                < div className="pt-12 border-t border-white/5" >
                     <button onClick={handleSave} className="w-full py-6 bg-gradient-to-r from-pink-600 to-purple-600 rounded-[2rem] text-xl font-black uppercase tracking-tighter shadow-2xl hover:scale-[1.01] transition-all active:scale-95 flex items-center justify-center gap-4">
                         <Save className="w-8 h-8" /> COMPLETE SYNC & LIVE UPDATE
                     </button>
-                </div>
-            </main>
-        </div>
+                </div >
+            </main >
+        </div >
     )
 }
