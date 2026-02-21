@@ -22,7 +22,16 @@ const DEFAULT_DICT: Record<string, string> = {
 }
 
 export default function RomanticAI({ content }: { content?: any }) {
-    const dict = content?.romantic_dict ? JSON.parse(content.romantic_dict) : DEFAULT_DICT
+    const dict = (() => {
+        try {
+            if (!content?.romantic_dict) return DEFAULT_DICT;
+            const parsed = JSON.parse(content.romantic_dict);
+            return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : DEFAULT_DICT;
+        } catch (e) {
+            console.warn("RomanticAI: Failed to parse romantic_dict, using default dictionary.");
+            return DEFAULT_DICT;
+        }
+    })();
     const [text, setText] = useState('')
     const [listening, setListening] = useState(false)
     const [output, setOutput] = useState('')

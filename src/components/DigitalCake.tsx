@@ -8,7 +8,17 @@ const DEFAULT_CAKE_WISHES = [
 ]
 
 export default function DigitalCake({ content }: { content?: any }) {
-    const wishes = content?.cake_wishes ? JSON.parse(content.cake_wishes) : DEFAULT_CAKE_WISHES
+    const wishes = (() => {
+        try {
+            if (!content?.cake_wishes) return DEFAULT_CAKE_WISHES;
+            const parsed = JSON.parse(content.cake_wishes);
+            return Array.isArray(parsed) ? (parsed.length > 0 ? parsed : DEFAULT_CAKE_WISHES) : [content.cake_wishes];
+        } catch (e) {
+            console.warn("DigitalCake: Failed to parse cake_wishes, using raw value as single wish.");
+            return content?.cake_wishes ? [content.cake_wishes] : DEFAULT_CAKE_WISHES;
+        }
+    })();
+
     const [candles, setCandles] = useState([true, true, true, true, true]) // 5 candles, true = lit
     const [wished, setWished] = useState(false)
 

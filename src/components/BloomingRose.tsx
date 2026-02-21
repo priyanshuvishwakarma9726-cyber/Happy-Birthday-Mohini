@@ -105,7 +105,16 @@ function RoseCluster({ bloomLevel, isNight }: { bloomLevel: number, isNight: boo
 }
 
 export default function BloomingRose({ content }: { content?: any }) {
-    const hinglishMessages = content?.love_messages ? JSON.parse(content.love_messages) : DEFAULT_HINGLISH
+    const hinglishMessages = (() => {
+        try {
+            if (!content?.love_messages) return DEFAULT_HINGLISH;
+            const parsed = JSON.parse(content.love_messages);
+            return Array.isArray(parsed) ? (parsed.length > 0 ? parsed : DEFAULT_HINGLISH) : [content.love_messages];
+        } catch (e) {
+            console.warn("BloomingRose: Failed to parse love_messages, using default messages.");
+            return content?.love_messages ? [content.love_messages] : DEFAULT_HINGLISH;
+        }
+    })();
     const secretMessages = content?.long_letter_title ? [content.long_letter_title] : DEFAULT_SECRET
     const [bloomLevel, setBloomLevel] = useState(0.5)
     const [isNight, setIsNight] = useState(false)
