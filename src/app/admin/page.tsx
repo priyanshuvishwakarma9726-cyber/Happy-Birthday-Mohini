@@ -303,15 +303,6 @@ export default function AdminPage() {
                             </section>
                         ))}
 
-                        {/* ADVANCED - JSON CONFIGS */}
-                        <section className="bg-indigo-900/10 p-8 rounded-3xl border border-indigo-500/20 space-y-8">
-                            <h2 className="text-xl font-bold flex items-center gap-2 text-indigo-400"><Compass /> Special Logic & AI (JSON Data)</h2>
-                            <div className="grid md:grid-cols-2 gap-8">
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Crystal Ball: Future Goals / Hopes</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['future_goals'] || '[]'} onChange={e => handleLocalChange('future_goals', e.target.value)} /></div>
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Roast Quiz: Questions & Logic</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['quiz_data'] || '[]'} onChange={e => handleLocalChange('quiz_data', e.target.value)} /></div>
-                                <div><label className="text-[10px] text-zinc-500 uppercase font-black block mb-2">Digital Cake: Random Wishes List</label><textarea className="w-full bg-black/40 border border-indigo-500/20 p-3 rounded-xl h-48 font-mono text-[10px]" value={localContent['cake_wishes'] || '[]'} onChange={e => handleLocalChange('cake_wishes', e.target.value)} /></div>
-                            </div>
-                        </section>
 
                         {/* Love Story Editor */}
                         <section className="bg-rose-900/10 p-8 rounded-3xl border border-rose-500/20 space-y-6">

@@ -85,26 +85,62 @@ const DEFAULT_QUESTIONS: QuizQuestion[] = [
     }
 ]
 
+// FREE AI ENGINE: NO API KEYS NEEDED
+const QUIZ_AI = {
+    generateSession: (count = 5) => {
+        // Pool of potential questions (expanded for variety)
+        const pool: QuizQuestion[] = [
+            ...DEFAULT_QUESTIONS,
+            {
+                q: "Mohini ka favorite actor kaun hai?",
+                options: ["Ranbir Kapoor", "Kartik Aaryan", "Shah Rukh Khan", "Sab ke sab fav hain 💀"],
+                a: "Sab ke sab fav hain 💀",
+                correct: "Sahi pakde hain! Inka choices switch hota rehta hai 😌",
+                wrong: "Galat! Inka mood swings actors par bhi apply hote hain 😏"
+            },
+            {
+                q: "Agar Mohini gussa ho jaye toh kya dena chahiye?",
+                options: ["Flowers 🌸", "Chocolate 🍫", "Full day attention 📱", "Maafi mangna 😭"],
+                a: "Full day attention 📱",
+                correct: "Bilkul! Bas screen ke uss paar unki suno, sab sahi ho jayega 😌",
+                wrong: "Galat! Gifts se zyada unhe unki baatein sunne wala chahiye 😏"
+            },
+            {
+                q: "Mohini ka sabse bada darr kya hai?",
+                options: ["Chipkali 🦎", "Main (Gussa) 😤", "Exam result 📄", "Internet khatam hona 💀"],
+                a: "Internet khatam hona 💀",
+                correct: "Sahi! Reel scroll rukni nahi chahiye bas 😌",
+                wrong: "Galat! Chipkali se toh darti hain, par internet se zyada nahi 💀"
+            },
+            {
+                q: "Humari sabse lambi call kitni der ki thi?",
+                options: ["1 Ghanta", "3 Ghante", "Whole Night 🌃", "Bas 5 minute (Ladai) 💀"],
+                a: "Whole Night 🌃",
+                correct: "Legend! Phone garam ho gaya tha par baatein nahi ruki ❤️",
+                wrong: "Galat! Tumhe memories thodi refresh karni padengi 😌"
+            }
+        ];
+
+        // Shuffle and pick subset
+        const shuffled = [...pool].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    }
+}
+
 export default function MohiniQuiz({ quizData }: { quizData?: string }) {
     const [current, setCurrent] = useState(0)
     const [score, setScore] = useState(0)
     const [showResult, setShowResult] = useState(false)
     const [feedback, setFeedback] = useState<{ msg: string; isCorrect: boolean } | null>(null)
     const [quizStarted, setQuizStarted] = useState(false)
-    const [questions, setQuestions] = useState<QuizQuestion[]>(DEFAULT_QUESTIONS)
+    const [questions, setQuestions] = useState<QuizQuestion[]>([])
 
+    // Initialize with random session when quiz starts
     useEffect(() => {
-        if (quizData) {
-            try {
-                const parsed = JSON.parse(quizData)
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    setQuestions(parsed)
-                }
-            } catch (e) {
-                console.error("Quiz Data Parse Error", e)
-            }
+        if (quizStarted && questions.length === 0) {
+            setQuestions(QUIZ_AI.generateSession(5))
         }
-    }, [quizData])
+    }, [quizStarted, questions.length])
 
     const [isTransitioning, setIsTransitioning] = useState(false)
 
@@ -205,6 +241,7 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
                 <button
                     onClick={() => {
                         setCurrent(0); setScore(0); setShowResult(false); setFeedback(null);
+                        setQuestions([]); // Clear to trigger regeneration
                     }}
                     className="w-full bg-zinc-800 hover:bg-zinc-700 text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all"
                 >

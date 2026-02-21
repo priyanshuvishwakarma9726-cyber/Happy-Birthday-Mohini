@@ -16,20 +16,28 @@ const DEFAULT_GOALS = [
     { title: "Endless Laughter 😂", desc: "Every single day filled with your beautiful smile.", icon: "🌟" }
 ]
 
+// FREE AI ENGINE: NO API KEYS NEEDED
+const FUTURE_ENGINE = {
+    actions: ["Midnight Ice-Cream 🍦", "World Tour ✈️", "Cute Puppy 🐶", "First Rain Date ⛈️", "First Rain Date ⛈️", "Gazing Stars 🌌", "Growing Old Together 👵👴", "Surprise Dinner 🍝", "Endless Laughter 😂", "Beach walk at 2 AM 🌊", "Watching Sunsets 🌅", "Bike trip to mountains 🏍️", "Cozy Movie Marathon 🍿", "Learning to cook together 🍳", "Writing a story together ✍️", "Shopping Spree 🛍️", "Dancing in the hall 💃", "Late night deep talks 🌙", "Waking up to your tea ☕", "Painting a wall together 🎨"],
+    vibes: ["Uncountable drives for your favorite treats.", "Exploring the world holding your hand.", "Adding a little furry member to our world.", "Getting drenched and sharing a warm chai.", "A quiet night under the infinite sky.", "Still annoying you with my jokes when we are 80.", "Cooking your favorite meal after a long day.", "Every single day filled with your beautiful smile.", "Chasing the waves and making memories.", "Finding peace in the chaos of the world.", "Finding magic in the simple moments.", "Laughing until our stomachs hurt.", "Building a home built on love and dreams.", "A life that feels like a never ending movie.", "Sharing the same earphone and favorite song.", "Walking through life like a power couple.", "Creating a legacy of love and kindness.", "Being each other's home and safe place."],
+    locations: ["in Paris 🇫🇷", "in Japan 🇯🇵", "on a quiet island 🏝️", "in our dream house 🏠", "in Switzerland 🏔️", "under the blue sky 🌌", "in our cozy balcony 🏙️", "by the Taj Mahal 🏰", "anywhere with you ❤️"]
+};
+
 export default function OurFutureMagic({ content }: { content?: any }) {
-    let goals = DEFAULT_GOALS
-    try {
-        if (content?.future_goals) {
-            const parsed = typeof content.future_goals === 'string' ? JSON.parse(content.future_goals) : content.future_goals
-            if (Array.isArray(parsed) && parsed.length > 0) {
-                goals = parsed
-            }
-        }
-    } catch (e) {
-        console.error("Failed to parse future goals", e)
-    }
+    const generateGoal = () => {
+        const action = FUTURE_ENGINE.actions[Math.floor(Math.random() * FUTURE_ENGINE.actions.length)];
+        const vibe = FUTURE_ENGINE.vibes[Math.floor(Math.random() * FUTURE_ENGINE.vibes.length)];
+        const loc = FUTURE_ENGINE.locations[Math.floor(Math.random() * FUTURE_ENGINE.locations.length)];
+
+        return {
+            title: action,
+            desc: `${vibe.replace('.', '')} ${loc}.`,
+            icon: action.split(' ').pop() || "✨"
+        };
+    };
 
     const [index, setIndex] = useState<number | null>(null)
+    const [currentGoal, setCurrentGoal] = useState<any>(null)
     const [isSpinning, setIsSpinning] = useState(false)
 
     const revealDestiny = () => {
@@ -39,8 +47,9 @@ export default function OurFutureMagic({ content }: { content?: any }) {
 
         // Simulate spinning
         setTimeout(() => {
-            const nextIndex = Math.floor(Math.random() * goals.length)
-            setIndex(nextIndex)
+            const nextGoal = generateGoal();
+            setCurrentGoal(nextGoal);
+            setIndex(1); // Non-null value to trigger UI
             setIsSpinning(false)
             confetti({
                 particleCount: 100,
@@ -96,19 +105,19 @@ export default function OurFutureMagic({ content }: { content?: any }) {
                             </motion.div>
                         )}
 
-                        {index !== null && !isSpinning && (
+                        {index !== null && !isSpinning && currentGoal && (
                             <motion.div
                                 key="result"
                                 initial={{ scale: 0.8, opacity: 0, y: 20 }}
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 className="text-center space-y-4"
                             >
-                                <div className="text-6xl mb-2">{goals[index].icon}</div>
+                                <div className="text-6xl mb-2">{currentGoal.icon}</div>
                                 <h4 className="text-2xl font-black text-pink-400 uppercase tracking-tighter leading-none italic">
-                                    {goals[index].title}
+                                    {currentGoal.title}
                                 </h4>
                                 <p className="text-zinc-400 text-sm leading-relaxed px-4">
-                                    "{goals[index].desc}"
+                                    "{currentGoal.desc}"
                                 </p>
                                 <button
                                     onClick={revealDestiny}
