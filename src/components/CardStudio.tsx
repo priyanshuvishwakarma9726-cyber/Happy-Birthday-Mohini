@@ -44,49 +44,145 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
     }
 
     const handlePrint = () => {
-        // Open a new window for printing
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) return alert('Please allow popups to print!');
+        const printWindow = window.open('', '_blank', 'width=800,height=900');
+        if (!printWindow) return alert('Please allow popups to generate your card!');
 
-        const content = `
+        const imageUrl = heroImage || "https://images.unsplash.com/photo-1530103862676-fa8c9d34da3e?q=80&w=1000&auto=format&fit=crop";
+
+        const printHtml = `
             <!DOCTYPE html>
             <html>
             <head>
-                <title>Birthday Card for ${recipientName}</title>
+                <meta charset="UTF-8">
+                <title>Birthday Card - ${recipientName}</title>
+                <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&display=swap');
-                    body { margin: 0; padding: 0; font-family: 'Playfair Display', serif; background: #fff; color: #333; }
-                    .card-container { width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; box-sizing: border-box; border: 20px solid #fdf2f8; }
-                    .title { font-size: 60px; font-weight: 700; color: #db2777; margin-bottom: 20px; font-family: 'Dancing Script', cursive; }
-                    .photo-frame { width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 10px solid #fce7f3; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-                    .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
-                    .body-text { font-size: 18px; line-height: 1.8; text-align: center; max-width: 600px; margin-bottom: 40px; font-style: italic; white-space: pre-wrap; }
-                    .footer { font-size: 16px; color: #888; margin-top: auto; }
-                    .heart { color: #ec4899; font-size: 24px; }
+                    body { 
+                        margin: 0; 
+                        padding: 0; 
+                        background: #fff; 
+                        font-family: 'Inter', sans-serif;
+                        color: #1a1a1a;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                    .card-wrapper {
+                        width: 210mm;
+                        min-height: 297mm;
+                        margin: 0 auto;
+                        padding: 40px;
+                        box-sizing: border-box;
+                        background: #fff;
+                        position: relative;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .border-decoration {
+                        position: absolute;
+                        top: 20px; bottom: 20px; left: 20px; right: 20px;
+                        border: 2px solid #fce7f3;
+                        pointer-events: none;
+                    }
+                    .header {
+                        text-align: center;
+                        margin-top: 40px;
+                        margin-bottom: 40px;
+                    }
+                    .title {
+                        font-family: 'Dancing Script', cursive;
+                        font-size: 72px;
+                        color: #db2777;
+                        margin: 0;
+                        line-height: 1.2;
+                    }
+                    .recipient {
+                        font-family: 'Playfair Display', serif;
+                        font-size: 32px;
+                        color: #4b5563;
+                        margin-top: 10px;
+                        font-weight: 700;
+                    }
+                    .image-container {
+                        width: 350px;
+                        height: 350px;
+                        border-radius: 20px;
+                        overflow: hidden;
+                        border: 12px solid #fdf2f8;
+                        box-shadow: 0 10px 25px rgba(219, 39, 119, 0.1);
+                        margin: 20px 0;
+                    }
+                    .image-container img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .letter-content {
+                        font-family: 'Playfair Display', serif;
+                        font-size: 20px;
+                        line-height: 1.8;
+                        color: #374151;
+                        max-width: 85%;
+                        text-align: center;
+                        margin: 40px 0;
+                        white-space: pre-wrap;
+                        font-style: italic;
+                    }
+                    .footer {
+                        margin-top: auto;
+                        text-align: center;
+                        padding-bottom: 40px;
+                    }
+                    .heart-icon {
+                        color: #db2777;
+                        font-size: 30px;
+                        margin-bottom: 10px;
+                    }
+                    .signature {
+                        font-family: 'Dancing Script', cursive;
+                        font-size: 28px;
+                        color: #db2777;
+                    }
                     @media print {
-                        .no-print { display: none; }
-                        body { -webkit-print-color-adjust: exact; }
+                        @page { margin: 0; }
+                        .card-wrapper { padding: 40px; }
                     }
                 </style>
             </head>
             <body>
-                <div class="card-container">
-                    <h1 class="title">Happy Birthday ${recipientName}</h1>
-                    ${heroImage ? `<div class="photo-frame"><img src="${heroImage}" /></div>` : ''}
-                    <div class="body-text">${letterBody || "Wishing you a day filled with love, laughter, and endless joy. You are special!"}</div>
+                <div class="card-wrapper">
+                    <div class="border-decoration"></div>
                     
+                    <div class="header">
+                        <h1 class="title">Happy Birthday</h1>
+                        <div class="recipient">${recipientName}</div>
+                    </div>
+
+                    <div class="image-container">
+                        <img src="${imageUrl}" alt="Memory" />
+                    </div>
+
+                    <div class="letter-content">${letterBody || "Wishing you a lifetime of happiness, love, and light. You are truly special."}</div>
+
                     <div class="footer">
-                        <span class="heart">❤</span> Created with Love
+                        <div class="heart-icon">❤</div>
+                        <div class="signature">With Love Always</div>
                     </div>
                 </div>
                 <script>
-                    window.onload = () => { setTimeout(() => { window.print(); window.close(); }, 500); }
+                    window.onload = () => {
+                        // Wait for images and fonts to load
+                        setTimeout(() => {
+                            window.print();
+                            // Optional: window.close(); // Uncomment if you want it to close after print
+                        }, 1000);
+                    };
                 </script>
             </body>
             </html>
         `;
 
-        printWindow.document.write(content);
+        printWindow.document.write(printHtml);
         printWindow.document.close();
     }
 
