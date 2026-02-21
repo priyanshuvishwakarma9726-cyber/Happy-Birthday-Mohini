@@ -151,7 +151,7 @@ export default function RomanticAI({ content }: { content?: any }) {
                 </div>
 
                 <button
-                    onClick={romanticize}
+                    onClick={() => romanticize()}
                     disabled={!text || isProcessing}
                     className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 transition-transform active:scale-95"
                 >
