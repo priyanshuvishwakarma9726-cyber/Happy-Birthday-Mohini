@@ -97,14 +97,6 @@ interface Song {
     url: string;
 }
 
-const SectionDivider = () => (
-    <div className="py-10 flex items-center justify-center gap-4 max-w-4xl mx-auto opacity-30">
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        <Heart className="text-pink-500 w-4 h-4 fill-pink-500/20" />
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-    </div>
-)
-
 export default function HomeClient({ content, gallery, playlist, skipIntro = false }: { content: Content, gallery: GalleryItem[], playlist: Song[], skipIntro?: boolean }) {
     const { setIsPlaying, setMusicPaused, setUnlocked, isUnlocked } = useMusic()
     const router = useRouter()
@@ -263,14 +255,6 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                 </motion.div>
             </section>
 
-            {/* GALLERY - MOVED UP TO SEPARATE FROM LOVE LETTER */}
-            {playing && flags.show_gallery && (
-                <>
-                    <GallerySection items={localGallery} title={content.gallery_title} />
-                    <SectionDivider />
-                </>
-            )}
-
             {/* MINI GAMES ARCADE - MOVED UP */}
             {playing && flags.show_games && (
                 <MiniGamesSection gallery={localGallery} content={content} flags={flags} />
@@ -322,34 +306,31 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
             {/* BIRTHDAY WISH BOX */}
             {playing && flags.show_wishes && (
-                <>
-                    <WishBox />
-                    <SectionDivider />
-                </>
+                <WishBox />
             )}
 
             {/* MEDIA */}
             {flags.show_media && (content.video_url || content.voice_url) && (
-                <>
-                    <section className="py-20 px-4 bg-zinc-950/50 relative">
-                        <div className="max-w-4xl mx-auto space-y-12">
-                            {content.video_url && (
-                                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-                                    <h2 className="text-3xl font-bold text-center mb-8 text-white">{content.video_title || content.media_title || "Our Memories 🎥"}</h2>
-                                    <VideoPlayer url={content.video_url} play={playing} onPlayChange={handleMediaPlay} />
-                                </motion.div>
-                            )}
-                            {content.voice_url && (
-                                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="pt-8 text-center">
-                                    <h3 className="text-xl text-zinc-400 mb-4 flex items-center justify-center gap-2"><Music className="w-5 h-5" /> {content.audio_title || "Listen to this..."}</h3>
-                                    <VoiceMessage url={content.voice_url} onPlayChange={handleMediaPlay} />
-                                </motion.div>
-                            )}
-                        </div>
-                    </section>
-                    <SectionDivider />
-                </>
+                <section className="py-20 px-4 bg-zinc-950/50 relative">
+                    <div className="max-w-4xl mx-auto space-y-12">
+                        {content.video_url && (
+                            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
+                                <h2 className="text-3xl font-bold text-center mb-8 text-white">{content.video_title || content.media_title || "Our Memories 🎥"}</h2>
+                                <VideoPlayer url={content.video_url} play={playing} onPlayChange={handleMediaPlay} />
+                            </motion.div>
+                        )}
+                        {content.voice_url && (
+                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="pt-8 text-center">
+                                <h3 className="text-xl text-zinc-400 mb-4 flex items-center justify-center gap-2"><Music className="w-5 h-5" /> {content.audio_title || "Listen to this..."}</h3>
+                                <VoiceMessage url={content.voice_url} onPlayChange={handleMediaPlay} />
+                            </motion.div>
+                        )}
+                    </div>
+                </section>
             )}
+
+            {/* GALLERY */}
+            {flags.show_gallery && <GallerySection items={localGallery} title={content.gallery_title} />}
 
             {/* Birthday Cake Overlay */}
             <AnimatePresence>
