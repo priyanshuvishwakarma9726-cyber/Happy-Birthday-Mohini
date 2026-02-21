@@ -63,6 +63,12 @@ interface Content {
     gift_shop_subtitle?: string;
     wishes_title?: string;
     message_title?: string;
+    scratch_prize_1?: string;
+    scratch_prompt_1?: string;
+    scratch_subtext_1?: string;
+    scratch_prize_2?: string;
+    scratch_prompt_2?: string;
+    scratch_subtext_2?: string;
 }
 
 interface FeatureFlags {
@@ -71,9 +77,9 @@ interface FeatureFlags {
     show_gallery: boolean;
     show_wishes: boolean;
     show_media: boolean;
-    game_hearts: boolean;
     show_puzzle: boolean;
     show_quiz: boolean;
+    game_hearts: boolean;
     puzzle_difficulty: 3 | 4 | 5;
 }
 
@@ -136,7 +142,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
     // Feature Flags
     const [flags, setFlags] = useState<FeatureFlags>({
         show_games: true, show_letter: true, show_gallery: true, show_wishes: true, show_media: true,
-        game_hearts: true, show_puzzle: true, show_quiz: true, puzzle_difficulty: 3
+        show_puzzle: true, show_quiz: true, game_hearts: true, puzzle_difficulty: 3
     })
 
     const [localGallery, setLocalGallery] = useState<GalleryItem[]>(gallery)
@@ -275,8 +281,11 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                     <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400">
                                         {content.surprise_title || "Your Surprise Gift 🎁"}
                                     </h3>
-                                    <ScratchCard prizeText={content.scratch_prize || "One Free 'Yes' Day! (Valid Forever) 💖"} content={content} />
-                                    <p className="text-sm text-zinc-500 italic">{content.scratch_prompt || "Scratch to reveal your gift!"}</p>
+                                    <ScratchCard
+                                        prizeText={content.scratch_prize_1 || "One Free 'Yes' Day! (Valid Forever) 💖"}
+                                        scratchPrompt={content.scratch_prompt_1 || "Scratch Me! ✨"}
+                                    />
+                                    <p className="text-sm text-zinc-500 italic">{content.scratch_subtext_1 || "Scratch to reveal your gift!"}</p>
                                 </div>
                             </div>
                         </div>

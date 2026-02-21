@@ -4,11 +4,12 @@ import confetti from 'canvas-confetti'
 
 interface Props {
     prizeText: string;
+    scratchPrompt?: string;
     onReveal?: () => void;
 }
 
-export default function ScratchCard({ prizeText, onReveal, content }: Props & { content?: any }) {
-    const textToDisplay = content?.scratch_card_prize || prizeText || "A special surprise just for you! 💖"
+export default function ScratchCard({ prizeText, scratchPrompt = 'Scratch Me! ✨', onReveal }: Props) {
+    const textToDisplay = prizeText || "A special surprise just for you! 💖"
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [isRevealed, setIsRevealed] = useState(false)
 
@@ -31,7 +32,7 @@ export default function ScratchCard({ prizeText, onReveal, content }: Props & { 
             ctx.font = 'bold 20px "Comic Sans MS", cursive, sans-serif'
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
-            ctx.fillText('Scratch Me! ✨', canvas.width / 2, canvas.height / 2)
+            ctx.fillText(scratchPrompt, canvas.width / 2, canvas.height / 2)
         }
 
         let isDrawing = false

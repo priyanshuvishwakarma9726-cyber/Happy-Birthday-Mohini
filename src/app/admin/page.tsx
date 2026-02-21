@@ -21,7 +21,12 @@ interface Content {
     romantic_dict: string; // JSON string for RomanticAI
     future_goals: string; // JSON string for OurFutureMagic
     cake_wishes: string; // JSON string for DigitalCake
-    scratch_card_prize: string;
+    scratch_prize_1: string;
+    scratch_prompt_1: string;
+    scratch_subtext_1: string;
+    scratch_prize_2: string;
+    scratch_prompt_2: string;
+    scratch_subtext_2: string;
     gallery_title: string;
     wishes_title: string;
     social_title: string;
@@ -43,6 +48,7 @@ interface FeatureFlags {
     show_media: boolean;
     show_puzzle: boolean;
     show_quiz: boolean;
+    game_hearts: boolean;
     puzzle_difficulty: 3 | 4 | 5;
 }
 
@@ -54,6 +60,7 @@ const DEFAULT_FLAGS: FeatureFlags = {
     show_media: true,
     show_puzzle: true,
     show_quiz: true,
+    game_hearts: true,
     puzzle_difficulty: 4
 }
 

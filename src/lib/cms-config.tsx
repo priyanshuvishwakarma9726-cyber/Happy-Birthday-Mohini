@@ -42,8 +42,12 @@ export const CMS_CATEGORIES = [
         icon: Gift,
         keys: [
             { key: 'surprise_title', label: 'Surprise Heading', type: 'text' },
-            { key: 'scratch_prompt', label: 'Scratch Hint', type: 'text' },
-            { key: 'scratch_prize', label: 'Prize Text', type: 'text' },
+            { key: 'scratch_prize_1', label: 'Prize 1 (Main Card)', type: 'text' },
+            { key: 'scratch_prompt_1', label: 'Prompt 1 (Scratch Me!)', type: 'text' },
+            { key: 'scratch_subtext_1', label: 'Subtext 1 (Hint)', type: 'text' },
+            { key: 'scratch_prize_2', label: 'Prize 2 (Fun Zone)', type: 'text' },
+            { key: 'scratch_prompt_2', label: 'Prompt 2 (Scratch Me!)', type: 'text' },
+            { key: 'scratch_subtext_2', label: 'Subtext 2 (Hint)', type: 'text' },
             { key: 'gift_shop_title', label: 'Gift Shop Title', type: 'text' },
             { key: 'gift_shop_subtitle', label: 'Gift Shop Subtitle', type: 'text' }
         ]
