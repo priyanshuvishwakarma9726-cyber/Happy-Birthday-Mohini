@@ -3,92 +3,83 @@ import { Type, Layout, MousePointerClick, Heart, Music, Image as ImageIcon, Gift
 export const CMS_CATEGORIES = [
     {
         id: 'hero',
-        title: 'Hero Section',
+        title: 'Hero / Top Section',
         icon: Layout,
         keys: [
-            { key: 'hero_title', label: 'Main Title', type: 'text' },
-            { key: 'hero_subtitle', label: 'Subtitle', type: 'text' },
-            { key: 'scroll_down_text', label: 'Scroll Hint (Top)', type: 'text' },
-            { key: 'scroll_karo_text', label: 'Scroll Hint (Bottom)', type: 'text' }
-        ]
-    },
-    {
-        id: 'timeline',
-        title: 'Love Story',
-        icon: Heart,
-        keys: [
-            { key: 'timeline_title', label: 'Section Title', type: 'text' }
+            { key: 'hero_title', label: 'Main Big Heading (Happy Bday...)', type: 'text' },
+            { key: 'hero_subtitle', label: 'Sub-title (Small Text)', type: 'text' },
+            { key: 'scroll_down_text', label: 'Floating Tag (Scroll Down...)', type: 'text' },
+            { key: 'scroll_karo_text', label: 'Bottom Scroll Hint (Next Section)', type: 'text' }
         ]
     },
     {
         id: 'wishbox',
-        title: 'Wish Box',
+        title: 'Magic Wish Box (Auto-Reply Section)',
         icon: Sparkles,
         keys: [
-            { key: 'wishbox_title', label: 'Badge Text', type: 'text' },
-            { key: 'wishbox_heading', label: 'Main Heading', type: 'text' },
-            { key: 'wishbox_subheading', label: 'Subheading', type: 'textarea' },
-            { key: 'wishbox_input_label', label: 'Input Label', type: 'text' },
-            { key: 'wishbox_placeholder', label: 'Placeholder', type: 'text' },
-            { key: 'wishbox_btn_text', label: 'Button Text', type: 'text' },
-            { key: 'wishbox_success_title', label: 'Success Title', type: 'text' },
-            { key: 'wishbox_success_sender', label: 'Sender Name', type: 'text' },
-            { key: 'wishbox_again_btn', label: 'Play Again Button', type: 'text' }
+            { key: 'wishbox_title', label: 'Floating Badge (e.g. MAGIC)', type: 'text' },
+            { key: 'wishbox_heading', label: 'Box Heading', type: 'text' },
+            { key: 'wishbox_subheading', label: 'Box Sub-heading / Description', type: 'textarea' },
+            { key: 'wishbox_input_label', label: 'Input Field Label', type: 'text' },
+            { key: 'wishbox_placeholder', label: 'Input Placeholder Hint', type: 'text' },
+            { key: 'wishbox_btn_text', label: 'Submit Button Text', type: 'text' },
+            { key: 'wishbox_success_title', label: 'Reply Box: Success Title', type: 'text' },
+            { key: 'wishbox_success_sender', label: 'Reply Box: Sender Name', type: 'text' },
+            { key: 'wishbox_again_btn', label: 'Back/Reset Button Text', type: 'text' }
         ]
     },
     {
         id: 'surprise',
-        title: 'Surprise / Gift',
+        title: 'Gift & Scratch Cards',
         icon: Gift,
         keys: [
-            { key: 'surprise_title', label: 'Surprise Heading', type: 'text' },
-            { key: 'scratch_prize_1', label: 'Prize 1 (Main Card)', type: 'text' },
-            { key: 'scratch_prompt_1', label: 'Prompt 1 (Scratch Me!)', type: 'text' },
-            { key: 'scratch_subtext_1', label: 'Subtext 1 (Hint)', type: 'text' },
-            { key: 'scratch_prize_2', label: 'Prize 2 (Fun Zone)', type: 'text' },
-            { key: 'scratch_prompt_2', label: 'Prompt 2 (Scratch Me!)', type: 'text' },
-            { key: 'scratch_subtext_2', label: 'Subtext 2 (Hint)', type: 'text' },
-            { key: 'gift_shop_title', label: 'Gift Shop Title', type: 'text' },
-            { key: 'gift_shop_subtitle', label: 'Gift Shop Subtitle', type: 'text' }
+            { key: 'surprise_title', label: 'Main Surprise Heading', type: 'text' },
+            { key: 'scratch_prize_1', label: 'Gift 1: Secret Message (Near Cake)', type: 'text' },
+            { key: 'scratch_prompt_1', label: 'Gift 1: Scratch Me! Text', type: 'text' },
+            { key: 'scratch_subtext_1', label: 'Gift 1: Bottom Helper Hint', type: 'text' },
+            { key: 'scratch_prize_2', label: 'Gift 2: Secret Message (Fun Zone)', type: 'text' },
+            { key: 'scratch_prompt_2', label: 'Gift 2: Scratch Me! Text', type: 'text' },
+            { key: 'scratch_subtext_2', label: 'Gift 2: Bottom Helper Hint', type: 'text' },
+        ]
+    },
+    {
+        id: 'giftshop',
+        title: 'Digital Shop Items',
+        icon: Gift,
+        keys: [
+            { key: 'gift_shop_title', label: 'Shop Section Title', type: 'text' },
+            { key: 'gift_shop_subtitle', label: 'Shop Section Subtitle', type: 'text' }
         ]
     },
     {
         id: 'media',
-        title: 'Media & Gallery',
+        title: 'Media Titles',
         icon: ImageIcon,
         keys: [
-            { key: 'media_title', label: 'Video Section Title', type: 'text' },
-            { key: 'audio_title', label: 'Audio Section Title', type: 'text' },
-            { key: 'gallery_title', label: 'Gallery Title', type: 'text' }
-        ]
-    },
-    {
-        id: 'guestbook',
-        title: 'Guest Wishes',
-        icon: PenTool,
-        keys: [
-            { key: 'wishes_title', label: 'Section Title', type: 'text' }
+            { key: 'media_title', label: 'Video Player Title', type: 'text' },
+            { key: 'audio_title', label: 'Voice Note Title', type: 'text' },
+            { key: 'gallery_title', label: 'Photo Gallery Title', type: 'text' }
         ]
     },
     {
         id: 'message',
-        title: 'Love Letter / Message',
+        title: 'Letters & Final Wishes',
         icon: Type,
         keys: [
-            { key: 'long_letter_title', label: 'Letter Title', type: 'text' },
-            { key: 'long_letter_body', label: 'Letter Body', type: 'textarea' },
-            { key: 'message_title', label: 'Final Message Title', type: 'text' },
-            { key: 'message_body', label: 'Final Message Body', type: 'textarea' }
+            { key: 'long_letter_title', label: 'Love Letter Title', type: 'text' },
+            { key: 'long_letter_body', label: 'Love Letter Body', type: 'textarea' },
+            { key: 'message_title', label: 'Final Surprise Box Title', type: 'text' },
+            { key: 'message_body', label: 'Final Message Content', type: 'textarea' }
         ]
     },
     {
         id: 'footer',
-        title: 'Footer & Secrets',
+        title: 'Bottom & Secret Vault',
         icon: Key,
         keys: [
-            { key: 'footer_text', label: 'Footer Text', type: 'text' },
-            { key: 'secret_vault_title', label: 'Vault Title', type: 'text' },
-            { key: 'secret_vault_hint', label: 'Vault Hint', type: 'text' },
+            { key: 'footer_text', label: 'Footer Bottom Text', type: 'text' },
+            { key: 'secret_vault_title', label: 'Vault Box Title', type: 'text' },
+            { key: 'secret_vault_hint', label: 'Vault Password Hint (DDMM)', type: 'text' },
         ]
     }
 ]
