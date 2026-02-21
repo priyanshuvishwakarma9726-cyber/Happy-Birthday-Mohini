@@ -44,8 +44,14 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
     }
 
     const handlePrint = () => {
-        const printWindow = window.open('', '_blank', 'width=800,height=900');
-        if (!printWindow) return alert('Please allow popups to generate your card!');
+        // Create a hidden iframe for printing to avoid popup issues and 'problem printing' errors
+        let printFrame = document.getElementById('print-frame') as HTMLIFrameElement;
+        if (!printFrame) {
+            printFrame = document.createElement('iframe');
+            printFrame.id = 'print-frame';
+            printFrame.style.display = 'none';
+            document.body.appendChild(printFrame);
+        }
 
         const imageUrl = heroImage || "https://images.unsplash.com/photo-1530103862676-fa8c9d34da3e?q=80&w=1000&auto=format&fit=crop";
 
@@ -54,7 +60,6 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
             <html>
             <head>
                 <meta charset="UTF-8">
-                <title>Birthday Card - ${recipientName}</title>
                 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
                 <style>
                     body { 
@@ -67,9 +72,8 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                         print-color-adjust: exact !important;
                     }
                     .card-wrapper {
-                        width: 210mm;
-                        min-height: 297mm;
-                        margin: 0 auto;
+                        width: 100%;
+                        min-height: 100vh;
                         padding: 40px;
                         box-sizing: border-box;
                         background: #fff;
@@ -77,39 +81,37 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                         display: flex;
                         flex-direction: column;
                         align-items: center;
+                        text-align: center;
                     }
                     .border-decoration {
                         position: absolute;
-                        top: 20px; bottom: 20px; left: 20px; right: 20px;
+                        top: 10px; bottom: 10px; left: 10px; right: 10px;
                         border: 2px solid #fce7f3;
                         pointer-events: none;
                     }
                     .header {
-                        text-align: center;
-                        margin-top: 40px;
-                        margin-bottom: 40px;
+                        margin-top: 20px;
+                        margin-bottom: 30px;
                     }
                     .title {
                         font-family: 'Dancing Script', cursive;
-                        font-size: 72px;
+                        font-size: 64px;
                         color: #db2777;
                         margin: 0;
-                        line-height: 1.2;
                     }
                     .recipient {
                         font-family: 'Playfair Display', serif;
-                        font-size: 32px;
+                        font-size: 28px;
                         color: #4b5563;
-                        margin-top: 10px;
+                        margin-top: 5px;
                         font-weight: 700;
                     }
                     .image-container {
-                        width: 350px;
-                        height: 350px;
-                        border-radius: 20px;
+                        width: 300px;
+                        height: 300px;
+                        border-radius: 15px;
                         overflow: hidden;
-                        border: 12px solid #fdf2f8;
-                        box-shadow: 0 10px 25px rgba(219, 39, 119, 0.1);
+                        border: 10px solid #fdf2f8;
                         margin: 20px 0;
                     }
                     .image-container img {
@@ -119,71 +121,70 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                     }
                     .letter-content {
                         font-family: 'Playfair Display', serif;
-                        font-size: 20px;
-                        line-height: 1.8;
+                        font-size: 18px;
+                        line-height: 1.6;
                         color: #374151;
-                        max-width: 85%;
-                        text-align: center;
-                        margin: 40px 0;
+                        max-width: 90%;
+                        margin: 30px 0;
                         white-space: pre-wrap;
                         font-style: italic;
                     }
                     .footer {
                         margin-top: auto;
-                        text-align: center;
-                        padding-bottom: 40px;
+                        padding-bottom: 20px;
                     }
                     .heart-icon {
                         color: #db2777;
-                        font-size: 30px;
-                        margin-bottom: 10px;
+                        font-size: 24px;
                     }
                     .signature {
                         font-family: 'Dancing Script', cursive;
-                        font-size: 28px;
+                        font-size: 24px;
                         color: #db2777;
                     }
                     @media print {
-                        @page { margin: 0; }
-                        .card-wrapper { padding: 40px; }
+                        @page { margin: 10mm; }
+                        body { padding: 0; }
                     }
                 </style>
             </head>
             <body>
                 <div class="card-wrapper">
                     <div class="border-decoration"></div>
-                    
                     <div class="header">
-                        <h1 class="title">Happy Birthday</h1>
+                        <div class="title">Happy Birthday</div>
                         <div class="recipient">${recipientName}</div>
                     </div>
-
                     <div class="image-container">
-                        <img src="${imageUrl}" alt="Memory" />
+                        <img src="${imageUrl}" onload="window.imageLoaded = true;" />
                     </div>
-
-                    <div class="letter-content">${letterBody || "Wishing you a lifetime of happiness, love, and light. You are truly special."}</div>
-
+                    <div class="letter-content">${letterBody || "Wishing you a lifetime of happiness and love."}</div>
                     <div class="footer">
                         <div class="heart-icon">❤</div>
                         <div class="signature">With Love Always</div>
                     </div>
                 </div>
-                <script>
-                    window.onload = () => {
-                        // Wait for images and fonts to load
-                        setTimeout(() => {
-                            window.print();
-                            // Optional: window.close(); // Uncomment if you want it to close after print
-                        }, 1000);
-                    };
-                </script>
             </body>
             </html>
         `;
 
-        printWindow.document.write(printHtml);
-        printWindow.document.close();
+        const frameDoc = printFrame.contentWindow?.document || printFrame.contentDocument;
+        if (frameDoc) {
+            frameDoc.open();
+            frameDoc.write(printHtml);
+            frameDoc.close();
+
+            // Wait for resources to load before printing
+            const checkAndPrint = () => {
+                const win = printFrame.contentWindow;
+                if (win) {
+                    win.focus();
+                    win.print();
+                }
+            };
+
+            setTimeout(checkAndPrint, 1500);
+        }
     }
 
     const handleEmail = () => {
