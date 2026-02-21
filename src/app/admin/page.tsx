@@ -220,7 +220,7 @@ export default function AdminPage() {
             {/* Header */}
             <header className="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/5 p-6 flex justify-between items-center">
                 <h1 className="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500 flex items-center gap-2">
-                    <Settings className="w-6 h-6 text-pink-500" /> CONTROL ROOM v2.0
+                    <Settings className="w-6 h-6 text-pink-500" /> CONTROL ROOM v2.5 <span className="text-[8px] text-zinc-600 bg-white/5 px-2 py-0.5 rounded-full ml-2">Build: 21Feb-1438</span>
                 </h1>
                 <div className="flex gap-4">
                     <button onClick={() => window.open('/gift?preview=true', '_blank')} className="bg-zinc-800 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest">Preview</button>
