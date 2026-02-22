@@ -82,7 +82,7 @@ export default function GuestWishes({ title }: { title?: string }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {/* FORM */}
-                    <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 shadow-xl h-fit sticky top-24">
+                    <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 shadow-xl h-fit md:sticky md:top-24">
                         <h3 className="text-xl font-bold text-white mb-4">Leave a Wish</h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>

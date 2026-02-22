@@ -48,8 +48,8 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                 const msg = loveMessages[Math.floor(Math.random() * loveMessages.length)]
                 // Trigger toast
                 const toast = document.createElement('div')
-                toast.className = "fixed bottom-10 right-10 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-2xl border border-pink-200 z-50 animate-bounce text-pink-600 font-bold flex items-center gap-2"
-                toast.innerHTML = `<span>💌</span> ${msg}`
+                toast.className = "fixed bottom-10 left-10 md:left-auto md:right-10 right-10 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-2xl border border-pink-200 z-[100] animate-bounce text-pink-600 font-bold flex items-center gap-2 max-w-[calc(100vw-80px)]"
+                toast.innerHTML = `<span class="shrink-0">💌</span> <span class="truncate">${msg}</span>`
                 document.body.appendChild(toast)
                 setTimeout(() => toast.remove(), 4000)
             }
@@ -366,12 +366,12 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                 <div className="text-center mt-12">
                     <button
                         onClick={triggerFinale}
-                        className="group relative px-12 py-6 bg-gradient-to-r from-red-500 via-pink-500 to-red-500 bg-[length:200%_auto] hover:bg-right transition-all duration-500 rounded-full font-black text-2xl text-white shadow-[0_0_50px_rgba(236,72,153,0.5)] hover:shadow-[0_0_80px_rgba(236,72,153,0.8)] active:scale-95"
+                        className="group relative px-8 sm:px-12 py-4 sm:py-6 bg-gradient-to-r from-red-500 via-pink-500 to-red-500 bg-[length:200%_auto] hover:bg-right transition-all duration-500 rounded-full font-black text-xl sm:text-2xl text-white shadow-[0_0_50px_rgba(236,72,153,0.5)] hover:shadow-[0_0_80px_rgba(236,72,153,0.8)] active:scale-95"
                     >
                         <span className="relative z-10 flex items-center justify-center gap-3">
-                            <Gift className="w-8 h-8 animate-bounce" />
+                            <Gift className="w-6 h-6 sm:w-8 sm:h-8 animate-bounce" />
                             BIG SURPRISE
-                            <Heart className="w-8 h-8 animate-pulse text-white" fill="white" />
+                            <Heart className="w-6 h-6 sm:w-8 sm:h-8 animate-pulse text-white" fill="white" />
                         </span>
                     </button>
                     <p className="mt-4 text-zinc-500 font-medium">Click only if you're ready to be overwhelmed!</p>

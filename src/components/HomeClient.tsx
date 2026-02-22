@@ -229,7 +229,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
 
             {/* HERO SECTION */}
-            <section className="h-screen flex flex-col items-center justify-center relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-black overflow-hidden">
+            <section className="h-screen flex flex-col items-center justify-center relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-black overflow-hidden px-4">
                 <FloatingHearts theme={currentTheme} />
                 <FullScreenSparkles theme={currentTheme} />
 
@@ -237,17 +237,17 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                     initial={{ opacity: 0, y: 50 }}
                     animate={playing ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
                     transition={{ duration: 1.2, ease: "easeOut" }}
-                    className="text-center z-10 p-4 relative"
+                    className="text-center z-10 p-4 relative w-full"
                 >
                     <TimeGreeting name={content.recipient_name?.split(' ')[0] || "Mohini"} />
 
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-sm md:text-base mb-8 animate-pulse backdrop-blur-sm">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-xs sm:text-sm md:text-base mb-8 animate-pulse backdrop-blur-sm">
                         <Stars className="w-4 h-4" />
                         <span>{content.scroll_down_text || "Scroll Down for More!"}</span>
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-pink-100 to-zinc-500 mb-6 tracking-tighter whitespace-pre-line leading-[1.1] relative select-none cursor-pointer" onClick={handleHeartClick}>
-                        <Sparkles className="inline-block mr-4 animate-pulse" color="#ec4899" />
+                    <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-pink-100 to-zinc-500 mb-6 tracking-tighter whitespace-pre-line leading-[1.1] relative select-none cursor-pointer" onClick={handleHeartClick}>
+                        <Sparkles className="inline-block mr-2 md:mr-4 animate-pulse w-6 h-6 md:w-10 md:h-10" color="#ec4899" />
                         <TypewriterText text={content.hero_title || "Happy Birthday\nMohini ❤️"} speed={150} />
                     </h1>
 
@@ -255,7 +255,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                         initial={{ opacity: 0 }}
                         animate={playing ? { opacity: 1 } : { opacity: 0 }}
                         transition={{ delay: 1, duration: 1 }}
-                        className="text-lg md:text-2xl text-zinc-400 mt-4 max-w-xl mx-auto leading-relaxed px-4"
+                        className="text-base md:text-2xl text-zinc-400 mt-4 max-w-xl mx-auto leading-relaxed px-4"
                     >
                         {content.hero_subtitle || "Ye website sirf tumhare liye ❤️"}
                     </motion.p>
@@ -292,28 +292,30 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
             {/* INTERACTIVE */}
             {playing && flags.show_games && (
                 <>
-                    <section className="py-20 px-4 bg-zinc-950/20">
-                        <div className="max-w-6xl mx-auto space-y-20">
+                    <section className="py-20 px-6 sm:px-12 md:px-20 bg-zinc-950/20">
+                        <div className="max-w-7xl mx-auto space-y-20">
                             {/* Row 1: Rose & AR */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                                <div><BloomingRose content={content} /></div>
-                                <div className="space-y-12"><RomanticAI content={content} /><OurFutureMagic content={content} /></div>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                                <div className="w-full"><BloomingRose content={content} /></div>
+                                <div className="space-y-12 w-full"><RomanticAI content={content} /><OurFutureMagic content={content} /></div>
                             </div>
 
                             {/* Row 2: Digital Cake & Scratch Card */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-zinc-900/40 p-8 rounded-3xl border border-white/5">
-                                <div className="text-center space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-zinc-900/40 p-6 sm:p-12 rounded-[3.5rem] border border-white/5">
+                                <div className="text-center space-y-4 w-full h-full flex flex-col items-center justify-center">
                                     <DigitalCake content={content} />
                                 </div>
-                                <div className="text-center space-y-8">
-                                    <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400">
+                                <div className="text-center space-y-8 w-full h-full flex flex-col items-center justify-center">
+                                    <h3 className="text-2xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400 tracking-tighter uppercase leading-tight">
                                         {content.surprise_title || "Your Surprise Gift 🎁"}
                                     </h3>
-                                    <ScratchCard
-                                        prizeText={content.scratch_prize_1 || "One Free 'Yes' Day! (Valid Forever) 💖"}
-                                        scratchPrompt={content.scratch_prompt_1 || "Scratch Me! ✨"}
-                                    />
-                                    <p className="text-sm text-zinc-500 italic">{content.scratch_subtext_1 || "Scratch to reveal your gift!"}</p>
+                                    <div className="w-full flex justify-center">
+                                        <ScratchCard
+                                            prizeText={content.scratch_prize_1 || "One Free 'Yes' Day! (Valid Forever) 💖"}
+                                            scratchPrompt={content.scratch_prompt_1 || "Scratch Me! ✨"}
+                                        />
+                                    </div>
+                                    <p className="text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-[0.2em]">{content.scratch_subtext_1 || "Scratch to reveal your gift!"}</p>
                                 </div>
                             </div>
                         </div>
@@ -461,11 +463,11 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                             ) : (
                                 <>
                                     {/* Header */}
-                                    <div className="p-8 md:p-10 pb-4 text-center border-b border-white/5">
+                                    <div className="p-6 md:p-10 pb-4 text-center border-b border-white/5">
                                         <motion.div
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
-                                            className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/20"
+                                            className="w-12 h-12 md:w-16 md:h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 border border-green-500/20"
                                         >
                                             <Key className="w-8 h-8 text-green-400" />
                                         </motion.div>
@@ -485,7 +487,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                     </div>
 
                                     {/* Footer / Actions */}
-                                    <div className="p-8 md:p-10 pt-4 bg-black/40 border-t border-white/5 space-y-6">
+                                    <div className="p-6 md:p-10 pt-4 bg-black/40 border-t border-white/5 space-y-4 md:space-y-6">
                                         {!proposalAnswer ? (
                                             <div className="flex flex-col md:flex-row gap-4">
                                                 <button

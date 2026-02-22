@@ -246,24 +246,24 @@ export default function AdminPage() {
                     <motion.section
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className={`p-1 flex items-center justify-between rounded-[2rem] shadow-2xl ${proposalAnswer.answer === 'Yes' ? 'bg-gradient-to-r from-green-500 to-emerald-600' : 'bg-gradient-to-r from-red-500 to-rose-600'}`}
+                        className={`p-1 flex flex-col items-stretch rounded-[2rem] shadow-2xl ${proposalAnswer.answer === 'Yes' ? 'bg-gradient-to-r from-green-500 to-emerald-600' : 'bg-gradient-to-r from-red-500 to-rose-600'}`}
                     >
-                        <div className="bg-black/20 backdrop-blur-md w-full m-1 p-8 rounded-[1.8rem] flex items-center justify-between">
-                            <div className="flex items-center gap-6">
-                                <div className={`w-20 h-20 rounded-full flex items-center justify-center shadow-xl ${proposalAnswer.answer === 'Yes' ? 'bg-green-500 shadow-green-500/50' : 'bg-red-500 shadow-red-500/50'}`}>
+                        <div className="bg-black/20 backdrop-blur-md w-full m-1 p-6 md:p-8 rounded-[1.8rem] flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+                                <div className={`w-20 h-20 rounded-full flex items-center justify-center shadow-xl shrink-0 ${proposalAnswer.answer === 'Yes' ? 'bg-green-500 shadow-green-500/50' : 'bg-red-500 shadow-red-500/50'}`}>
                                     {proposalAnswer.answer === 'Yes' ? <CheckCircle className="w-12 h-12 text-white" /> : <X className="w-12 h-12 text-white" />}
                                 </div>
                                 <div className="space-y-1">
-                                    <h2 className="text-3xl font-black uppercase tracking-tighter">Secret Vault Decision</h2>
-                                    <p className="text-zinc-400 text-sm font-bold uppercase tracking-widest">{proposalAnswer.created_at ? new Date(proposalAnswer.created_at).toLocaleString() : 'Just now'}</p>
+                                    <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter">Secret Vault Decision</h2>
+                                    <p className="text-zinc-400 text-xs sm:text-sm font-bold uppercase tracking-widest">{proposalAnswer.created_at ? new Date(proposalAnswer.created_at).toLocaleString() : 'Just now'}</p>
                                 </div>
                             </div>
-                            <div className="text-right flex items-center gap-6">
-                                <div>
+                            <div className="flex flex-col sm:flex-row items-center gap-8 w-full md:w-auto">
+                                <div className="text-center md:text-right flex-1 md:flex-none">
                                     <p className="text-[10px] uppercase font-black tracking-[0.3em] mb-2 opacity-50">She chose:</p>
-                                    <p className="text-7xl font-black italic tracking-tighter">{proposalAnswer.answer.toUpperCase()}!</p>
+                                    <p className="text-5xl sm:text-7xl font-black italic tracking-tighter">{proposalAnswer.answer.toUpperCase()}!</p>
                                 </div>
-                                <button onClick={handleDeleteProposal} className="p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group">
+                                <button onClick={handleDeleteProposal} className="p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group shrink-0 w-full sm:w-auto flex justify-center">
                                     <Trash2 className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
                                 </button>
                             </div>

@@ -108,7 +108,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, onComplete }: Puz
     }
 
     return (
-        <div className="flex flex-col items-center gap-8 p-6 md:p-10 bg-zinc-900/60 backdrop-blur-3xl rounded-[3rem] border border-white/10 shadow-3xl w-full max-w-sm mx-auto select-none">
+        <div className="flex flex-col items-center gap-8 p-4 sm:p-10 bg-zinc-900/60 backdrop-blur-3xl rounded-[2.5rem] sm:rounded-[3rem] border border-white/10 shadow-3xl w-full max-w-[400px] mx-auto select-none">
 
             {/* Header Stats */}
             <div className="flex justify-between w-full items-center mb-2">

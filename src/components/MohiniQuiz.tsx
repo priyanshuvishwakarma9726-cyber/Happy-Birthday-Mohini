@@ -203,22 +203,22 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
 
     if (!quizStarted) {
         return (
-            <div className="w-full max-w-xl mx-auto p-12 bg-zinc-900/80 backdrop-blur-xl rounded-[3rem] border-2 border-pink-500/20 shadow-2xl text-center space-y-8">
-                <div className="w-24 h-24 bg-gradient-to-tr from-pink-500 to-purple-600 rounded-3xl mx-auto flex items-center justify-center rotate-12 shadow-lg">
-                    <Trophy className="w-12 h-12 text-white -rotate-12" />
+            <div className="w-full max-w-xl mx-auto p-6 sm:p-12 bg-zinc-900/80 backdrop-blur-xl rounded-[2.5rem] sm:rounded-[3rem] border-2 border-pink-500/20 shadow-2xl text-center space-y-8">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-tr from-pink-500 to-purple-600 rounded-3xl mx-auto flex items-center justify-center rotate-12 shadow-lg">
+                    <Trophy className="w-10 h-10 sm:w-12 sm:h-12 text-white -rotate-12" />
                 </div>
                 <div className="space-y-4">
-                    <h2 className="text-4xl font-black text-white italic tracking-tighter">
+                    <h2 className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter">
                         Quiz About Mohini 😏💖 <br />
                         <span className="text-pink-500">(Roast Mode)</span>
                     </h2>
-                    <p className="text-zinc-400 font-medium">Dekhte hain tum Mohini ko kitna jaante ho!</p>
+                    <p className="text-zinc-400 font-medium text-sm sm:text-base">Dekhte hain tum Mohini ko kitna jaante ho!</p>
                 </div>
                 <button
                     onClick={() => setQuizStarted(true)}
-                    className="w-full bg-white text-black py-5 rounded-2xl font-black uppercase tracking-tighter hover:scale-[1.02] active:scale-95 transition-all text-xl shadow-xl flex items-center justify-center gap-2"
+                    className="w-full bg-white text-black py-4 sm:py-5 rounded-2xl font-black uppercase tracking-tighter hover:scale-[1.02] active:scale-95 transition-all text-lg sm:text-xl shadow-xl flex items-center justify-center gap-2"
                 >
-                    Chalo Shuru Karein <ArrowRight className="w-6 h-6" />
+                    Chalo Shuru Karein <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
             </div>
         )
@@ -226,14 +226,14 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
 
     if (showResult) {
         return (
-            <div className="w-full max-w-xl mx-auto p-12 bg-zinc-900/80 backdrop-blur-xl rounded-[3rem] border-2 border-white/10 shadow-2xl text-center space-y-10">
+            <div className="w-full max-w-xl mx-auto p-6 sm:p-12 bg-zinc-900/80 backdrop-blur-xl rounded-[2.5rem] sm:rounded-[3rem] border-2 border-white/10 shadow-2xl text-center space-y-10">
                 <div className="space-y-2">
-                    <p className="text-pink-500 font-black uppercase tracking-[0.2em] text-sm">Final Score</p>
-                    <h3 className="text-7xl font-black text-white">{score}/{questions.length}</h3>
+                    <p className="text-pink-500 font-black uppercase tracking-[0.2em] text-xs sm:text-sm">Final Score</p>
+                    <h3 className="text-6xl sm:text-7xl font-black text-white">{score}/{questions.length}</h3>
                 </div>
 
-                <div className="p-8 bg-black/40 rounded-3xl border border-white/5">
-                    <p className="text-2xl font-bold text-pink-100 italic leading-relaxed">
+                <div className="p-6 sm:p-8 bg-black/40 rounded-3xl border border-white/5">
+                    <p className="text-xl sm:text-2xl font-bold text-pink-100 italic leading-relaxed">
                         "{getScoreMessage()}"
                     </p>
                 </div>
@@ -243,7 +243,7 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
                         setCurrent(0); setScore(0); setShowResult(false); setFeedback(null);
                         setQuestions([]); // Clear to trigger regeneration
                     }}
-                    className="w-full bg-zinc-800 hover:bg-zinc-700 text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all"
+                    className="w-full bg-zinc-800 hover:bg-zinc-700 text-white py-4 sm:py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all text-sm sm:text-base"
                 >
                     <RefreshCw className="w-5 h-5" /> Phir Se Try Karein?
                 </button>

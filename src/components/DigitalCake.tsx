@@ -53,18 +53,9 @@ export default function DigitalCake({ content }: { content?: any }) {
                 {wished ? "Your Wish is Granted! ✨" : "Make a Wish & Blow the Candles! 🎂"}
             </h3>
 
-            <div className="relative mt-24">
-                {/* Cake Base */}
-                <div className="w-64 h-32 bg-pink-300 rounded-t-lg relative shadow-lg">
-                    <div className="absolute top-0 left-0 w-full h-8 bg-pink-400 rounded-t-lg opacity-50" />
-                    <div className="absolute top-1/2 left-0 w-full h-4 bg-white/30 skew-y-1" />
-
-                    {/* Filling */}
-                    <div className="absolute bottom-0 w-full h-12 bg-pink-400/30 rounded-b-lg -z-10 translate-y-2 scale-95 blur-sm" />
-                </div>
-
+            <div className="relative mt-24 flex flex-col items-center">
                 {/* Candles */}
-                <div className="absolute -top-16 left-0 w-full flex justify-center gap-6 px-4">
+                <div className="flex justify-center flex-wrap gap-4 px-4 mb-4">
                     {candles.map((isLit, i) => (
                         <div key={i} className="relative group cursor-pointer" onClick={() => blowCandle(i)}>
                             {/* Flame */}
@@ -84,6 +75,15 @@ export default function DigitalCake({ content }: { content?: any }) {
                             </div>
                         </div>
                     ))}
+                </div>
+
+                {/* Cake Base */}
+                <div className="w-48 sm:w-64 h-24 sm:h-32 bg-pink-300 rounded-t-lg relative shadow-lg">
+                    <div className="absolute top-0 left-0 w-full h-6 sm:h-8 bg-pink-400 rounded-t-lg opacity-50" />
+                    <div className="absolute top-1/2 left-0 w-full h-3 sm:h-4 bg-white/30 skew-y-1" />
+
+                    {/* Filling */}
+                    <div className="absolute bottom-0 w-full h-8 sm:h-12 bg-pink-400/30 rounded-b-lg -z-10 translate-y-2 scale-95 blur-sm" />
                 </div>
             </div>
 

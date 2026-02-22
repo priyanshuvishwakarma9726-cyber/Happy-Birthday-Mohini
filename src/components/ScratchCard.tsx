@@ -133,7 +133,7 @@ export default function ScratchCard({ prizeText, scratchPrompt = 'Scratch Me! âœ
     }, [isRevealed, onReveal])
 
     return (
-        <div className="relative w-[300px] h-[150px] mx-auto overflow-hidden rounded-xl shadow-2xl border-4 border-pink-300 transform hover:scale-105 transition-transform">
+        <div className="relative w-full max-w-[300px] h-[150px] mx-auto overflow-hidden rounded-xl shadow-2xl border-4 border-pink-300 transform hover:scale-105 transition-transform">
             {/* Hidden Content */}
             <div className={`absolute inset-0 bg-white flex items-center justify-center p-4 text-center select-none ${isRevealed ? 'animate-pulse' : ''}`}>
                 <h3 className="font-bold text-xl text-pink-600 font-handwriting">
