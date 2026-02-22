@@ -29,6 +29,17 @@ export default function PremiumLoader() {
         return () => clearInterval(interval)
     }, [])
 
+    // Helper to wrap emojis
+    const renderEmojiText = (txt: string) => {
+        if (!txt) return txt;
+        return txt.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
+            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
+                return <span key={i} className="emoji inline-block not-italic">{part}</span>
+            }
+            return part
+        })
+    }
+
     return (
         <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black text-white">
             <div className="relative">
@@ -66,9 +77,9 @@ export default function PremiumLoader() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.5 }}
-                className="mt-8 text-lg font-medium text-pink-200 tracking-widest uppercase"
+                className="mt-8 text-lg font-medium text-pink-200 tracking-widest uppercase font-romantic"
             >
-                {currentPhrase}
+                {renderEmojiText(currentPhrase)}
             </motion.p>
         </div>
     )

@@ -32,12 +32,23 @@ export default function LoveTimeline() {
             .catch(err => console.error("Failed to load story:", err))
     }, [])
 
+    // Helper to wrap emojis
+    const renderEmojiText = (txt: string) => {
+        if (!txt) return txt;
+        return txt.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
+            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
+                return <span key={i} className="emoji inline-block not-italic">{part}</span>
+            }
+            return part
+        })
+    }
+
     if (timelineData.length === 0) return null
 
     return (
         <section className="py-20 px-6 relative overflow-hidden">
-            <h2 className="text-3xl md:text-5xl font-black text-center mb-20 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
-                Hamari Pyaari Kahani 📖
+            <h2 className="text-3xl md:text-5xl font-black text-center mb-20 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 font-romantic">
+                {renderEmojiText("Hamari Pyaari Kahani 📖")}
             </h2>
 
             <div className="max-w-4xl mx-auto relative">
@@ -63,14 +74,14 @@ export default function LoveTimeline() {
                             {/* Content Card */}
                             <div className={`pl-16 md:pl-0 w-full md:w-1/2 ${i % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}>
                                 <div className="bg-zinc-900/40 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-white/5 hover:border-pink-500/30 transition-all group hover:bg-zinc-900/60 shadow-lg">
-                                    <span className="text-xs font-black uppercase tracking-[0.2em] text-pink-400 mb-3 block">
-                                        {item.subtitle}
+                                    <span className="text-xs font-black uppercase tracking-[0.2em] text-pink-400 mb-3 block font-romantic">
+                                        {renderEmojiText(item.subtitle)}
                                     </span>
-                                    <h3 className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-pink-200 transition-colors">
-                                        {item.title}
+                                    <h3 className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-pink-200 transition-colors font-romantic">
+                                        {renderEmojiText(item.title)}
                                     </h3>
-                                    <p className="text-zinc-400 font-medium leading-relaxed text-sm md:text-base">
-                                        {item.description}
+                                    <p className="text-zinc-400 font-medium leading-relaxed text-sm md:text-base font-romantic italic">
+                                        "{renderEmojiText(item.description)}"
                                     </p>
                                 </div>
                             </div>

@@ -132,12 +132,21 @@ export default function ScratchCard({ prizeText, scratchPrompt = 'Scratch Me! âœ
         }
     }, [isRevealed, onReveal])
 
+    const EmojiWrapper = ({ children }: { children: string }) => {
+        return <>{children.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
+            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
+                return <span key={i} className="emoji inline-block not-italic">{part}</span>
+            }
+            return part
+        })}</>
+    }
+
     return (
         <div className="relative w-full max-w-[300px] h-[150px] mx-auto overflow-hidden rounded-xl shadow-2xl border-4 border-pink-300 transform hover:scale-105 transition-transform">
             {/* Hidden Content */}
             <div className={`absolute inset-0 bg-white flex items-center justify-center p-4 text-center select-none ${isRevealed ? 'animate-pulse' : ''}`}>
-                <h3 className="font-bold text-xl text-pink-600 font-handwriting">
-                    {textToDisplay}
+                <h3 className="font-bold text-xl text-pink-600 font-romantic">
+                    <EmojiWrapper>{textToDisplay}</EmojiWrapper>
                 </h3>
             </div>
 

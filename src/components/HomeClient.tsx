@@ -219,7 +219,16 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
         }
     }
 
-    // ...
+    // Helper to wrap emojis for 'sidha' look
+    const renderEmojiText = (txt: string | React.ReactNode) => {
+        if (typeof txt !== 'string') return txt;
+        return txt.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
+            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
+                return <span key={i} className="emoji inline-block not-italic">{part}</span>
+            }
+            return part
+        })
+    }
 
     if (verifying) return <PremiumLoader />
 
@@ -246,18 +255,18 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                         <span>{content.scroll_down_text || "Scroll Down for More!"}</span>
                     </div>
 
-                    <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-pink-100 to-zinc-500 mb-6 tracking-tighter whitespace-pre-line leading-[1.1] relative select-none cursor-pointer" onClick={handleHeartClick}>
+                    <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-pink-100 to-zinc-500 mb-6 tracking-tighter whitespace-pre-line leading-[1.1] relative select-none cursor-pointer font-romantic" onClick={handleHeartClick}>
                         <Sparkles className="inline-block mr-2 md:mr-4 animate-pulse w-6 h-6 md:w-10 md:h-10" color="#ec4899" />
-                        <TypewriterText text={content.hero_title || "Happy Birthday\nMohini <span class='emoji'>❤️</span>"} speed={150} />
+                        <TypewriterText text={content.hero_title || "Happy Birthday\nMohini ❤️"} speed={150} />
                     </h1>
 
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={playing ? { opacity: 1 } : { opacity: 0 }}
                         transition={{ delay: 1, duration: 1 }}
-                        className="text-base md:text-2xl text-zinc-400 mt-4 max-w-xl mx-auto leading-relaxed px-4"
+                        className="text-base md:text-2xl text-zinc-400 mt-4 max-w-xl mx-auto leading-relaxed px-4 font-romantic italic"
                     >
-                        {content.hero_subtitle || <>Ye website sirf tumhare liye <span className='emoji'>❤️</span></>}
+                        {renderEmojiText(content.hero_subtitle || "Ye website sirf tumhare liye ❤️")}
                     </motion.p>
                 </motion.p>
 
@@ -310,8 +319,8 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                 <DigitalCake content={content} />
                             </div>
                             <div className="text-center space-y-8 w-full h-full flex flex-col items-center justify-center">
-                                <h3 className="text-2xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400 tracking-tighter uppercase leading-tight">
-                                    {content.surprise_title || "Your Surprise Gift 🎁"}
+                                <h3 className="text-2xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400 tracking-tighter uppercase leading-tight font-romantic">
+                                    {renderEmojiText(content.surprise_title || "Your Surprise Gift 🎁")}
                                 </h3>
                                 <div className="w-full flex justify-center">
                                     <ScratchCard
@@ -319,7 +328,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                         scratchPrompt={content.scratch_prompt_1 || "Scratch Me! ✨"}
                                     />
                                 </div>
-                                <p className="text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-[0.2em]">{content.scratch_subtext_1 || "Scratch to reveal your gift!"}</p>
+                                <p className="text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-[0.2em] font-romantic">{renderEmojiText(content.scratch_subtext_1 || "Scratch to reveal your gift! 🎁")}</p>
                             </div>
                         </div>
                     </div>
@@ -348,13 +357,13 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                     <div className="max-w-4xl mx-auto space-y-12">
                         {content.video_url && (
                             <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-                                <h2 className="text-3xl font-bold text-center mb-8 text-white">{content.video_title || content.media_title || "Our Memories 🎥"}</h2>
+                                <h2 className="text-3xl font-bold text-center mb-8 text-white font-romantic">{renderEmojiText(content.video_title || content.media_title || "Our Memories 🎥")}</h2>
                                 <VideoPlayer url={content.video_url} play={playing} onPlayChange={handleMediaPlay} />
                             </motion.div>
                         )}
                         {content.voice_url && (
                             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="pt-8 text-center">
-                                <h3 className="text-xl text-zinc-400 mb-4 flex items-center justify-center gap-2"><Music className="w-5 h-5" /> {content.audio_title || "Listen to this..."}</h3>
+                                <h3 className="text-xl text-zinc-400 mb-4 flex items-center justify-center gap-2 font-romantic"><Music className="w-5 h-5" /> {renderEmojiText(content.audio_title || "Listen to this... 🎧")}</h3>
                                 <VoiceMessage url={content.voice_url} onPlayChange={handleMediaPlay} />
                             </motion.div>
                         )}
@@ -416,12 +425,12 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-pink-900/20 via-transparent to-transparent opacity-50" />
                 <div className="max-w-3xl text-center space-y-8 z-10">
                     <Heart className="w-16 h-16 text-pink-500 mx-auto fill-current animate-pulse opacity-80 filter drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]" />
-                    <h2 className="text-3xl md:text-6xl font-black text-white tracking-tight">{content.message_title || "Ek Chhota Sa Message 💌"}</h2>
+                    <h2 className="text-3xl md:text-6xl font-black text-white tracking-tight font-romantic">{renderEmojiText(content.message_title || "Ek Chhota Sa Message 💌")}</h2>
                     <div className="relative p-8 md:p-12 bg-zinc-900/50 backdrop-blur-xl rounded-3xl border border-white/5 shadow-2xl">
-                        <div className="text-lg md:text-xl text-zinc-300 leading-loose space-y-6 font-light whitespace-pre-wrap text-left md:text-center">
-                            {content.message_body || "Happy Birthday Mohini! 🎉"}
+                        <div className="text-lg md:text-xl text-zinc-300 leading-loose space-y-6 font-light whitespace-pre-wrap text-left md:text-center font-romantic italic">
+                            {renderEmojiText(content.message_body || "Happy Birthday Mohini! 🎉")}
                         </div>
-                        <p className="font-handwriting text-4xl text-pink-400 mt-12 transform -rotate-2 inline-block drop-shadow-lg">- {content.message_sender || "YOUR LOVE"}</p>
+                        <p className="font-romantic text-4xl text-pink-400 mt-12 transform -rotate-2 inline-block drop-shadow-lg">- {content.message_sender || "YOUR LOVE"}</p>
                     </div>
                 </div>
             </section>
@@ -430,10 +439,10 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
     {/* FOOTER & SECRET VAULT TRIGGER */ }
     <footer className="py-12 text-center border-t border-zinc-900 mt-20 bg-black relative">
-        <p className="text-zinc-600 text-sm flex items-center justify-center gap-2">
+        <p className="text-zinc-600 text-sm flex items-center justify-center gap-2 font-romantic">
             {content.footer_text || "Made with"}
             <button onClick={() => setShowSecretVault(true)} className="hover:scale-125 transition-transform"><Heart className="w-4 h-4 fill-pink-600 text-pink-600 animate-pulse" /></button>
-            {content.footer_for || "for Mohini"}
+            {renderEmojiText(content.footer_for || "for Mohini ❤️")}
         </p>
     </footer>
 
@@ -455,7 +464,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                 <Lock className="w-8 h-8 text-zinc-400" />
                             </div>
                             <div className="space-y-2">
-                                <h3 className="text-3xl font-black text-white tracking-tighter uppercase">{content.secret_vault_title || "Secret Vault 🔒"}</h3>
+                                <h3 className="text-3xl font-black text-white tracking-tighter uppercase font-romantic">{renderEmojiText(content.secret_vault_title || "Secret Vault 🔒")}</h3>
                                 <p className="text-zinc-500 text-sm font-medium">{content.secret_vault_hint || "Enter your Birth Date (DDMM) to unlock."}</p>
                             </div>
                             <div className="flex gap-2 justify-center">
@@ -486,8 +495,8 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                 >
                                     <Key className="w-8 h-8 text-green-400" />
                                 </motion.div>
-                                <h3 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-white to-purple-400 tracking-tighter uppercase">
-                                    {content.secret_vault_success_title || "SYSTRM UNLOCKED 🎉"}
+                                <h3 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-white to-purple-400 tracking-tighter uppercase font-romantic">
+                                    {renderEmojiText(content.secret_vault_success_title || "SYSTRM UNLOCKED 🎉")}
                                 </h3>
                             </div>
 
@@ -495,8 +504,8 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                             <div className="flex-1 overflow-y-auto px-8 md:px-12 py-8 custom-scrollbar">
                                 <div className="relative">
                                     <div className="absolute -top-4 -left-4 opacity-10"><Heart className="w-20 h-20 fill-current text-white" /></div>
-                                    <p className="text-xl md:text-2xl text-zinc-100 leading-relaxed font-serif italic text-center relative z-10 py-4">
-                                        "{content.secret_vault_success_msg || "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖"}"
+                                    <p className="text-xl md:text-2xl text-zinc-100 leading-relaxed font-romantic italic text-center relative z-10 py-4">
+                                        "{renderEmojiText(content.secret_vault_success_msg || "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖")}"
                                     </p>
                                 </div>
                             </div>

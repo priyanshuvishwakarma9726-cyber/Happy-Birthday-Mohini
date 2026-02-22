@@ -55,13 +55,13 @@ export default function CinematicEnd({ name }: { name: string }) {
                                 <Heart className="w-24 h-24 text-pink-600 fill-pink-600 mx-auto drop-shadow-[0_0_30px_rgba(236,72,153,0.6)]" />
                             </motion.div>
 
-                            <h1 className="text-4xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-pink-100 to-zinc-500 tracking-tighter leading-tight">
+                            <h1 className="text-4xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-pink-100 to-zinc-500 tracking-tighter leading-tight font-romantic">
                                 Forever Together<br />
                                 <span className="text-pink-500">{name}</span>
                             </h1>
 
-                            <p className="text-xl md:text-2xl text-zinc-400 font-serif italic max-w-lg mx-auto leading-relaxed">
-                                "Chahe kal jo bhi ho, mera aaj aur aane wala har pal sirf tumhara hai."
+                            <p className="text-xl md:text-2xl text-zinc-400 font-romantic italic max-w-lg mx-auto leading-relaxed">
+                                "Chahe kal jo bhi ho, mera aaj aur aane wala har pal sirf tumhara hai." <span className="emoji inline-block not-italic">❤️</span>
                             </p>
 
                             <motion.div

@@ -121,12 +121,23 @@ export default function RomanticAI({ content }: { content?: any }) {
         recognition.start()
     }
 
+    // Helper to wrap emojis
+    const renderEmojiText = (txt: string) => {
+        if (!txt) return txt;
+        return txt.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
+            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
+                return <span key={i} className="emoji inline-block not-italic">{part}</span>
+            }
+            return part
+        })
+    }
+
     return (
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 max-w-xl mx-auto shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500" />
 
-            <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 to-purple-300 mb-6 flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-pink-400" /> AI Poet Assistant 🤖
+            <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 to-purple-300 mb-6 flex items-center gap-2 font-romantic">
+                <Sparkles className="w-6 h-6 text-pink-400" /> {renderEmojiText("AI Poet Assistant 🤖")}
             </h3>
 
             <p className="text-zinc-400 text-sm mb-6">
@@ -157,11 +168,11 @@ export default function RomanticAI({ content }: { content?: any }) {
                 >
                     {isProcessing ? (
                         <>
-                            <Sparkles className="w-5 h-5 animate-spin" /> Magic Happening...
+                            <Sparkles className="w-5 h-5 animate-spin" /> {renderEmojiText("Magic Happening... ✨")}
                         </>
                     ) : (
                         <>
-                            <MessageSquareHeart className="w-5 h-5" /> Make it Romantic! 💖
+                            <MessageSquareHeart className="w-5 h-5" /> {renderEmojiText("Make it Romantic! 💖")}
                         </>
                     )}
                 </button>
@@ -178,8 +189,8 @@ export default function RomanticAI({ content }: { content?: any }) {
                             <span className="text-4xl animate-bounce">✨</span>
                         </div>
                         <h4 className="text-xs uppercase text-pink-400 font-bold mb-2 tracking-widest">AI Result:</h4>
-                        <p className="text-xl font-serif italic text-pink-100 leading-relaxed indent-8">
-                            "{output}"
+                        <p className="text-xl font-romantic italic text-pink-100 leading-relaxed indent-8">
+                            "{renderEmojiText(output)}"
                         </p>
 
                         <div className="mt-4 flex justify-end">

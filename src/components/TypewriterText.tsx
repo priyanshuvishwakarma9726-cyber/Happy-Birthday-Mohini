@@ -31,10 +31,14 @@ export default function TypewriterText({
     useEffect(() => {
         if (!started) return
 
+        // Simple regex to match emoji sequences and individual characters
+        const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|.)/gu
+        const characters = Array.from(text.matchAll(emojiRegex), m => m[0])
+
         let i = 0
         const interval = setInterval(() => {
-            if (i < text.length) {
-                setDisplayedText(text.slice(0, i + 1))
+            if (i < characters.length) {
+                setDisplayedText(characters.slice(0, i + 1).join(''))
                 i++
             } else {
                 clearInterval(interval)
@@ -44,9 +48,19 @@ export default function TypewriterText({
         return () => clearInterval(interval)
     }, [text, speed, started])
 
+    const renderSegmentedText = (txt: string) => {
+        const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu
+        return txt.split(emojiRegex).map((part, i) => {
+            if (emojiRegex.test(part)) {
+                return <span key={i} className="emoji inline-block not-italic">{part}</span>
+            }
+            return part
+        })
+    }
+
     return (
         <span className={cn("inline-block", className)}>
-            {displayedText}
+            {renderSegmentedText(displayedText)}
             <motion.span
                 animate={{ opacity: [1, 0] }}
                 transition={{ repeat: Infinity, duration: 0.8 }}
