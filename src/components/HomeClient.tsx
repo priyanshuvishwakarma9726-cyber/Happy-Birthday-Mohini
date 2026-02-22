@@ -429,21 +429,23 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
                     >
-                        <div className="max-w-md w-full bg-zinc-900 border border-zinc-700 p-8 rounded-2xl text-center shadow-2xl relative">
-                            <button onClick={() => setShowSecretVault(false)} className="absolute top-4 right-4 text-zinc-500 hover:text-white"><X className="w-6 h-6" /></button>
+                        <div className="max-w-2xl w-full bg-zinc-900/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+                            <button onClick={() => setShowSecretVault(false)} className="absolute top-6 right-6 z-20 text-zinc-500 hover:text-white transition-colors bg-white/5 p-2 rounded-full"><X className="w-5 h-5" /></button>
 
                             {!vaultUnlocked ? (
-                                <div className="space-y-6">
-                                    <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <div className="p-8 md:p-12 text-center space-y-8">
+                                    <div className="w-20 h-20 bg-zinc-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5 shadow-inner">
                                         <Lock className="w-8 h-8 text-zinc-400" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-white">{content.secret_vault_title || "Secret Vault 🔒"}</h3>
-                                    <p className="text-zinc-400 text-sm">{content.secret_vault_hint || "Enter your Birth Date (DDMM) to unlock."}</p>
+                                    <div className="space-y-2">
+                                        <h3 className="text-3xl font-black text-white tracking-tighter uppercase">{content.secret_vault_title || "Secret Vault 🔒"}</h3>
+                                        <p className="text-zinc-500 text-sm font-medium">{content.secret_vault_hint || "Enter your Birth Date (DDMM) to unlock."}</p>
+                                    </div>
                                     <div className="flex gap-2 justify-center">
                                         <input
                                             type="password"
                                             maxLength={4}
-                                            className="bg-black border border-zinc-700 text-center text-2xl tracking-[1em] text-white p-4 rounded-lg w-48 focus:border-pink-500 outline-none"
+                                            className="bg-black/50 border border-zinc-700 text-center text-4xl tracking-[0.5em] text-pink-500 p-6 rounded-2xl w-full max-w-[280px] focus:border-pink-500 outline-none transition-all shadow-2xl font-black"
                                             value={secretCode}
                                             onChange={e => setSecretCode(e.target.value)}
                                             placeholder="••••"
@@ -451,57 +453,74 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                     </div>
                                     <button
                                         onClick={unlockVault}
-                                        className="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-lg"
+                                        className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-pink-500/20 uppercase tracking-widest text-sm transition-all active:scale-95"
                                     >
-                                        Unlock
+                                        Initiate Unlock
                                     </button>
                                 </div>
                             ) : (
-                                <div className="space-y-6">
-                                    <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-                                        <Key className="w-8 h-8 text-green-400" />
-                                    </div>
-                                    <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
-                                        {content.secret_vault_success_title || "SURPRISE! 🎉"}
-                                    </h3>
-                                    <p className="text-zinc-300 text-lg italic leading-relaxed">
-                                        "{content.secret_vault_success_msg || "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖"}"
-                                    </p>
-
-                                    {!proposalAnswer ? (
-                                        <div className="flex gap-4 pt-4">
-                                            <button
-                                                onClick={() => handleProposal('Yes')}
-                                                className="flex-1 bg-green-600 hover:bg-green-500 text-white font-black py-4 rounded-xl shadow-lg hover:scale-[1.05] transition-all flex items-center justify-center gap-2"
-                                            >
-                                                <Heart className="w-5 h-5 fill-current" /> YES!
-                                            </button>
-                                            <button
-                                                onClick={() => handleProposal('No')}
-                                                className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 font-bold py-4 rounded-xl transition-all"
-                                            >
-                                                NO... 💔
-                                            </button>
-                                        </div>
-                                    ) : (
+                                <>
+                                    {/* Header */}
+                                    <div className="p-8 md:p-10 pb-4 text-center border-b border-white/5">
                                         <motion.div
-                                            initial={{ scale: 0.9, opacity: 0 }}
-                                            animate={{ scale: 1, opacity: 1 }}
-                                            className="p-6 bg-white/5 rounded-2xl border border-white/10"
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/20"
                                         >
-                                            <p className="text-sm uppercase font-black tracking-widest text-zinc-500 mb-2">Your Answer Recorded</p>
-                                            <p className={`text-3xl font-black ${proposalAnswer === 'Yes' ? 'text-green-400' : 'text-red-400'}`}>
-                                                {proposalAnswer === 'Yes' ? 'I SAID YES! 💍' : 'Not yet... 🥀'}
-                                            </p>
+                                            <Key className="w-8 h-8 text-green-400" />
                                         </motion.div>
-                                    )}
-
-                                    <div className="p-4 bg-zinc-950 rounded border border-zinc-800 text-left text-xs font-mono text-green-400">
-                                        <p>{`> SECRET_LEVEL_UNLOCKED: TRUE`}</p>
-                                        <p>{`> HAPPINESS_LEVEL: INFINITY`}</p>
-                                        <p>{`> LOVE_STATUS: ETERNAL`}</p>
+                                        <h3 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-white to-purple-400 tracking-tighter uppercase">
+                                            {content.secret_vault_success_title || "SYSTRM UNLOCKED 🎉"}
+                                        </h3>
                                     </div>
-                                </div>
+
+                                    {/* Scrollable Content */}
+                                    <div className="flex-1 overflow-y-auto px-8 md:px-12 py-8 custom-scrollbar">
+                                        <div className="relative">
+                                            <div className="absolute -top-4 -left-4 opacity-10"><Heart className="w-20 h-20 fill-current text-white" /></div>
+                                            <p className="text-xl md:text-2xl text-zinc-100 leading-relaxed font-serif italic text-center relative z-10 py-4">
+                                                "{content.secret_vault_success_msg || "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖"}"
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Footer / Actions */}
+                                    <div className="p-8 md:p-10 pt-4 bg-black/40 border-t border-white/5 space-y-6">
+                                        {!proposalAnswer ? (
+                                            <div className="flex flex-col md:flex-row gap-4">
+                                                <button
+                                                    onClick={() => handleProposal('Yes')}
+                                                    className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-green-500/20 transition-all flex items-center justify-center gap-3 uppercase tracking-tighter text-lg group"
+                                                >
+                                                    <Heart className="w-6 h-6 fill-current group-hover:scale-125 transition-transform" /> I Say Yes!
+                                                </button>
+                                                <button
+                                                    onClick={() => handleProposal('No')}
+                                                    className="md:w-1/3 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 font-bold py-5 rounded-2xl transition-all uppercase tracking-widest text-xs"
+                                                >
+                                                    Not Today 💔
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <motion.div
+                                                initial={{ scale: 0.9, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                className="p-8 bg-gradient-to-br from-pink-500/10 to-purple-500/10 rounded-3xl border border-white/10 text-center"
+                                            >
+                                                <p className="text-[10px] uppercase font-black tracking-[0.3em] text-pink-500 mb-2">Protocol Recorded</p>
+                                                <p className={`text-4xl md:text-5xl font-black italic tracking-tighter ${proposalAnswer === 'Yes' ? 'text-green-400' : 'text-red-400'}`}>
+                                                    {proposalAnswer === 'Yes' ? 'YES, FOREVER! 💍' : 'REJECTED... 🥀'}
+                                                </p>
+                                            </motion.div>
+                                        )}
+
+                                        <div className="p-4 bg-zinc-950/50 rounded-xl border border-white/5 flex flex-wrap justify-between gap-2 text-[10px] font-mono text-green-500/60 uppercase">
+                                            <span>{`> STATUS: ACCESS_GRANTED`}</span>
+                                            <span>{`> LOVE: ETERNAL`}</span>
+                                            <span>{`> MODE: SURPRISE`}</span>
+                                        </div>
+                                    </div>
+                                </>
                             )}
                         </div>
                     </motion.div>
