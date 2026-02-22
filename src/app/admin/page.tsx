@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, Unlock, Settings, Eye, EyeOff, Save, Trash2, CheckCircle, AlertTriangle, Camera, Music, Sparkles, MessageSquareHeart, Heart, Gift, Compass, Image as ImageIcon, PenTool, Printer } from 'lucide-react'
+import { Lock, Unlock, Settings, Eye, EyeOff, Save, Trash2, CheckCircle, X, AlertTriangle, Camera, Music, Sparkles, MessageSquareHeart, Heart, Gift, Compass, Image as ImageIcon, PenTool, Printer } from 'lucide-react'
 
 // Types
 interface Content {
