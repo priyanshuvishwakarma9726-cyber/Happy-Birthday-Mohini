@@ -16,6 +16,40 @@ const DEFAULT_HINGLISH = [
     "Har pal tumhari yaad dil mein basi rehti hai."
 ]
 
+// LOCAL ROMANTIC AI ENGINE (Template Based)
+const ROSE_AI_ENGINE = {
+    openers: ["Tumhari", "Mera", "Aaj ka har", "Har ek", "Meri", "Tumhara", "Hamara"],
+    subjects: ["smile", "saath", "ek pal", "pyaar", "din", "khayal", "ehsaas"],
+    actions: ["mere liye", "is duniya mein", "sab se", "hamesha", "is dil ko"],
+    conclusions: ["sab kuch hai.", "jannat hai.", "khushi deta hai.", "complete karta hai.", "zindagi banata hai.", "beintehaan pyaara hai."],
+    templates: [
+        "{opener} {subject} {action} {conclusion} ❤️",
+        "{opener} {subject} hi meri {conclusion} ✨",
+        "{subject} {action} {conclusion} 💖",
+        "Tum {action} {conclusion} 🥰"
+    ],
+    emojis: ["❤️", "✨", "💖", "🥰", "🌹", "💎", "🌟"]
+};
+
+const generateRoseMessage = () => {
+    const template = ROSE_AI_ENGINE.templates[Math.floor(Math.random() * ROSE_AI_ENGINE.templates.length)];
+    const opener = ROSE_AI_ENGINE.openers[Math.floor(Math.random() * ROSE_AI_ENGINE.openers.length)];
+    const subject = ROSE_AI_ENGINE.subjects[Math.floor(Math.random() * ROSE_AI_ENGINE.subjects.length)];
+    const action = ROSE_AI_ENGINE.actions[Math.floor(Math.random() * ROSE_AI_ENGINE.actions.length)];
+    const conclusion = ROSE_AI_ENGINE.conclusions[Math.floor(Math.random() * ROSE_AI_ENGINE.conclusions.length)];
+    const emoji = ROSE_AI_ENGINE.emojis[Math.floor(Math.random() * ROSE_AI_ENGINE.emojis.length)];
+
+    let msg = template
+        .replace("{opener}", opener)
+        .replace("{subject}", subject)
+        .replace("{action}", action)
+        .replace("{conclusion}", conclusion);
+
+    // Swap heart for random emoji occasionally
+    if (Math.random() > 0.5) msg = msg.replace("❤️", emoji);
+    return msg;
+};
+
 const DEFAULT_SECRET = [
     "You are the best thing that ever happened to me. ❤️",
     "I'll love you until the last petal falls (and these never will).",
@@ -151,10 +185,10 @@ export default function BloomingRose({ content }: { content?: any }) {
         // Petal fall effect
         setPetalsFallen(p => p + 1)
 
-        // Random Line
-        const randomLine = hinglishMessages[Math.floor(Math.random() * hinglishMessages.length)]
-        setCurrentLine(randomLine)
-        setTimeout(() => setCurrentLine(""), 3000)
+        // Random AI Line
+        const aiMessage = generateRoseMessage()
+        setCurrentLine(aiMessage)
+        setTimeout(() => setCurrentLine(""), 3500)
 
         // Confetti Hearts
         confetti({
