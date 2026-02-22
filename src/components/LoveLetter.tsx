@@ -81,7 +81,7 @@ export default function LoveLetter({ title, body, gallery }: Props) {
 
                         <div className="mt-12 text-right">
                             <p className="font-handwriting text-3xl text-pink-600 transform -rotate-3 inline-block">
-                                — With all my love ❤️
+                                — With all my love <span className="inline-block transform rotate-3 no-italic emoji">❤️</span>
                             </p>
                         </div>
                     </motion.div>

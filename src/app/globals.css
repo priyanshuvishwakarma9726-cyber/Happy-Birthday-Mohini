@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Color+Emoji&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -14,13 +14,15 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
 }
 
 /* Fix slanted emojis in italic text */
-span.emoji, em span, i span {
+span.emoji,
+em span,
+i span {
   font-style: normal !important;
   display: inline-block;
 }
@@ -67,6 +69,7 @@ textarea {
   -ms-user-select: text;
   user-select: text;
 }
+
 /* Utilities for Animations */
 .clip-path-envelope-flap {
   clip-path: polygon(0 0, 100% 0, 50% 100%);

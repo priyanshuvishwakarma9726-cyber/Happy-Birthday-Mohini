@@ -235,10 +235,10 @@ export default function BloomingRose({ content }: { content?: any }) {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-3xl md:text-4xl font-black italic text-pink-300 drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]"
                 >
-                    A Rose That Never Fades… 🌹
+                    A Rose That Never Fades… <span className="emoji inline-block not-italic">🌹</span>
                 </motion.h3>
                 <p className="text-zinc-500 text-xs font-bold uppercase tracking-[0.3em]">
-                    {isNight ? "Night Bloom Mode: On ✨" : "Sunlight Symbiosis Active ☀️"}
+                    {isNight ? <>Night Bloom Mode: On <span className="emoji inline-block">✨</span></> : <>Sunlight Symbiosis Active <span className="emoji inline-block">☀️</span></>}
                 </p>
             </div>
 
@@ -252,7 +252,10 @@ export default function BloomingRose({ content }: { content?: any }) {
                         exit={{ opacity: 0, scale: 0.8, y: -20 }}
                         className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 bg-black/60 backdrop-blur-xl px-8 py-4 rounded-2xl border border-pink-500/30 text-pink-100 font-serif italic text-lg text-center max-w-[80%]"
                     >
-                        "{currentLine}"
+                        "{currentLine.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) =>
+                            /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part) ?
+                                <span key={i} className="emoji inline-block not-italic">{part}</span> : part
+                        )}"
                     </motion.div>
                 )}
             </AnimatePresence>

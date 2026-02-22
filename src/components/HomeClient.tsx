@@ -248,7 +248,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
                     <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-pink-100 to-zinc-500 mb-6 tracking-tighter whitespace-pre-line leading-[1.1] relative select-none cursor-pointer" onClick={handleHeartClick}>
                         <Sparkles className="inline-block mr-2 md:mr-4 animate-pulse w-6 h-6 md:w-10 md:h-10" color="#ec4899" />
-                        <TypewriterText text={content.hero_title || "Happy Birthday\nMohini ❤️"} speed={150} />
+                        <TypewriterText text={content.hero_title || "Happy Birthday\nMohini <span class='emoji'>❤️</span>"} speed={150} />
                     </h1>
 
                     <motion.p
@@ -257,146 +257,161 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                         transition={{ delay: 1, duration: 1 }}
                         className="text-base md:text-2xl text-zinc-400 mt-4 max-w-xl mx-auto leading-relaxed px-4"
                     >
-                        {content.hero_subtitle || "Ye website sirf tumhare liye ❤️"}
+                        {content.hero_subtitle || <>Ye website sirf tumhare liye <span className='emoji'>❤️</span></>}
                     </motion.p>
+                </motion.p>
 
-                    {/* Simple Social Share Bar (Hero) */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={playing ? { opacity: 1 } : { opacity: 0 }}
-                        transition={{ delay: 1.5, duration: 1 }}
-                        className="mt-8"
-                    >
-                        <SocialShare />
-                    </motion.div>
-                </motion.div>
-
+                {/* Simple Social Share Bar (Hero) */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={playing ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: 2, duration: 1 }}
-                    className="absolute bottom-10 animate-bounce cursor-pointer z-50 text-white"
-                    onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                    transition={{ delay: 1.5, duration: 1 }}
+                    className="mt-8"
                 >
-                    <p className="text-zinc-500 text-sm">{content.scroll_karo_text || "Scroll Karo 👇"}</p>
+                    <SocialShare />
                 </motion.div>
-            </section>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={playing ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ delay: 2, duration: 1 }}
+                className="absolute bottom-10 animate-bounce cursor-pointer z-50 text-white"
+                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+            >
+                <p className="text-zinc-500 text-sm">{content.scroll_karo_text || "Scroll Karo 👇"}</p>
+            </motion.div>
+        </section>
 
 
-            {/* MINI GAMES ARCADE */}
-            {playing && flags.show_games && (
-                <MiniGamesSection gallery={localGallery} content={content} flags={flags} />
-            )}
+            {/* MINI GAMES ARCADE */ }
+    {
+        playing && flags.show_games && (
+            <MiniGamesSection gallery={localGallery} content={content} flags={flags} />
+        )
+    }
 
 
-            {/* INTERACTIVE */}
-            {playing && flags.show_games && (
-                <>
-                    <section className="py-20 px-6 sm:px-12 md:px-20 bg-zinc-950/20">
-                        <div className="max-w-7xl mx-auto space-y-20">
-                            {/* Row 1: Rose & AR */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                                <div className="w-full"><BloomingRose content={content} /></div>
-                                <div className="space-y-12 w-full"><RomanticAI content={content} /><OurFutureMagic content={content} /></div>
+    {/* INTERACTIVE */ }
+    {
+        playing && flags.show_games && (
+            <>
+                <section className="py-20 px-6 sm:px-12 md:px-20 bg-zinc-950/20">
+                    <div className="max-w-7xl mx-auto space-y-20">
+                        {/* Row 1: Rose & AR */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                            <div className="w-full"><BloomingRose content={content} /></div>
+                            <div className="space-y-12 w-full"><RomanticAI content={content} /><OurFutureMagic content={content} /></div>
+                        </div>
+
+                        {/* Row 2: Digital Cake & Scratch Card */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-zinc-900/40 p-6 sm:p-12 rounded-[3.5rem] border border-white/5">
+                            <div className="text-center space-y-4 w-full h-full flex flex-col items-center justify-center">
+                                <DigitalCake content={content} />
                             </div>
-
-                            {/* Row 2: Digital Cake & Scratch Card */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-zinc-900/40 p-6 sm:p-12 rounded-[3.5rem] border border-white/5">
-                                <div className="text-center space-y-4 w-full h-full flex flex-col items-center justify-center">
-                                    <DigitalCake content={content} />
+                            <div className="text-center space-y-8 w-full h-full flex flex-col items-center justify-center">
+                                <h3 className="text-2xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400 tracking-tighter uppercase leading-tight">
+                                    {content.surprise_title || "Your Surprise Gift 🎁"}
+                                </h3>
+                                <div className="w-full flex justify-center">
+                                    <ScratchCard
+                                        prizeText={content.scratch_prize_1 || "One Free 'Yes' Day! (Valid Forever) 💖"}
+                                        scratchPrompt={content.scratch_prompt_1 || "Scratch Me! ✨"}
+                                    />
                                 </div>
-                                <div className="text-center space-y-8 w-full h-full flex flex-col items-center justify-center">
-                                    <h3 className="text-2xl sm:text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400 tracking-tighter uppercase leading-tight">
-                                        {content.surprise_title || "Your Surprise Gift 🎁"}
-                                    </h3>
-                                    <div className="w-full flex justify-center">
-                                        <ScratchCard
-                                            prizeText={content.scratch_prize_1 || "One Free 'Yes' Day! (Valid Forever) 💖"}
-                                            scratchPrompt={content.scratch_prompt_1 || "Scratch Me! ✨"}
-                                        />
-                                    </div>
-                                    <p className="text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-[0.2em]">{content.scratch_subtext_1 || "Scratch to reveal your gift!"}</p>
-                                </div>
+                                <p className="text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-[0.2em]">{content.scratch_subtext_1 || "Scratch to reveal your gift!"}</p>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    <SectionDivider />
-                </>
-            )}
+                <SectionDivider />
+            </>
+        )
+    }
 
-            {/* BIRTHDAY WISH BOX */}
-            {playing && flags.show_wishes && (
-                <>
-                    <WishBox />
-                    <SectionDivider />
-                </>
-            )}
+    {/* BIRTHDAY WISH BOX */ }
+    {
+        playing && flags.show_wishes && (
+            <>
+                <WishBox />
+                <SectionDivider />
+            </>
+        )
+    }
 
-            {/* MEDIA */}
-            {flags.show_media && (content.video_url || content.voice_url) && (
-                <>
-                    <section className="py-20 px-4 bg-zinc-950/50 relative">
-                        <div className="max-w-4xl mx-auto space-y-12">
-                            {content.video_url && (
-                                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-                                    <h2 className="text-3xl font-bold text-center mb-8 text-white">{content.video_title || content.media_title || "Our Memories 🎥"}</h2>
-                                    <VideoPlayer url={content.video_url} play={playing} onPlayChange={handleMediaPlay} />
-                                </motion.div>
-                            )}
-                            {content.voice_url && (
-                                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="pt-8 text-center">
-                                    <h3 className="text-xl text-zinc-400 mb-4 flex items-center justify-center gap-2"><Music className="w-5 h-5" /> {content.audio_title || "Listen to this..."}</h3>
-                                    <VoiceMessage url={content.voice_url} onPlayChange={handleMediaPlay} />
-                                </motion.div>
-                            )}
-                        </div>
-                    </section>
-                    <SectionDivider />
-                </>
-            )}
+    {/* MEDIA */ }
+    {
+        flags.show_media && (content.video_url || content.voice_url) && (
+            <>
+                <section className="py-20 px-4 bg-zinc-950/50 relative">
+                    <div className="max-w-4xl mx-auto space-y-12">
+                        {content.video_url && (
+                            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
+                                <h2 className="text-3xl font-bold text-center mb-8 text-white">{content.video_title || content.media_title || "Our Memories 🎥"}</h2>
+                                <VideoPlayer url={content.video_url} play={playing} onPlayChange={handleMediaPlay} />
+                            </motion.div>
+                        )}
+                        {content.voice_url && (
+                            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="pt-8 text-center">
+                                <h3 className="text-xl text-zinc-400 mb-4 flex items-center justify-center gap-2"><Music className="w-5 h-5" /> {content.audio_title || "Listen to this..."}</h3>
+                                <VoiceMessage url={content.voice_url} onPlayChange={handleMediaPlay} />
+                            </motion.div>
+                        )}
+                    </div>
+                </section>
+                <SectionDivider />
+            </>
+        )
+    }
 
-            {/* GALLERY - MOVED BELOW MEDIA */}
-            {playing && flags.show_gallery && (
-                <GallerySection items={localGallery} title={content.gallery_title} />
-            )}
+    {/* GALLERY - MOVED BELOW MEDIA */ }
+    {
+        playing && flags.show_gallery && (
+            <GallerySection items={localGallery} title={content.gallery_title} />
+        )
+    }
 
-            {/* LOVE LETTER - MOVED BELOW MEDIA */}
-            {playing && flags.show_letter && content.long_letter_body && (
-                <LoveLetter
-                    title={content.long_letter_title || "My Heart's Letter"}
-                    body={content.long_letter_body}
-                    gallery={localGallery.filter(i => i.type === 'image' || (i.type as string) === 'photo').slice(0, 4)}
-                />
-            )}
+    {/* LOVE LETTER - MOVED BELOW MEDIA */ }
+    {
+        playing && flags.show_letter && content.long_letter_body && (
+            <LoveLetter
+                title={content.long_letter_title || "My Heart's Letter"}
+                body={content.long_letter_body}
+                gallery={localGallery.filter(i => i.type === 'image' || (i.type as string) === 'photo').slice(0, 4)}
+            />
+        )
+    }
 
-            <SectionDivider />
+    <SectionDivider />
 
-            {/* Birthday Cake Overlay */}
-            <AnimatePresence>
-                {showCake && <BirthdayCakePopup isOpen={showCake} onClose={() => setShowCake(false)} content={content} />}
-            </AnimatePresence>
+    {/* Birthday Cake Overlay */ }
+    <AnimatePresence>
+        {showCake && <BirthdayCakePopup isOpen={showCake} onClose={() => setShowCake(false)} content={content} />}
+    </AnimatePresence>
 
 
 
-            {/* CARD STUDIO */}
-            {playing && flags.show_wishes && (
-                <CardStudio
-                    recipientName={content.recipient_name || content.hero_title?.split('\n')[1]?.replace('❤️', '').trim() || "Mohini"}
-                    letterBody={content.card_message || content.long_letter_body || "Happy Birthday!"}
-                    heroImage={content.card_image_url || localGallery[0]?.url}
-                    title={content.gift_shop_title}
-                    subtitle={content.gift_shop_subtitle}
-                />
-            )}
+    {/* CARD STUDIO */ }
+    {
+        playing && flags.show_wishes && (
+            <CardStudio
+                recipientName={content.recipient_name || content.hero_title?.split('\n')[1]?.replace('❤️', '').trim() || "Mohini"}
+                letterBody={content.card_message || content.long_letter_body || "Happy Birthday!"}
+                heroImage={content.card_image_url || localGallery[0]?.url}
+                title={content.gift_shop_title}
+                subtitle={content.gift_shop_subtitle}
+            />
+        )
+    }
 
-            {/* GUEST WISHES */}
-            {flags.show_wishes && <GuestWishes title={content.wishes_title} />}
+    {/* GUEST WISHES */ }
+    { flags.show_wishes && <GuestWishes title={content.wishes_title} /> }
 
-            {/* LOVE TIMELINE */}
-            {playing && <LoveTimeline />}
+    {/* LOVE TIMELINE */ }
+    { playing && <LoveTimeline /> }
 
-            {/* MESSAGE */}
+    {/* MESSAGE */ }
             <section className="min-h-[60vh] flex items-center justify-center py-20 px-6 bg-zinc-950 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-pink-900/20 via-transparent to-transparent opacity-50" />
                 <div className="max-w-3xl text-center space-y-8 z-10">
@@ -413,121 +428,121 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
             <CinematicEnd name={content.recipient_name || "Mohini"} />
 
-            {/* FOOTER & SECRET VAULT TRIGGER */}
-            <footer className="py-12 text-center border-t border-zinc-900 mt-20 bg-black relative">
-                <p className="text-zinc-600 text-sm flex items-center justify-center gap-2">
-                    {content.footer_text || "Made with"}
-                    <button onClick={() => setShowSecretVault(true)} className="hover:scale-125 transition-transform"><Heart className="w-4 h-4 fill-pink-600 text-pink-600 animate-pulse" /></button>
-                    {content.footer_for || "for Mohini"}
-                </p>
-            </footer>
+    {/* FOOTER & SECRET VAULT TRIGGER */ }
+    <footer className="py-12 text-center border-t border-zinc-900 mt-20 bg-black relative">
+        <p className="text-zinc-600 text-sm flex items-center justify-center gap-2">
+            {content.footer_text || "Made with"}
+            <button onClick={() => setShowSecretVault(true)} className="hover:scale-125 transition-transform"><Heart className="w-4 h-4 fill-pink-600 text-pink-600 animate-pulse" /></button>
+            {content.footer_for || "for Mohini"}
+        </p>
+    </footer>
 
-            {/* SECRET VAULT MODAL */}
-            <AnimatePresence>
-                {showSecretVault && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
-                    >
-                        <div className="max-w-2xl w-full bg-zinc-900/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
-                            <button onClick={() => setShowSecretVault(false)} className="absolute top-6 right-6 z-20 text-zinc-500 hover:text-white transition-colors bg-white/5 p-2 rounded-full"><X className="w-5 h-5" /></button>
+    {/* SECRET VAULT MODAL */ }
+    <AnimatePresence>
+        {showSecretVault && (
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
+            >
+                <div className="max-w-2xl w-full bg-zinc-900/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+                    <button onClick={() => setShowSecretVault(false)} className="absolute top-6 right-6 z-20 text-zinc-500 hover:text-white transition-colors bg-white/5 p-2 rounded-full"><X className="w-5 h-5" /></button>
 
-                            {!vaultUnlocked ? (
-                                <div className="p-8 md:p-12 text-center space-y-8">
-                                    <div className="w-20 h-20 bg-zinc-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5 shadow-inner">
-                                        <Lock className="w-8 h-8 text-zinc-400" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <h3 className="text-3xl font-black text-white tracking-tighter uppercase">{content.secret_vault_title || "Secret Vault 🔒"}</h3>
-                                        <p className="text-zinc-500 text-sm font-medium">{content.secret_vault_hint || "Enter your Birth Date (DDMM) to unlock."}</p>
-                                    </div>
-                                    <div className="flex gap-2 justify-center">
-                                        <input
-                                            type="password"
-                                            maxLength={4}
-                                            className="bg-black/50 border border-zinc-700 text-center text-4xl tracking-[0.5em] text-pink-500 p-6 rounded-2xl w-full max-w-[280px] focus:border-pink-500 outline-none transition-all shadow-2xl font-black"
-                                            value={secretCode}
-                                            onChange={e => setSecretCode(e.target.value)}
-                                            placeholder="••••"
-                                        />
-                                    </div>
-                                    <button
-                                        onClick={unlockVault}
-                                        className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-pink-500/20 uppercase tracking-widest text-sm transition-all active:scale-95"
-                                    >
-                                        Initiate Unlock
-                                    </button>
-                                </div>
-                            ) : (
-                                <>
-                                    {/* Header */}
-                                    <div className="p-6 md:p-10 pb-4 text-center border-b border-white/5">
-                                        <motion.div
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            className="w-12 h-12 md:w-16 md:h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 border border-green-500/20"
-                                        >
-                                            <Key className="w-8 h-8 text-green-400" />
-                                        </motion.div>
-                                        <h3 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-white to-purple-400 tracking-tighter uppercase">
-                                            {content.secret_vault_success_title || "SYSTRM UNLOCKED 🎉"}
-                                        </h3>
-                                    </div>
-
-                                    {/* Scrollable Content */}
-                                    <div className="flex-1 overflow-y-auto px-8 md:px-12 py-8 custom-scrollbar">
-                                        <div className="relative">
-                                            <div className="absolute -top-4 -left-4 opacity-10"><Heart className="w-20 h-20 fill-current text-white" /></div>
-                                            <p className="text-xl md:text-2xl text-zinc-100 leading-relaxed font-serif italic text-center relative z-10 py-4">
-                                                "{content.secret_vault_success_msg || "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖"}"
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {/* Footer / Actions */}
-                                    <div className="p-6 md:p-10 pt-4 bg-black/40 border-t border-white/5 space-y-4 md:space-y-6">
-                                        {!proposalAnswer ? (
-                                            <div className="flex flex-col md:flex-row gap-4">
-                                                <button
-                                                    onClick={() => handleProposal('Yes')}
-                                                    className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-green-500/20 transition-all flex items-center justify-center gap-3 uppercase tracking-tighter text-lg group"
-                                                >
-                                                    <Heart className="w-6 h-6 fill-current group-hover:scale-125 transition-transform" /> I Say Yes!
-                                                </button>
-                                                <button
-                                                    onClick={() => handleProposal('No')}
-                                                    className="md:w-1/3 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 font-bold py-5 rounded-2xl transition-all uppercase tracking-widest text-xs"
-                                                >
-                                                    Not Today 💔
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <motion.div
-                                                initial={{ scale: 0.9, opacity: 0 }}
-                                                animate={{ scale: 1, opacity: 1 }}
-                                                className="p-8 bg-gradient-to-br from-pink-500/10 to-purple-500/10 rounded-3xl border border-white/10 text-center"
-                                            >
-                                                <p className="text-[10px] uppercase font-black tracking-[0.3em] text-pink-500 mb-2">Protocol Recorded</p>
-                                                <p className={`text-4xl md:text-5xl font-black italic tracking-tighter ${proposalAnswer === 'Yes' ? 'text-green-400' : 'text-red-400'}`}>
-                                                    {proposalAnswer === 'Yes' ? 'YES, FOREVER! 💍' : 'REJECTED... 🥀'}
-                                                </p>
-                                            </motion.div>
-                                        )}
-
-                                        <div className="p-4 bg-zinc-950/50 rounded-xl border border-white/5 flex flex-wrap justify-between gap-2 text-[10px] font-mono text-green-500/60 uppercase">
-                                            <span>{`> STATUS: ACCESS_GRANTED`}</span>
-                                            <span>{`> LOVE: ETERNAL`}</span>
-                                            <span>{`> MODE: SURPRISE`}</span>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
+                    {!vaultUnlocked ? (
+                        <div className="p-8 md:p-12 text-center space-y-8">
+                            <div className="w-20 h-20 bg-zinc-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5 shadow-inner">
+                                <Lock className="w-8 h-8 text-zinc-400" />
+                            </div>
+                            <div className="space-y-2">
+                                <h3 className="text-3xl font-black text-white tracking-tighter uppercase">{content.secret_vault_title || "Secret Vault 🔒"}</h3>
+                                <p className="text-zinc-500 text-sm font-medium">{content.secret_vault_hint || "Enter your Birth Date (DDMM) to unlock."}</p>
+                            </div>
+                            <div className="flex gap-2 justify-center">
+                                <input
+                                    type="password"
+                                    maxLength={4}
+                                    className="bg-black/50 border border-zinc-700 text-center text-4xl tracking-[0.5em] text-pink-500 p-6 rounded-2xl w-full max-w-[280px] focus:border-pink-500 outline-none transition-all shadow-2xl font-black"
+                                    value={secretCode}
+                                    onChange={e => setSecretCode(e.target.value)}
+                                    placeholder="••••"
+                                />
+                            </div>
+                            <button
+                                onClick={unlockVault}
+                                className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-pink-500/20 uppercase tracking-widest text-sm transition-all active:scale-95"
+                            >
+                                Initiate Unlock
+                            </button>
                         </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </main>
+                    ) : (
+                        <>
+                            {/* Header */}
+                            <div className="p-6 md:p-10 pb-4 text-center border-b border-white/5">
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="w-12 h-12 md:w-16 md:h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 border border-green-500/20"
+                                >
+                                    <Key className="w-8 h-8 text-green-400" />
+                                </motion.div>
+                                <h3 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-white to-purple-400 tracking-tighter uppercase">
+                                    {content.secret_vault_success_title || "SYSTRM UNLOCKED 🎉"}
+                                </h3>
+                            </div>
+
+                            {/* Scrollable Content */}
+                            <div className="flex-1 overflow-y-auto px-8 md:px-12 py-8 custom-scrollbar">
+                                <div className="relative">
+                                    <div className="absolute -top-4 -left-4 opacity-10"><Heart className="w-20 h-20 fill-current text-white" /></div>
+                                    <p className="text-xl md:text-2xl text-zinc-100 leading-relaxed font-serif italic text-center relative z-10 py-4">
+                                        "{content.secret_vault_success_msg || "Knowing you is the greatest gift of all. Here's a secret promise: I will always be your biggest fan. 💖"}"
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Footer / Actions */}
+                            <div className="p-6 md:p-10 pt-4 bg-black/40 border-t border-white/5 space-y-4 md:space-y-6">
+                                {!proposalAnswer ? (
+                                    <div className="flex flex-col md:flex-row gap-4">
+                                        <button
+                                            onClick={() => handleProposal('Yes')}
+                                            className="flex-1 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-green-500/20 transition-all flex items-center justify-center gap-3 uppercase tracking-tighter text-lg group"
+                                        >
+                                            <Heart className="w-6 h-6 fill-current group-hover:scale-125 transition-transform" /> I Say Yes!
+                                        </button>
+                                        <button
+                                            onClick={() => handleProposal('No')}
+                                            className="md:w-1/3 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 font-bold py-5 rounded-2xl transition-all uppercase tracking-widest text-xs"
+                                        >
+                                            Not Today 💔
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <motion.div
+                                        initial={{ scale: 0.9, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        className="p-8 bg-gradient-to-br from-pink-500/10 to-purple-500/10 rounded-3xl border border-white/10 text-center"
+                                    >
+                                        <p className="text-[10px] uppercase font-black tracking-[0.3em] text-pink-500 mb-2">Protocol Recorded</p>
+                                        <p className={`text-4xl md:text-5xl font-black italic tracking-tighter ${proposalAnswer === 'Yes' ? 'text-green-400' : 'text-red-400'}`}>
+                                            {proposalAnswer === 'Yes' ? 'YES, FOREVER! 💍' : 'REJECTED... 🥀'}
+                                        </p>
+                                    </motion.div>
+                                )}
+
+                                <div className="p-4 bg-zinc-950/50 rounded-xl border border-white/5 flex flex-wrap justify-between gap-2 text-[10px] font-mono text-green-500/60 uppercase">
+                                    <span>{`> STATUS: ACCESS_GRANTED`}</span>
+                                    <span>{`> LOVE: ETERNAL`}</span>
+                                    <span>{`> MODE: SURPRISE`}</span>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </motion.div>
+        )}
+    </AnimatePresence>
+        </main >
     )
 }

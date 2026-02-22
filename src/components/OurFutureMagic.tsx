@@ -112,7 +112,9 @@ export default function OurFutureMagic({ content }: { content?: any }) {
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 className="text-center space-y-4"
                             >
-                                <div className="text-6xl mb-2">{currentGoal.icon}</div>
+                                <div className="text-6xl mb-2">
+                                    <span className="emoji inline-block">{currentGoal.icon}</span>
+                                </div>
                                 <h4 className="text-2xl font-black text-pink-400 uppercase tracking-tighter leading-none italic">
                                     {currentGoal.title}
                                 </h4>
