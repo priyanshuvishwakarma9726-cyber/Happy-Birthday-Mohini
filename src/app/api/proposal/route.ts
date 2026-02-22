@@ -28,3 +28,14 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Failed to save" }, { status: 500 });
     }
 }
+
+export async function DELETE() {
+    if (!await isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    try {
+        await query('DELETE FROM proposals');
+        return NextResponse.json({ success: true });
+    } catch (e) {
+        console.error(e);
+        return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+    }
+}

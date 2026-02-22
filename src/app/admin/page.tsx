@@ -192,6 +192,15 @@ export default function AdminPage() {
         }
     }
 
+    const handleDeleteProposal = async () => {
+        if (confirm('Are you sure you want to clear this decision? This will allow a new one to be recorded.')) {
+            const res = await fetch('/api/proposal', { method: 'DELETE' })
+            if (res.ok) {
+                setProposalAnswer(null)
+            }
+        }
+    }
+
     const handleFileUpload = async (file: File) => {
         const formData = new FormData(); formData.append('file', file)
         const res = await fetch('/api/upload', { method: 'POST', body: formData })
@@ -249,9 +258,14 @@ export default function AdminPage() {
                                     <p className="text-zinc-400 text-sm font-bold uppercase tracking-widest">{proposalAnswer.created_at ? new Date(proposalAnswer.created_at).toLocaleString() : 'Just now'}</p>
                                 </div>
                             </div>
-                            <div className="text-right">
-                                <p className="text-[10px] uppercase font-black tracking-[0.3em] mb-2 opacity-50">She chose:</p>
-                                <p className="text-7xl font-black italic tracking-tighter">{proposalAnswer.answer.toUpperCase()}!</p>
+                            <div className="text-right flex items-center gap-6">
+                                <div>
+                                    <p className="text-[10px] uppercase font-black tracking-[0.3em] mb-2 opacity-50">She chose:</p>
+                                    <p className="text-7xl font-black italic tracking-tighter">{proposalAnswer.answer.toUpperCase()}!</p>
+                                </div>
+                                <button onClick={handleDeleteProposal} className="p-4 bg-white/10 hover:bg-white/20 rounded-2xl transition-all group">
+                                    <Trash2 className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                                </button>
                             </div>
                         </div>
                     </motion.section>
