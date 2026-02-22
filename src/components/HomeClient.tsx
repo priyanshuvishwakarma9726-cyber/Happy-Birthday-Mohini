@@ -229,7 +229,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
 
 
             {/* HERO SECTION */}
-            <section className="h-screen flex flex-col items-center justify-center relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-black overflow-hidden px-4">
+            <section className="min-h-screen flex flex-col items-center justify-center relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-black overflow-hidden px-4 py-24 md:py-32">
                 <FloatingHearts theme={currentTheme} />
                 <FullScreenSparkles theme={currentTheme} />
 
