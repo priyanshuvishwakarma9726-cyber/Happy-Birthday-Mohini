@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { RotateCcw, Timer, Trophy, Play, Lightbulb, Wand2 } from 'lucide-react'
 import confetti from 'canvas-confetti'
+import { renderEmojiText } from '@/lib/emoji-helper'
 
 interface PuzzleGameProps {
     imageUrl: string
@@ -377,7 +378,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
     const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`
     const adjacentSet = tiles.length ? getAdjacentSet(tiles, SIZE) : new Set<number>()
     const solutionReady = solveStatus === 'ready' && solutionRef.current.length > cursorRef.current
-    const hintLabel = solveStatus === 'computing' ? '⏳ Computing…' : solveStatus === 'failed' ? '⚠️ No Path' : '💡 Hint'
+    const hintLabel = solveStatus === 'computing' ? renderEmojiText('⏳ Computing…') : solveStatus === 'failed' ? renderEmojiText('⚠️ No Path') : renderEmojiText('💡 Hint')
 
     return (
         <div className="flex flex-col items-center gap-6 p-4 sm:p-8 bg-zinc-900/60 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 shadow-2xl w-full max-w-[420px] mx-auto select-none">
@@ -442,7 +443,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
                                         animate={{ opacity: [0.3, 1, 0.3] }}
                                         transition={{ repeat: Infinity, duration: 0.7 }}
                                     >
-                                        <span className="text-white text-xl drop-shadow-lg">👆</span>
+                                        {renderEmojiText("👆")}
                                     </motion.div>
                                 )}
                             </motion.div>
@@ -465,7 +466,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
                             >
                                 <Trophy className="w-10 h-10 text-white" />
                             </motion.div>
-                            <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">Perfect! 💖</h3>
+                            <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">{renderEmojiText("Perfect! 💖")}</h3>
                             <p className="text-pink-200 italic mb-8 font-serif text-sm leading-relaxed px-4">
                                 {victoryMessage || "Solving puzzles with you is my favorite thing to do. You complete me! 🧩✨"}
                             </p>
@@ -489,7 +490,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
                         exit={{ opacity: 0, y: 6 }}
                         className="px-4 py-2 bg-pink-500/12 border border-pink-400/25 rounded-full text-pink-300 text-[11px] font-semibold text-center"
                     >
-                        💡 Tap tiles next to the empty space
+                        {renderEmojiText("💡 Tap tiles next to the empty space")}
                     </motion.div>
                 )}
             </AnimatePresence>

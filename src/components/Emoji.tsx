@@ -9,19 +9,23 @@ interface EmojiProps {
 }
 
 export default function Emoji({ symbol, label, className = "" }: EmojiProps) {
+    // We clean the symbol mostly to fix some variation selectors if needed, but Elk handles standard emojis well
+    const emojiSrc = `https://emojicdn.elk.sh/${encodeURIComponent(symbol)}?style=apple`
+
     return (
-        <span
-            className={`emoji inline-block font-["Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif] not-italic select-none leading-none ${className}`}
-            role="img"
-            aria-label={label ? label : ""}
+        <img
+            src={emojiSrc}
+            alt={label || symbol}
             aria-hidden={label ? "false" : "true"}
-            style={{
-                fontStyle: 'normal',
-                verticalAlign: 'middle',
-                lineHeight: '1'
+            aria-label={label ? label : ""}
+            className={`emoji inline-block align-middle pb-[2px] ${className}`}
+            style={{ width: '1.15em', height: '1.15em', verticalAlign: 'middle' }}
+            draggable={false}
+            onError={(e) => {
+                // Fallback to text if the image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.removeAttribute('style');
             }}
-        >
-            {symbol}
-        </span>
+        />
     )
 }
