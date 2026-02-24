@@ -61,11 +61,6 @@ export default function TypewriterText({
     return (
         <span className={cn("inline-block", className)}>
             {renderSegmentedText(displayedText)}
-            <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{ repeat: Infinity, duration: 0.8 }}
-                className={cn("inline-block w-[3px] h-[1em] ml-1 align-middle", cursorColor)}
-            />
         </span>
     )
 }
