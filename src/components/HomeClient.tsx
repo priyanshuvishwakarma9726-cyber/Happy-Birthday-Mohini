@@ -24,7 +24,6 @@ import MiniGamesSection from '@/components/MiniGamesSection'
 import BloomingRose from '@/components/BloomingRose'
 import RomanticAI from '@/components/RomanticAI'
 import OurFutureMagic from '@/components/OurFutureMagic'
-import SocialShare from '@/components/SocialShare'
 import GifGenerator from '@/components/GifGenerator'
 import StoryGenerator from '@/components/StoryGenerator'
 import LoveLetter from '@/components/LoveLetter'
@@ -271,15 +270,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                     </motion.p>
                 </motion.div>
 
-                {/* Simple Social Share Bar (Hero) */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={playing ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: 1.5, duration: 1 }}
-                    className="mt-8"
-                >
-                    <SocialShare />
-                </motion.div>
+
 
                 <motion.div
                     initial={{ opacity: 0 }}

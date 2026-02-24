@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Printer, Mail, Heart, Download, X, Share2 } from 'lucide-react'
+import { Printer, Heart, Download, X, Share2 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
 interface Props {
@@ -199,11 +199,7 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
         }
     }
 
-    const handleEmail = () => {
-        const subject = encodeURIComponent(`A Special Birthday Card for ${recipientName} 🎂`);
-        const body = encodeURIComponent(`Hey!\n\nI created a special birthday surprise for you. Check it out here:\n\n${window.location.origin}\n\n"${letterBody.slice(0, 100)}..."\n\nWith Love ❤️`);
-        window.location.href = `mailto:?subject=${subject}&body=${body}`;
-    }
+
 
     return (
         <section className="py-20 px-4 bg-zinc-900 border-t border-zinc-800">
@@ -213,7 +209,7 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                 </h2>
                 <p className="text-zinc-400 mb-8">{subtitle || "Take a piece of this memory with you."}</p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 max-w-2xl mx-auto gap-6">
                     {/* Printable Card */}
                     <motion.div
                         whileHover={{ y: -5 }}
@@ -225,19 +221,6 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
                         </div>
                         <h3 className="text-xl font-bold text-white">Printable Card</h3>
                         <p className="text-sm text-zinc-400">Download a high-quality PDF version of your love letter.</p>
-                    </motion.div>
-
-                    {/* Email Card */}
-                    <motion.div
-                        whileHover={{ y: -5 }}
-                        className="bg-zinc-800/50 p-6 rounded-2xl border border-zinc-700/50 flex flex-col items-center gap-4 cursor-pointer group"
-                        onClick={handleEmail}
-                    >
-                        <div className="p-4 bg-purple-500/10 rounded-full group-hover:bg-purple-500/20 transition-colors">
-                            <Mail className="w-8 h-8 text-purple-500" />
-                        </div>
-                        <h3 className="text-xl font-bold text-white">Send E-Card</h3>
-                        <p className="text-sm text-zinc-400">Share this magical experience via email instantly.</p>
                     </motion.div>
 
                     {/* Heart Rain */}
