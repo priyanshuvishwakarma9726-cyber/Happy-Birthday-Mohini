@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { Trophy } from 'lucide-react'
-import { renderEmojiText } from '@/lib/emoji-helper'
 
 const MID_MESSAGES = [
     "You're the best! 💖",
@@ -90,10 +89,10 @@ export default function HeartCollector({ victoryMessage }: HeartCollectorProps) 
         <div className="relative w-full max-w-md mx-auto aspect-[3/4] bg-zinc-900 rounded-3xl overflow-hidden border-4 border-pink-500/50 shadow-2xl">
             {/* HUD */}
             <div className="absolute top-4 w-full text-center z-20">
-                <span className="bg-pink-600 px-4 py-1 rounded-full text-white font-bold shadow-lg text-sm flex items-center justify-center gap-1 mx-auto w-fit">
-                    Score: {score} {renderEmojiText("❤️")}
+                <span className="bg-pink-600 px-4 py-1 rounded-full text-white font-bold shadow-lg text-sm">
+                    Score: {score} ❤️
                 </span>
-                <p className="text-pink-300 text-xs mt-2 font-bold animate-pulse">{renderEmojiText(message)}</p>
+                <p className="text-pink-300 text-xs mt-2 font-bold animate-pulse">{message}</p>
             </div>
 
             {/* Start Screen */}
@@ -105,13 +104,13 @@ export default function HeartCollector({ victoryMessage }: HeartCollectorProps) 
                         exit={{ opacity: 0 }}
                         className="absolute inset-0 z-30 bg-black/60 flex flex-col items-center justify-center text-center p-6"
                     >
-                        <h2 className="text-3xl font-black text-white mb-4">{renderEmojiText("Heart Collector 💘")}</h2>
+                        <h2 className="text-3xl font-black text-white mb-4">Heart Collector 💘</h2>
                         <p className="text-pink-200 mb-6 text-sm">Tap the floating hearts before they disappear!</p>
                         <button
                             onClick={startGame}
                             className="bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-3 rounded-full font-black text-white shadow-xl hover:scale-105 transition-transform text-sm"
                         >
-                            {renderEmojiText("Start Collecting ▶️")}
+                            Start Collecting ▶️
                         </button>
                     </motion.div>
                 )}
@@ -135,10 +134,10 @@ export default function HeartCollector({ victoryMessage }: HeartCollectorProps) 
                         </motion.div>
 
                         <h3 className="text-2xl font-black text-white mb-1 uppercase tracking-tighter">
-                            {renderEmojiText("Time's Up! 🎉")}
+                            Time's Up! 🎉
                         </h3>
-                        <p className="text-pink-400 font-bold text-lg mb-3 flex items-center justify-center gap-1">
-                            You collected <span className="text-white text-2xl mx-1">{finalScore.current}</span> hearts! {renderEmojiText("💖")}
+                        <p className="text-pink-400 font-bold text-lg mb-3">
+                            You collected <span className="text-white text-2xl">{finalScore.current}</span> hearts! 💖
                         </p>
                         <p className="text-pink-200 italic text-sm leading-relaxed px-4 mb-6">
                             {victoryMessage || "Har ek dil tumhare liye dhadakta hai, Mohini! 🌸"}
@@ -168,7 +167,7 @@ export default function HeartCollector({ victoryMessage }: HeartCollectorProps) 
                             onMouseDown={(e) => { e.preventDefault(); collectHeart(heart.id) }}
                             whileTap={{ scale: 1.5 }}
                         >
-                            {renderEmojiText("❤️")}
+                            ❤️
                         </motion.button>
                     ))}
                 </AnimatePresence>
