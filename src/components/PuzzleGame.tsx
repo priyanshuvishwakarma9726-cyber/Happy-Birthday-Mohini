@@ -59,6 +59,54 @@ function getAdjacentIndices(tiles: number[], size: number): Set<number> {
     return adj
 }
 
+// ── Fisher-Yates with solvability validation ─────────────────────────────────
+/**
+ * Count inversions ignoring the blank tile (value = size*size-1).
+ * An inversion is a pair (i, j) where i < j but arr[i] > arr[j]
+ * (blank excluded from both sides of comparison).
+ */
+function countInversions(arr: number[]): number {
+    const flat = arr.filter(v => v !== arr.length - 1)
+    let inv = 0
+    for (let i = 0; i < flat.length - 1; i++)
+        for (let j = i + 1; j < flat.length; j++)
+            if (flat[i] > flat[j]) inv++
+    return inv
+}
+
+/**
+ * Standard N-puzzle solvability:
+ * - Odd grid width (3, 5): solvable iff inversions count is even.
+ * - Even grid width (4):   solvable iff (inversions + blank row from bottom) is odd.
+ */
+function isSolvable(arr: number[], size: number): boolean {
+    const inv = countInversions(arr)
+    if (size % 2 === 1) return inv % 2 === 0
+    const blankRow = Math.floor(arr.indexOf(size * size - 1) / size)
+    const blankFromBottom = size - blankRow
+    return (inv + blankFromBottom) % 2 === 1
+}
+
+/** Fisher-Yates shuffle, retries until puzzle is solvable and not already solved. */
+function createShuffledTiles(size: number): number[] {
+    const total = size * size
+    let arr: number[]
+    let attempts = 0
+    do {
+        arr = Array.from({ length: total }, (_, i) => i)
+        // Fisher-Yates
+        for (let i = total - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]]
+        }
+        attempts++
+    } while (
+        !isSolvable(arr, size) ||
+        arr.every((v, i) => v === i) // reject already-solved state
+    )
+    return arr
+}
+
 export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, onComplete }: PuzzleGameProps) {
     const SIZE = difficulty
     const TOTAL = SIZE * SIZE
@@ -67,31 +115,26 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
     const [timer, setTimer] = useState(0)
     const [isActive, setIsActive] = useState(false)
     const [moves, setMoves] = useState(0)
-    const [hintIdx, setHintIdx] = useState<number | null>(null)         // tile visual index highlighted by hint
-    const [showIdleTip, setShowIdleTip] = useState(false)               // "tap tiles next to gap" tip
+    const [hintIdx, setHintIdx] = useState<number | null>(null)
+    const [showIdleTip, setShowIdleTip] = useState(false)
     const [isSolving, setIsSolving] = useState(false)
     const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const solverRef = useRef<ReturnType<typeof setInterval> | null>(null)
     const tilesRef = useRef(tiles)
     tilesRef.current = tiles
 
-    // ── Shuffle ──────────────────────────────────────────────────────────────
+    // ── Idle tip reset (defined before shuffle so shuffle can reference it) ──
+    const resetIdleTimer = useCallback(() => {
+        if (idleTimer.current) clearTimeout(idleTimer.current)
+        setShowIdleTip(false)
+        idleTimer.current = setTimeout(() => setShowIdleTip(true), 25000)
+    }, [])
+
+    // ── Shuffle ───────────────────────────────────────────────────────────────
     const shuffle = useCallback(() => {
-        const arr = Array.from({ length: TOTAL }, (_, i) => i)
-        let emptyIdx = TOTAL - 1
-        for (let i = 0; i < 300; i++) {
-            const row = Math.floor(emptyIdx / SIZE), col = emptyIdx % SIZE
-            const moves: number[] = []
-            if (row > 0) moves.push(emptyIdx - SIZE)
-            if (row < SIZE - 1) moves.push(emptyIdx + SIZE)
-            if (col > 0) moves.push(emptyIdx - 1)
-            if (col < SIZE - 1) moves.push(emptyIdx + 1)
-            const pick = moves[Math.floor(Math.random() * moves.length)]
-                ;[arr[emptyIdx], arr[pick]] = [arr[pick], arr[emptyIdx]]
-            emptyIdx = pick
-        }
         if (solverRef.current) clearInterval(solverRef.current)
-        setTiles(arr)
+        const freshTiles = createShuffledTiles(SIZE)
+        setTiles(freshTiles)
         setWon(false)
         setTimer(0)
         setMoves(0)
@@ -100,9 +143,9 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
         setShowIdleTip(false)
         setIsSolving(false)
         resetIdleTimer()
-    }, [SIZE, TOTAL])
+    }, [SIZE, resetIdleTimer])
 
-    useEffect(() => { shuffle() }, [difficulty, imageUrl])
+    useEffect(() => { shuffle() }, [difficulty, imageUrl, shuffle])
 
     // ── Timer ─────────────────────────────────────────────────────────────────
     useEffect(() => {
@@ -111,17 +154,11 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
         return () => clearInterval(itv)
     }, [isActive, won])
 
-    // ── Idle tip ──────────────────────────────────────────────────────────────
-    const resetIdleTimer = useCallback(() => {
-        if (idleTimer.current) clearTimeout(idleTimer.current)
-        setShowIdleTip(false)
-        idleTimer.current = setTimeout(() => setShowIdleTip(true), 25000)
-    }, [])
 
     useEffect(() => {
         resetIdleTimer()
         return () => { if (idleTimer.current) clearTimeout(idleTimer.current) }
-    }, [tiles])
+    }, [tiles, resetIdleTimer])
 
     // ── Win ───────────────────────────────────────────────────────────────────
     const handleWin = useCallback((currentTiles: number[]) => {
