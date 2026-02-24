@@ -41,8 +41,6 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
         }
     }
 
-    const [isRedirecting, setIsRedirecting] = useState(false)
-    const [redirectStep, setRedirectStep] = useState(0) // 0: init, 1: text1, 2: text2, 3: text3
 
     // Helper to wrap emojis for 'sidha' look
     const renderEmojiText = (txt: string) => {
