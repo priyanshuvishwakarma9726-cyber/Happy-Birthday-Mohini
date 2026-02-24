@@ -114,6 +114,7 @@ export default function MiniGamesSection({ gallery, content, flags }: Props) {
                                     <PuzzleGame
                                         imageUrl={content.puzzle_image_url || (gallery && gallery.length > 0 ? gallery[0].url : '/uploads/fcee3990-4c9a-4f33-b444-2ef2453bc780-that.priyanshu_1.jpg')}
                                         difficulty={flags.puzzle_difficulty || 4}
+                                        victoryMessage={content.puzzle_victory_message}
                                     />
                                 </div>
                             )}
@@ -125,7 +126,7 @@ export default function MiniGamesSection({ gallery, content, flags }: Props) {
                                         <h3 className="text-2xl font-bold text-center text-white flex items-center justify-center gap-2">
                                             Heart Hunter 💘
                                         </h3>
-                                        <HeartCollector />
+                                        <HeartCollector victoryMessage={content.heart_hunter_victory_message} />
                                     </div>
                                 )}
                             </div>

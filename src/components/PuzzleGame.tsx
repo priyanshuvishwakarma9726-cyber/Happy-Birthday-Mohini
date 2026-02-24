@@ -7,10 +7,11 @@ import confetti from 'canvas-confetti'
 interface PuzzleGameProps {
     imageUrl: string;
     difficulty?: 3 | 4 | 5;
+    victoryMessage?: string;
     onComplete?: () => void;
 }
 
-export default function PuzzleGame({ imageUrl, difficulty = 4, onComplete }: PuzzleGameProps) {
+export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, onComplete }: PuzzleGameProps) {
     const SIZE = difficulty
     const [tiles, setTiles] = useState<number[]>([]) // Array of Piece IDs
     const [won, setWon] = useState(false)
@@ -189,7 +190,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, onComplete }: Puz
                             </motion.div>
                             <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">Perfect! 💖</h3>
                             <p className="text-pink-200 italic mb-8 font-serif text-sm leading-relaxed px-4">
-                                "Solving puzzles with you is my favorite thing to do. You complete me!"
+                                {victoryMessage || "Solving puzzles with you is my favorite thing to do. You complete me! 🧩✨"}
                             </p>
                             <button
                                 onClick={shuffle}

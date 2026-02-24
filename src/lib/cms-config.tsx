@@ -13,6 +13,15 @@ export const CMS_CATEGORIES = [
         ]
     },
     {
+        id: 'games',
+        title: 'Games – Victory Messages',
+        icon: MousePointerClick,
+        keys: [
+            { key: 'puzzle_victory_message', label: 'Love Puzzle: Win Message (after solving)', type: 'textarea' },
+            { key: 'heart_hunter_victory_message', label: 'Heart Hunter: End Screen Message (after 30s)', type: 'textarea' },
+        ]
+    },
+    {
         id: 'surprise',
         title: 'Gift & Scratch Cards',
         icon: Gift,
