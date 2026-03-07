@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
@@ -144,16 +145,7 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
 
     const [isTransitioning, setIsTransitioning] = useState(false)
 
-    // Helper to wrap emojis
-    const renderEmojiText = (txt: string) => {
-        if (!txt) return txt;
-        return txt.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
-            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
-                return <span key={i} className="emoji inline-block not-italic">{part}</span>
-            }
-            return part
-        })
-    }
+
 
     // Reset transition state when question changes
     useEffect(() => {
@@ -219,7 +211,7 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
                     <Trophy className="w-10 h-10 sm:w-12 sm:h-12 text-white -rotate-12" />
                 </div>
                 <div className="space-y-4">
-                    <h2 className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter font-romantic">
+                    <h2 className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter">
                         {renderEmojiText("Quiz About Mohini 😏💖")} <br />
                         <span className="text-pink-500">(Roast Mode)</span>
                     </h2>
@@ -244,7 +236,7 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
                 </div>
 
                 <div className="p-6 sm:p-8 bg-black/40 rounded-3xl border border-white/5">
-                    <p className="text-xl sm:text-2xl font-bold text-pink-100 italic leading-relaxed font-romantic">
+                    <p className="text-xl sm:text-2xl font-bold text-pink-100 italic leading-relaxed">
                         "{renderEmojiText(getScoreMessage())}"
                     </p>
                 </div>
@@ -297,7 +289,7 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
                         <div className={`p-6 rounded-3xl ${feedback.isCorrect ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
                             {feedback.isCorrect ? <Trophy className="w-12 h-12 text-green-400" /> : <AlertCircle className="w-12 h-12 text-red-400" />}
                         </div>
-                        <p className={`text-3xl font-bold leading-tight font-romantic ${feedback.isCorrect ? 'text-green-100' : 'text-red-100'}`}>
+                        <p className={`text-3xl font-bold leading-tight ${feedback.isCorrect ? 'text-green-100' : 'text-red-100'}`}>
                             {renderEmojiText(feedback.msg)}
                         </p>
                         <motion.button
@@ -320,7 +312,7 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
                         exit={{ x: -20, opacity: 0 }}
                         className="flex-1 flex flex-col justify-center space-y-8"
                     >
-                        <h3 className="text-2xl md:text-3xl font-black text-white text-center leading-tight font-romantic">
+                        <h3 className="text-2xl md:text-3xl font-black text-white text-center leading-tight">
                             {renderEmojiText(activeQuestion.q)}
                         </h3>
                         <div className="grid grid-cols-1 gap-4">

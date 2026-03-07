@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
@@ -149,7 +150,7 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
                             transition={{ duration: 0.8 }}
                         >
                             <h1 className="text-4xl md:text-7xl font-black mb-6 drop-shadow-lg text-white tracking-tight">
-                                Coming Soon... 🤫
+                                {renderEmojiText("Coming Soon... 🤫")}
                             </h1>
                         </motion.div>
 
@@ -160,7 +161,7 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
                             className="text-lg md:text-2xl text-white/80 mb-12 font-medium"
                         >
                             Sabar ka phal meetha hota hai, {recipientName}! <br />
-                            <span className="text-pink-400 font-bold text-3xl mt-2 inline-block">30th March</span> tak wait karo ❤️
+                            <span className="text-pink-400 font-bold text-3xl mt-2 inline-block">30th March</span> tak wait karo {renderEmojiText("❤️")}
                         </motion.p>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-16 justify-items-center">
@@ -191,7 +192,7 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="bg-black/80 backdrop-blur-md p-6 rounded-2xl border border-pink-500/50 shadow-2xl max-w-sm mx-auto"
                             >
-                                <h3 className="text-white font-bold mb-4">Admin Access 🕵️‍♀️</h3>
+                                <h3 className="text-white font-bold mb-4">{renderEmojiText("Admin Access 🕵️‍♀️")}</h3>
                                 <div className="flex gap-2">
                                     <input
                                         type="password"
@@ -230,7 +231,7 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
                             </motion.div>
                             <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter">
                                 Sab Ready Hai... <br />
-                                <span className="text-pink-500">Bas Ek Click Baaki Hai 💖</span>
+                                <span className="text-pink-500">{renderEmojiText("Bas Ek Click Baaki Hai 💖")}</span>
                             </h1>
                         </div>
 
@@ -240,12 +241,12 @@ export default function UnifiedGiftPage({ introAudioUrl, targetDate, recipientNa
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                             <span className="relative z-10 flex items-center gap-3 group-hover:text-white transition-all">
-                                Open Your Gift 🎁
+                                {renderEmojiText("Open Your Gift 🎁")}
                             </span>
                         </button>
 
                         <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs animate-pulse">
-                            Are you ready for the magic? ✨
+                            {renderEmojiText("Are you ready for the magic? ✨")}
                         </p>
                     </motion.div>
                 )}

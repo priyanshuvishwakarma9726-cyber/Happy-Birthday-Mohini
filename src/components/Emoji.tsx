@@ -9,19 +9,14 @@ interface EmojiProps {
 }
 
 export default function Emoji({ symbol, label, className = "" }: EmojiProps) {
+    if (!symbol) return null;
+
     return (
-        <span
-            className={`emoji inline-block font-["Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif] not-italic select-none leading-none ${className}`}
-            role="img"
-            aria-label={label ? label : ""}
-            aria-hidden={label ? "false" : "true"}
-            style={{
-                fontStyle: 'normal',
-                verticalAlign: 'middle',
-                lineHeight: '1'
-            }}
-        >
-            {symbol}
-        </span>
+        <img
+            src={`https://emojicdn.elk.sh/${encodeURIComponent(symbol)}?style=apple`}
+            alt={label || symbol}
+            className={`emoji inline-block w-[1.2em] h-[1.2em] align-[-0.2em] select-none pointer-events-none ${className}`}
+            draggable={false}
+        />
     )
 }

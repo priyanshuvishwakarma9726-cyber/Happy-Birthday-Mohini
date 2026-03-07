@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper';
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -249,7 +250,7 @@ export default function HiddenSnake({ onClose }: { onClose: () => void }) {
                     {gameOver && (
                         <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-20">
                             <h2 className="text-3xl font-black text-red-500 mb-2">GAME OVER</h2>
-                            <p className="text-white mb-6">Score: {score}</p>
+                            <p className="text-white mb-6">Score: {score} {renderEmojiText("??")}</p>
                             <button
                                 onClick={startGame}
                                 className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold px-6 py-2 rounded-full transition-transform hover:scale-105"

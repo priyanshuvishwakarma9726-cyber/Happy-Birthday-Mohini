@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
@@ -23,7 +24,7 @@ export default function GallerySection({ items, title }: { items: GalleryItem[],
                     viewport={{ once: true }}
                     className="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent"
                 >
-                    {title || "Found Memories 📸"}
+                    {renderEmojiText(title || "Found Memories 📸")}
                 </motion.h2>
 
                 <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
@@ -73,7 +74,7 @@ export default function GallerySection({ items, title }: { items: GalleryItem[],
                             {item.caption && (
                                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
                                     <p className="text-white text-sm font-medium drop-shadow-md">
-                                        {item.caption}
+                                        {renderEmojiText(item.caption)}
                                     </p>
                                 </div>
                             )}

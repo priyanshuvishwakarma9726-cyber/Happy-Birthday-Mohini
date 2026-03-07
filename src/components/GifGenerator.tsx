@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { Download, Play, Video, Share2 } from 'lucide-react'
 
 // Simple helper to generate video from image sequence
@@ -89,7 +90,7 @@ export default function GifGenerator({ gallery }: { gallery: { url: string }[] }
                 <Video className="w-8 h-8" />
             </div>
 
-            <h3 className="text-xl font-bold text-white mb-2">Auto-Generate "Birthday Reel" 🎞️</h3>
+            <h3 className="text-xl font-bold text-white mb-2">{renderEmojiText(`Auto-Generate "Birthday Reel" 🎞️`)}</h3>
             <p className="text-zinc-400 text-sm mb-6 max-w-xs">
                 Combine the gallery photos into a cute looping video instantly!
             </p>
@@ -122,9 +123,9 @@ export default function GifGenerator({ gallery }: { gallery: { url: string }[] }
                     className="bg-white text-black font-bold px-8 py-3 rounded-full hover:bg-zinc-200 disabled:opacity-50 flex items-center gap-2 transition-transform active:scale-95"
                 >
                     {generating ? (
-                        <>Generating... <span className="animate-spin">⏳</span></>
+                        <>{renderEmojiText(`Generating... ⏳`)}</>
                     ) : (
-                        <>Create Magic Video ✨</>
+                        <>{renderEmojiText(`Create Magic Video ✨`)}</>
                     )}
                 </button>
             )}

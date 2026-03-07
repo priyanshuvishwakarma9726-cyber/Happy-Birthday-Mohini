@@ -1,5 +1,6 @@
 'use client'
 
+import { renderEmojiText } from '@/lib/emoji-helper'
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, Compass, MapPin, Heart, Stars, Moon, Gift } from 'lucide-react'
@@ -68,7 +69,7 @@ export default function OurFutureMagic({ content }: { content?: any }) {
 
             <div className="relative z-10 space-y-8 max-w-sm">
                 <div className="space-y-2">
-                    <h3 className="text-3xl font-black text-white uppercase tracking-tighter italic">Naseeb Ka Pitara 🔮</h3>
+                    <h3 className="text-3xl font-black text-white uppercase tracking-tighter italic">{renderEmojiText("Naseeb Ka Pitara 🔮")}</h3>
                     <p className="text-zinc-500 text-sm font-medium">Click to see a glimpse of our beautiful future together.</p>
                 </div>
 
@@ -113,13 +114,13 @@ export default function OurFutureMagic({ content }: { content?: any }) {
                                 className="text-center space-y-4"
                             >
                                 <div className="text-6xl mb-2">
-                                    <span className="emoji inline-block">{currentGoal.icon}</span>
+                                    <span className="emoji inline-block">{renderEmojiText(currentGoal.icon)}</span>
                                 </div>
                                 <h4 className="text-2xl font-black text-pink-400 uppercase tracking-tighter leading-none italic">
-                                    {currentGoal.title}
+                                    {renderEmojiText(currentGoal.title)}
                                 </h4>
                                 <p className="text-zinc-400 text-sm leading-relaxed px-4">
-                                    "{currentGoal.desc}"
+                                    "{renderEmojiText(currentGoal.desc)}"
                                 </p>
                                 <button
                                     onClick={revealDestiny}

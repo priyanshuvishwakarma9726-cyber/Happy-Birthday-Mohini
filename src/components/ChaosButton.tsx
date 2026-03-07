@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { PartyPopper } from 'lucide-react'
+import { renderEmojiText } from '@/lib/emoji-helper'
 
 export default function ConfettiChaos() {
     const [clicked, setClicked] = useState(false)
@@ -43,7 +44,7 @@ export default function ConfettiChaos() {
         >
             <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-zinc-900 rounded-md group-hover:bg-opacity-0 flex items-center gap-2 font-bold">
                 <PartyPopper className={`w-5 h-5 ${clicked ? 'animate-bounce' : ''}`} />
-                Chaos Mode 🎊
+                {renderEmojiText("Chaos Mode 🎊")}
             </span>
         </motion.button>
     )

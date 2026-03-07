@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper';
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { RotateCcw, Timer, Trophy, Play, Lightbulb, Wand2 } from 'lucide-react'
@@ -442,7 +443,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
                                         animate={{ opacity: [0.3, 1, 0.3] }}
                                         transition={{ repeat: Infinity, duration: 0.7 }}
                                     >
-                                        <span className="text-white text-xl drop-shadow-lg">👆</span>
+                                        <span className="text-white text-xl drop-shadow-lg">{renderEmojiText("👆")}</span>
                                     </motion.div>
                                 )}
                             </motion.div>
@@ -465,9 +466,9 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
                             >
                                 <Trophy className="w-10 h-10 text-white" />
                             </motion.div>
-                            <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">Perfect! 💖</h3>
+                            <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">{renderEmojiText("Perfect! 💖")}</h3>
                             <p className="text-pink-200 italic mb-8 font-serif text-sm leading-relaxed px-4">
-                                {victoryMessage || "Solving puzzles with you is my favorite thing to do. You complete me! 🧩✨"}
+                                {renderEmojiText(victoryMessage || "Solving puzzles with you is my favorite thing to do. You complete me! 🧩✨")}
                             </p>
                             <button
                                 onClick={shuffle}
@@ -489,7 +490,7 @@ export default function PuzzleGame({ imageUrl, difficulty = 4, victoryMessage, o
                         exit={{ opacity: 0, y: 6 }}
                         className="px-4 py-2 bg-pink-500/12 border border-pink-400/25 rounded-full text-pink-300 text-[11px] font-semibold text-center"
                     >
-                        💡 Tap tiles next to the empty space
+                        {renderEmojiText("💡 Tap tiles next to the empty space")}
                     </motion.div>
                 )}
             </AnimatePresence>

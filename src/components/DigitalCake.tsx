@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import confetti from 'canvas-confetti'
 
 const DEFAULT_CAKE_WISHES = [
@@ -47,19 +48,12 @@ export default function DigitalCake({ content }: { content?: any }) {
         }
     }, [candles, wishes])
 
-    const renderText = (txt: string) => {
-        return txt.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
-            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
-                return <span key={i} className="emoji inline-block not-italic">{part}</span>
-            }
-            return part
-        })
-    }
+
 
     return (
         <div className="relative py-12 flex flex-col items-center justify-center">
-            <h3 className="text-2xl font-bold text-pink-400 mb-8 font-romantic">
-                {wished ? renderText("Your Wish is Granted! ✨") : renderText("Make a Wish & Blow the Candles! 🎂")}
+            <h3 className="text-2xl font-bold text-pink-400 mb-8">
+                {wished ? renderEmojiText("Your Wish is Granted! ✨") : renderEmojiText("Make a Wish & Blow the Candles! 🎂")}
             </h3>
 
             <div className="relative mt-24 flex flex-col items-center">
@@ -103,7 +97,7 @@ export default function DigitalCake({ content }: { content?: any }) {
                     className="mt-12 text-center max-w-sm bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm"
                 >
                     <p className="text-lg italic text-pink-200">
-                        "{renderText(currentWish)}"
+                        "{renderEmojiText(currentWish)}"
                     </p>
                 </motion.div>
             )}

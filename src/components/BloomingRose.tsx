@@ -1,5 +1,6 @@
 'use client'
 
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, BakeShadows, MeshDistortMaterial, Stars, Sparkles } from '@react-three/drei'
@@ -235,10 +236,10 @@ export default function BloomingRose({ content }: { content?: any }) {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-3xl md:text-4xl font-black italic text-pink-300 drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]"
                 >
-                    A Rose That Never Fades… <span className="emoji inline-block not-italic">🌹</span>
+                    {renderEmojiText("A Rose That Never Fades… 🌹")}
                 </motion.h3>
                 <p className="text-zinc-500 text-xs font-bold uppercase tracking-[0.3em]">
-                    {isNight ? <>Night Bloom Mode: On <span className="emoji inline-block">✨</span></> : <>Sunlight Symbiosis Active <span className="emoji inline-block">☀️</span></>}
+                    {isNight ? <>{renderEmojiText("Night Bloom Mode: On ✨")}</> : <>{renderEmojiText("Sunlight Symbiosis Active ☀️")}</>}
                 </p>
             </div>
 
@@ -252,10 +253,7 @@ export default function BloomingRose({ content }: { content?: any }) {
                         exit={{ opacity: 0, scale: 0.8, y: -20 }}
                         className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 bg-black/60 backdrop-blur-xl px-8 py-4 rounded-2xl border border-pink-500/30 text-pink-100 font-serif italic text-lg text-center max-w-[80%]"
                     >
-                        "{currentLine.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) =>
-                            /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part) ?
-                                <span key={i} className="emoji inline-block not-italic">{part}</span> : part
-                        )}"
+                        "{renderEmojiText(currentLine)}"
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -282,7 +280,7 @@ export default function BloomingRose({ content }: { content?: any }) {
                     >
                         <Heart className="w-16 h-16 text-pink-500 fill-pink-500 animate-bounce" />
                         <h4 className="text-3xl md:text-5xl font-black italic text-white tracking-tighter">
-                            {secretMessages[Math.floor(Math.random() * secretMessages.length)]}
+                            {renderEmojiText(secretMessages[Math.floor(Math.random() * secretMessages.length)])}
                         </h4>
                         <button
                             onClick={(e) => {

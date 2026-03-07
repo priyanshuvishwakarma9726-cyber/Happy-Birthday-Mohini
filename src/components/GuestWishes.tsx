@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, ThumbsUp, Heart, Star, Smile } from 'lucide-react'
@@ -73,28 +74,19 @@ export default function GuestWishes({ title }: { title?: string }) {
         })
     }
 
-    // Helper to wrap emojis
-    const renderEmojiText = (txt: string) => {
-        if (!txt) return txt;
-        return txt.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
-            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
-                return <span key={i} className="emoji inline-block not-italic">{part}</span>
-            }
-            return part
-        })
-    }
+
 
     return (
         <section className="py-20 px-4 bg-zinc-900 border-t border-zinc-800">
             <div className="max-w-4xl mx-auto">
-                <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 text-white font-romantic">
+                <h2 className="text-3xl md:text-5xl font-bold text-center mb-12 text-white">
                     {renderEmojiText(title || "Guestbook ✍️")}
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {/* FORM */}
                     <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 shadow-xl h-fit md:sticky md:top-24">
-                        <h3 className="text-xl font-bold text-white mb-4 font-romantic">Leave a Wish</h3>
+                        <h3 className="text-xl font-bold text-white mb-4">Leave a Wish</h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
                                 <label className="text-xs uppercase text-zinc-500 font-bold">Your Name</label>
@@ -146,10 +138,10 @@ export default function GuestWishes({ title }: { title?: string }) {
                                             className="bg-zinc-800/50 p-5 rounded-xl border border-zinc-700/50 hover:border-pink-500/30 transition-colors"
                                         >
                                             <div className="flex justify-between items-start mb-2">
-                                                <h4 className="font-bold text-white font-romantic">{wish.name}</h4>
+                                                <h4 className="font-bold text-white">{wish.name}</h4>
                                                 <span className="text-xs text-zinc-500">Guest</span>
                                             </div>
-                                            <p className="text-zinc-300 text-sm mb-4 leading-relaxed font-romantic italic">
+                                            <p className="text-zinc-300 text-sm mb-4 leading-relaxed italic">
                                                 "{renderEmojiText(wish.message)}"
                                             </p>
 
@@ -162,7 +154,7 @@ export default function GuestWishes({ title }: { title?: string }) {
                                                         className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-colors ${reactions[emoji] ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30' : 'bg-zinc-900 text-zinc-500 hover:bg-zinc-800'
                                                             }`}
                                                     >
-                                                        <span className="emoji not-italic">{emoji}</span>
+                                                        <span className="emoji not-italic">{renderEmojiText(emoji)}</span>
                                                         <span className="font-mono">{reactions[emoji] || 0}</span>
                                                     </button>
                                                 ))}

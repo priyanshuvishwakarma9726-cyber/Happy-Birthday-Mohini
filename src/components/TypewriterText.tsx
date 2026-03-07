@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { renderEmojiText, cleanTextForEmoji } from '@/lib/emoji-helper'
 
 interface TypewriterProps {
     text: string
@@ -31,9 +32,10 @@ export default function TypewriterText({
     useEffect(() => {
         if (!started) return
 
-        // Simple regex to match emoji sequences and individual characters
-        const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|.)/gu
-        const characters = Array.from(text.matchAll(emojiRegex), m => m[0])
+        // Use Intl.Segmenter to accurately split graphemes including complex emojis (e.g., family or skin tone emojis)
+        const cleaned = cleanTextForEmoji(text)
+        const segmenter = new Intl.Segmenter(navigator.language, { granularity: 'grapheme' })
+        const characters = Array.from(segmenter.segment(cleaned)).map(s => s.segment)
 
         let i = 0
         const interval = setInterval(() => {
@@ -48,19 +50,9 @@ export default function TypewriterText({
         return () => clearInterval(interval)
     }, [text, speed, started])
 
-    const renderSegmentedText = (txt: string) => {
-        const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu
-        return txt.split(emojiRegex).map((part, i) => {
-            if (emojiRegex.test(part)) {
-                return <span key={i} className="emoji inline-block not-italic">{part}</span>
-            }
-            return part
-        })
-    }
-
     return (
         <span className={cn("inline-block", className)}>
-            {renderSegmentedText(displayedText)}
+            {renderEmojiText(displayedText)}
         </span>
     )
 }

@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { motion } from 'framer-motion'
 import { Play, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -38,7 +39,7 @@ export default function IntroClient({ introAudioUrl, recipientName }: { introAud
                     </motion.div>
                     <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter">
                         A Special Gift <br />
-                        <span className="text-pink-500">For {recipientName || "Mohini"} ❤️</span>
+                        <span className="text-pink-500">{renderEmojiText(`For ${recipientName || "Mohini"} ❤️`)}</span>
                     </h1>
                 </div>
 
@@ -49,12 +50,12 @@ export default function IntroClient({ introAudioUrl, recipientName }: { introAud
                 >
                     <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
                     <span className="relative z-10 flex items-center gap-3 group-hover:text-white transition-all">
-                        {loading ? "Opening... 🎁" : "Open Your Gift 🎁"}
+                        {loading ? renderEmojiText("Opening... 🎁") : renderEmojiText("Open Your Gift 🎁")}
                     </span>
                 </button>
 
                 <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs animate-pulse">
-                    Listen closely... it's magical ✨
+                    {renderEmojiText("Listen closely... it's magical ✨")}
                 </p>
             </motion.div>
 

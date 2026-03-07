@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { Download, Camera, Share2, Instagram } from 'lucide-react'
 
 export default function StoryGenerator({ gallery }: { gallery: { url: string }[] }) {
@@ -99,7 +100,7 @@ export default function StoryGenerator({ gallery }: { gallery: { url: string }[]
             </div>
 
             <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 mb-6 flex items-center gap-2 z-10">
-                <Instagram className="text-pink-500 w-6 h-6" /> Insta Story Maker 🎨
+                <Instagram className="text-pink-500 w-6 h-6" /> {renderEmojiText("Insta Story Maker 🎨")}
             </h3>
 
             {/* Image Selector */}
@@ -117,8 +118,8 @@ export default function StoryGenerator({ gallery }: { gallery: { url: string }[]
             </div>
 
             <div className="flex gap-4 mb-6 z-10">
-                <button onClick={() => setTemplate(0)} className={`px-4 py-1 rounded-full text-xs font-bold ${template === 0 ? 'bg-pink-500 text-white' : 'bg-zinc-800 text-zinc-400'}`}>Romantic 💖</button>
-                <button onClick={() => setTemplate(1)} className={`px-4 py-1 rounded-full text-xs font-bold ${template === 1 ? 'bg-yellow-500 text-black' : 'bg-zinc-800 text-zinc-400'}`}>Fun 🎉</button>
+                <button onClick={() => setTemplate(0)} className={`px-4 py-1 rounded-full text-xs font-bold ${template === 0 ? 'bg-pink-500 text-white' : 'bg-zinc-800 text-zinc-400'}`}>{renderEmojiText("Romantic 💖")}</button>
+                <button onClick={() => setTemplate(1)} className={`px-4 py-1 rounded-full text-xs font-bold ${template === 1 ? 'bg-yellow-500 text-black' : 'bg-zinc-800 text-zinc-400'}`}>{renderEmojiText("Fun 🎉")}</button>
             </div>
 
             <button
@@ -126,7 +127,7 @@ export default function StoryGenerator({ gallery }: { gallery: { url: string }[]
                 disabled={!selectedImg}
                 className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-xl hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 transition-transform active:scale-95 mb-6 z-10"
             >
-                Generate Story 🪄
+                {renderEmojiText("Generate Story 🪄")}
             </button>
 
             {downloadUrl && (

@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { useState, useEffect } from 'react'
 import { Moon, Sun, Cloud, Stars } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -48,16 +49,6 @@ export default function TimeGreeting({ name }: { name: string }) {
 
     const Icon = greeting.icon
 
-    // Helper to wrap emojis for 'sidha' (upright) look
-    const renderMessage = (msg: string) => {
-        return msg.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
-            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
-                return <span key={i} className="emoji inline-block not-italic">{part}</span>
-            }
-            return part
-        })
-    }
-
     return (
         <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -71,7 +62,7 @@ export default function TimeGreeting({ name }: { name: string }) {
                 {greeting.text}, <span className="text-pink-400 font-bold">{name}</span>
             </h3>
             <p className="text-sm text-zinc-500 italic font-medium tracking-wide">
-                "{renderMessage(greeting.message)}"
+                "{renderEmojiText(greeting.message)}"
             </p>
         </motion.div>
     )

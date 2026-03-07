@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText, cleanTextForEmoji } from '@/lib/emoji-helper'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, Sparkles, Heart } from 'lucide-react'
@@ -25,11 +26,18 @@ const TypingText = ({ text, delay = 500 }: { text: string, delay?: number }) => 
     useEffect(() => {
         if (!started) return
 
+        const cleaned = cleanTextForEmoji(text)
+        const segmenter = new Intl.Segmenter(navigator.language, { granularity: 'grapheme' })
+        const characters = Array.from(segmenter.segment(cleaned)).map(s => s.segment)
+
         let i = 0
         const interval = setInterval(() => {
-            setDisplayedText(text.slice(0, i + 1))
-            i++
-            if (i >= text.length) clearInterval(interval)
+            if (i < characters.length) {
+                setDisplayedText(characters.slice(0, i + 1).join(''))
+                i++
+            } else {
+                clearInterval(interval)
+            }
         }, 50) // Typing speed
 
         return () => clearInterval(interval)
@@ -37,7 +45,7 @@ const TypingText = ({ text, delay = 500 }: { text: string, delay?: number }) => 
 
     return (
         <span className="inline-block">
-            {displayedText}
+            {renderEmojiText(displayedText)}
             {displayedText.length < text.length && (
                 <span className="inline-block w-0.5 h-6 ml-1 bg-pink-500 animate-pulse align-middle" />
             )}
@@ -142,13 +150,13 @@ export default function WishBox() {
             <div className="max-w-3xl mx-auto relative z-10" ref={resultRef}>
                 <div className="text-center mb-12 space-y-4">
                     <span className="inline-block px-4 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-sm font-bold tracking-widest uppercase">
-                        {content.wishbox_title || "Make a Wish ✨"}
+                        {renderEmojiText(content.wishbox_title || "Make a Wish ✨")}
                     </span>
                     <h2 className="text-4xl md:text-5xl font-black text-white leading-tight">
-                        {content.wishbox_heading || "What's Your Biggest Dream?"}
+                        {renderEmojiText(content.wishbox_heading || "What's Your Biggest Dream?")}
                     </h2>
                     <p className="text-zinc-400 max-w-lg mx-auto text-lg">
-                        {content.wishbox_subheading || "Likh do jo bhi dil me hai. Aaj sab kuch sach ho sakta hai if you believe! 💖"}
+                        {renderEmojiText(content.wishbox_subheading || "Likh do jo bhi dil me hai. Aaj sab kuch sach ho sakta hai if you believe! 💖")}
                     </p>
                 </div>
 
@@ -182,7 +190,7 @@ export default function WishBox() {
                                     {loading ? (
                                         <div className="w-6 h-6 border-4 border-black border-t-transparent rounded-full animate-spin" />
                                     ) : (
-                                        <>{content.wishbox_btn_text || "Make It Happen"} <Send className="w-5 h-5" /></>
+                                        <>{renderEmojiText(content.wishbox_btn_text || "Make It Happen")} <Send className="w-5 h-5" /></>
                                     )}
                                 </button>
                             </motion.form>
@@ -199,7 +207,7 @@ export default function WishBox() {
 
                                 <div className="bg-white/5 p-6 rounded-3xl border border-white/5 text-left relative">
                                     <div className="absolute -top-3 left-6 px-3 bg-zinc-900 border border-white/10 rounded-full text-xs text-zinc-500 font-bold uppercase tracking-wider">
-                                        {content.wishbox_success_title || "You Wished"}
+                                        {renderEmojiText(content.wishbox_success_title || "You Wished")}
                                     </div>
                                     <p className="text-zinc-300 italic text-lg leading-relaxed">"{result.message}"</p>
                                 </div>
@@ -210,7 +218,7 @@ export default function WishBox() {
                                     </div>
                                     <div className="relative flex justify-center">
                                         <span className="px-4 bg-zinc-900 text-sm text-pink-500 font-bold flex items-center gap-2">
-                                            <Heart className="w-4 h-4 fill-pink-500 animate-pulse" /> {content.wishbox_success_sender || "From Universe (Me)"}
+                                            <Heart className="w-4 h-4 fill-pink-500 animate-pulse" /> {renderEmojiText(content.wishbox_success_sender || "From Universe (Me)")}
                                         </span>
                                     </div>
                                 </div>
@@ -226,7 +234,7 @@ export default function WishBox() {
                                     onClick={() => setResult(null)}
                                     className="text-zinc-500 font-bold text-sm hover:text-white transition-colors underline decoration-zinc-700 hover:decoration-white underline-offset-4"
                                 >
-                                    {content.wishbox_again_btn || "Make another wish?"}
+                                    {renderEmojiText(content.wishbox_again_btn || "Make another wish?")}
                                 </button>
                             </motion.div>
                         )}

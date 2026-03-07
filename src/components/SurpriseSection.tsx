@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Heart, Sparkles, Wand2, Volume2, Calendar, Coffee, Moon, Sun, Camera, Gift } from 'lucide-react'
@@ -42,16 +43,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
     }
 
 
-    // Helper to wrap emojis for 'sidha' look
-    const renderEmojiText = (txt: string) => {
-        if (!txt) return txt;
-        return txt.split(/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u).map((part, i) => {
-            if (/(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u.test(part)) {
-                return <span key={i} className="emoji inline-block not-italic">{part}</span>
-            }
-            return part
-        })
-    }
+
 
     // Random Love Popup
     useEffect(() => {
@@ -61,7 +53,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                 // Trigger toast
                 const toast = document.createElement('div')
                 toast.className = "fixed bottom-10 left-10 md:left-auto md:right-10 right-10 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-2xl border border-pink-200 z-[100] animate-bounce text-pink-600 font-bold flex items-center gap-2 max-w-[calc(100vw-80px)]"
-                toast.innerHTML = `<span class="shrink-0">💌</span> <span class="truncate font-romantic">${msg}</span>` // msg handled by CSS span.emoji rule in globals.css
+                toast.innerHTML = `<span class="shrink-0">💌</span> <span class="truncate">${msg}</span>` // msg handled by globally injected CSS for images if we were in React, but here we just leave as is or wrap if we had a string helper.
                 document.body.appendChild(toast)
                 setTimeout(() => toast.remove(), 4000)
             }
@@ -200,7 +192,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                                         exit={{ opacity: 0, y: -20 }}
                                         className="text-3xl md:text-5xl font-black text-white tracking-widest uppercase"
                                     >
-                                        Hold Your Breath... 🤫
+                                        {renderEmojiText("Hold Your Breath... 🤫")}
                                     </motion.h2>
                                 )}
                                 {redirectStep === 2 && (
@@ -211,7 +203,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                                         exit={{ opacity: 0, scale: 1.5 }}
                                         className="text-4xl md:text-6xl font-black text-pink-500 tracking-tighter"
                                     >
-                                        Are You Ready? 🫣
+                                        {renderEmojiText("Are You Ready? 🫣")}
                                     </motion.h2>
                                 )}
                                 {redirectStep === 3 && (
@@ -222,7 +214,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                                         exit={{ opacity: 0, scale: 2 }}
                                         className="text-5xl md:text-7xl font-black text-white bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-red-500"
                                     >
-                                        IT'S SHOWTIME! 🚀
+                                        {renderEmojiText("IT'S SHOWTIME! 🚀")}
                                     </motion.h2>
                                 )}
                             </AnimatePresence>
@@ -232,7 +224,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
             </AnimatePresence>
 
             <div className="max-w-6xl mx-auto">
-                <h2 className="text-4xl font-black text-center text-white mb-12 flex items-center justify-center gap-2 font-romantic">
+                <h2 className="text-4xl font-black text-center text-white mb-12 flex items-center justify-center gap-2">
                     <Sparkles className="text-purple-400" /> {renderEmojiText("Surprise Box 🎁")}
                 </h2>
 
@@ -240,7 +232,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
 
                     {/* 1. Theme Switcher */}
                     <div className="bg-zinc-800 p-6 rounded-2xl border border-zinc-700 hover:border-pink-500/50 transition-colors">
-                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 font-romantic">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                             <Moon className="w-5 h-5 text-indigo-400" /> Mood Setter
                         </h3>
                         <div className="flex gap-2">
@@ -252,7 +244,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
 
                     {/* 2. Whisper Mode */}
                     <div className="bg-zinc-800 p-6 rounded-2xl border border-zinc-700 hover:border-pink-500/50 transition-colors">
-                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 font-romantic">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                             <Volume2 className="w-5 h-5 text-pink-400" /> Whisper Mode
                         </h3>
                         <button
@@ -265,7 +257,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
 
                     {/* 3. Memory Timeline */}
                     <div className="bg-zinc-800 p-6 rounded-2xl border border-zinc-700 hover:border-pink-500/50 transition-colors">
-                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 font-romantic">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                             <Calendar className="w-5 h-5 text-blue-400" /> Flashback
                         </h3>
                         <button
@@ -278,7 +270,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
 
                     {/* 4. Wish Amplifier */}
                     <div className="bg-zinc-800 p-6 rounded-2xl border border-zinc-700 hover:border-pink-500/50 transition-colors">
-                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 font-romantic">
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                             <Wand2 className="w-5 h-5 text-yellow-400" /> Wish Magic
                         </h3>
                         <button
@@ -301,7 +293,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                             className="overflow-hidden mt-8"
                         >
                             <div className="bg-zinc-800/50 rounded-3xl p-8 border border-white/10">
-                                <h3 className="text-2xl font-bold text-white mb-6 text-center font-romantic">{renderEmojiText("Our Journey Together 🛤️")}</h3>
+                                <h3 className="text-2xl font-bold text-white mb-6 text-center">{renderEmojiText("Our Journey Together 🛤️")}</h3>
                                 <div className="space-y-8 relative before:absolute before:left-4 md:before:left-1/2 before:top-0 before:bottom-0 before:w-1 before:bg-pink-500/30">
                                     {/* Mock Content - would come from props/JSON */}
                                     {[2021, 2022, 2023, 2024, 2025].map((year, i) => (
@@ -311,8 +303,8 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                                             <div className="w-10/12 md:w-5/12 pl-12 md:pl-0 md:group-even:pl-8 md:group-odd:pr-8">
                                                 <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-700 hover:border-pink-500 transition-colors shadow-lg">
                                                     <span className="text-pink-500 font-black text-xl mb-2 block">{year}</span>
-                                                    <h4 className="text-white font-bold mb-2 font-romantic">Beautiful Memory</h4>
-                                                    <p className="text-zinc-400 text-sm font-romantic">{renderEmojiText("Remember that time we laughed until we cried? Best day ever. ❤️")}</p>
+                                                    <h4 className="text-white font-bold mb-2">Beautiful Memory</h4>
+                                                    <p className="text-zinc-400 text-sm">{renderEmojiText("Remember that time we laughed until we cried? Best day ever. ❤️")}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -334,7 +326,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl animate-pulse" />
                                 <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
 
-                                <h3 className="text-3xl font-bold text-white mb-2 relative z-10 font-romantic">{renderEmojiText("Wish Amplifier 🔮")}</h3>
+                                <h3 className="text-3xl font-bold text-white mb-2 relative z-10">{renderEmojiText("Wish Amplifier 🔮")}</h3>
                                 <p className="text-indigo-200 mb-8 relative z-10">Type a simple wish, and let the magic of the universe amplify it.</p>
 
                                 <div className="max-w-2xl mx-auto space-y-6 relative z-10">
@@ -363,7 +355,7 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                                         >
                                             <Sparkles className="absolute -top-4 -left-4 text-yellow-400 w-8 h-8 animate-spin-slow" />
                                             <Sparkles className="absolute -bottom-4 -right-4 text-pink-400 w-8 h-8 animate-spin-slow" />
-                                            <p className="text-2xl font-serif text-pink-100 italic leading-relaxed font-romantic">
+                                            <p className="text-2xl font-serif text-pink-100 italic leading-relaxed">
                                                 "{renderEmojiText(amplifiedWish)}"
                                             </p>
                                         </motion.div>
@@ -383,10 +375,10 @@ export default function SurpriseSection({ content, gallery, onThemeChange, onPla
                         <span className="relative z-10 flex items-center justify-center gap-3">
                             <Gift className="w-6 h-6 sm:w-8 sm:h-8 animate-bounce" />
                             BIG SURPRISE
-                            <Heart className="w-6 h-6 sm:w-8 sm:h-8 animate-pulse text-white font-romantic" fill="white" />
+                            <Heart className="w-6 h-6 sm:w-8 sm:h-8 animate-pulse text-white" fill="white" />
                         </span>
                     </button>
-                    <p className="mt-4 text-zinc-500 font-medium font-romantic">{renderEmojiText("Click only if you're ready to be overwhelmed! 🫣")}</p>
+                    <p className="mt-4 text-zinc-500 font-medium">{renderEmojiText("Click only if you're ready to be overwhelmed! 🫣")}</p>
                 </div>
             </div>
         </section>

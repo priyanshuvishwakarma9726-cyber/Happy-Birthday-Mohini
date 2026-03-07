@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper';
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Printer, Heart, Download, X, Share2 } from 'lucide-react'
@@ -205,9 +206,9 @@ export default function CardStudio({ recipientName, letterBody, heroImage, title
         <section className="py-20 px-4 bg-zinc-900 border-t border-zinc-800">
             <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-                    {title || "Gift Shop 🎁"}
+                    {renderEmojiText(title || "Gift Shop 🎁")}
                 </h2>
-                <p className="text-zinc-400 mb-8">{subtitle || "Take a piece of this memory with you."}</p>
+                <p className="text-zinc-400 mb-8">{renderEmojiText(subtitle || "Take a piece of this memory with you.")}</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 max-w-2xl mx-auto gap-6">
                     {/* Printable Card */}

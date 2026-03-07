@@ -1,4 +1,5 @@
 'use client'
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Disc, Gamepad2, Gift, Sparkles, Heart, Cake, Stars } from 'lucide-react'
@@ -45,7 +46,7 @@ export default function MiniGamesSection({ gallery, content, flags }: Props) {
                     className="text-center mb-12"
                 >
                     <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 mb-6 drop-shadow-sm">
-                        Fun Zone! 🎠
+                        {renderEmojiText("Fun Zone! 🎠")}
                     </h2>
 
                     {/* Tabs */}
@@ -88,12 +89,12 @@ export default function MiniGamesSection({ gallery, content, flags }: Props) {
                                     scratchPrompt={content.scratch_prompt_2 || "Scratch Me! ✨"}
                                 />
                                 <p className="text-zinc-500 text-xs text-center mt-4">
-                                    {content.scratch_subtext_2 || "Scratch Karo, darr kyu rahi ho bacchi... 😜"}
+                                    {renderEmojiText(content.scratch_subtext_2 || "Scratch Karo, darr kyu rahi ho bacchi... 😜")}
                                 </p>
                             </div>
                             <div className="flex flex-col items-center gap-4">
                                 <ChaosButton />
-                                <p className="text-zinc-500 text-xs text-center">Warning: Extreme Fun! ⚠️</p>
+                                <p className="text-zinc-500 text-xs text-center">{renderEmojiText("Warning: Extreme Fun! ⚠️")}</p>
                             </div>
                         </motion.div>
                     ) : (
@@ -109,7 +110,7 @@ export default function MiniGamesSection({ gallery, content, flags }: Props) {
                             {flags.show_puzzle && (
                                 <div className="space-y-8 pb-12 border-b border-zinc-900">
                                     <h3 className="text-3xl font-black text-center text-white flex items-center justify-center gap-3">
-                                        <Stars className="text-pink-500 animate-pulse" /> Love Puzzle 🧩
+                                        <Stars className="text-pink-500 animate-pulse" /> {renderEmojiText("Love Puzzle 🧩")}
                                     </h3>
                                     <PuzzleGame
                                         imageUrl={content.puzzle_image_url || (gallery && gallery.length > 0 ? gallery[0].url : '/uploads/fcee3990-4c9a-4f33-b444-2ef2453bc780-that.priyanshu_1.jpg')}
@@ -124,7 +125,7 @@ export default function MiniGamesSection({ gallery, content, flags }: Props) {
                                 {flags.game_hearts && (
                                     <div className="space-y-4">
                                         <h3 className="text-2xl font-bold text-center text-white flex items-center justify-center gap-2">
-                                            Heart Hunter 💘
+                                            {renderEmojiText("Heart Hunter 💘")}
                                         </h3>
                                         <HeartCollector victoryMessage={content.heart_hunter_victory_message} />
                                     </div>
@@ -138,7 +139,7 @@ export default function MiniGamesSection({ gallery, content, flags }: Props) {
                                 {flags.show_quiz && (
                                     <div className="space-y-4">
                                         <h3 className="text-2xl font-bold text-center text-white flex items-center justify-center gap-2">
-                                            <Sparkles className="text-yellow-400" /> Roast Quiz 😏
+                                            <Sparkles className="text-yellow-400" /> {renderEmojiText("Roast Quiz 😏")}
                                         </h3>
                                         <MohiniQuiz quizData={content.quiz_data} />
                                     </div>

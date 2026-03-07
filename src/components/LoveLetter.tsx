@@ -1,5 +1,5 @@
 'use client'
-
+import { renderEmojiText } from '@/lib/emoji-helper'
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Heart } from 'lucide-react'
@@ -54,7 +54,7 @@ export default function LoveLetter({ title, body, gallery }: Props) {
                                     <div className="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
                                 <p className="font-handwriting text-zinc-600 text-center mt-6 transform -rotate-1 text-2xl">
-                                    {img.caption || 'For You ❤️'}
+                                    {renderEmojiText(img.caption || 'For You ❤️')}
                                 </p>
                             </motion.div>
                         ))}
@@ -71,17 +71,17 @@ export default function LoveLetter({ title, body, gallery }: Props) {
                         <div className="mb-8 text-center border-b-2 border-pink-200 pb-6">
                             <Heart className="w-8 h-8 text-pink-500 mx-auto mb-4 fill-pink-500" />
                             <h2 className="text-3xl md:text-5xl font-serif italic text-pink-900">
-                                {title || "My Sincereset Feelings"}
+                                {renderEmojiText(title || "My Sincereset Feelings")}
                             </h2>
                         </div>
 
                         <div className="prose prose-lg prose-p:font-serif prose-p:text-zinc-700 prose-p:leading-loose text-lg md:text-xl font-medium whitespace-pre-line max-h-[600px] overflow-y-auto custom-scrollbar pr-4">
-                            {body}
+                            {renderEmojiText(body)}
                         </div>
 
                         <div className="mt-12 text-right">
                             <p className="font-handwriting text-3xl text-pink-600 transform -rotate-3 inline-block">
-                                — With all my love <span className="inline-block transform rotate-3 no-italic emoji">❤️</span>
+                                — With all my love <span className="inline-block transform rotate-3 no-italic emoji">{renderEmojiText("❤️")}</span>
                             </p>
                         </div>
                     </motion.div>
@@ -109,7 +109,7 @@ export default function LoveLetter({ title, body, gallery }: Props) {
                                     <div className="absolute inset-0 bg-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
                                 <p className="font-handwriting text-zinc-600 text-center mt-6 transform -rotate-1 text-2xl">
-                                    {img.caption || 'Forever ✨'}
+                                    {renderEmojiText(img.caption || 'Forever ✨')}
                                 </p>
                             </motion.div>
                         ))}
