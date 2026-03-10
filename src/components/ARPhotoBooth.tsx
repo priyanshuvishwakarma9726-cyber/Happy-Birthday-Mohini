@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Camera, Download, RefreshCw, Stars, Heart, CheckCircle2, Loader2, Sparkles, X, AlertCircle } from 'lucide-react'
 import confetti from 'canvas-confetti'
+import { renderEmojiText } from '@/lib/emoji-helper'
 
 const OVERLAYS = [
     { id: 0, name: "Normal", icon: "✨" },

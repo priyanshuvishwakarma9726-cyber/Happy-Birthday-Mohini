@@ -62,7 +62,7 @@ export default function OurFutureMagic({ content }: { content?: any }) {
             let nextGoal;
             try {
                 // Try to parse the AI output if it's JSON-wrapped
-                const match = data.result.match(/\{.*\}/s);
+                const match = data.result.match(/\{[\s\S]*\}/);
                 nextGoal = match ? JSON.parse(match[0]) : JSON.parse(data.result);
             } catch (pErr) {
                 console.error("AI Parse Error:", pErr);

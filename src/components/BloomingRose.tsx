@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Gift, AlertTriangle, Terminal, XCircle, HeartPulse, RefreshCw, ScanFace, Lock, Trash2 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 
-export default function BloomingRose() {
+export default function BloomingRose({ content }: { content?: any }) {
     // Stage 0: Dodging Button (Extremely annoying)
     // Stage 1: Fake Face ID Scan
     // Stage 2: Embarrassing Security Typo
