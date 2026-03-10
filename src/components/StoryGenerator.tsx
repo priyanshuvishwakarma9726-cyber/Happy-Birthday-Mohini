@@ -3,13 +3,33 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { renderEmojiText } from '@/lib/emoji-helper'
-import { Download, Camera, Share2, Instagram } from 'lucide-react'
+import { Download, Camera, Share2, Instagram, Sparkles as SparklesIcon } from 'lucide-react'
 
 export default function StoryGenerator({ gallery }: { gallery: { url: string }[] }) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [selectedImg, setSelectedImg] = useState<string | null>(null)
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
     const [template, setTemplate] = useState(0) // 0: Romantic, 1: Fun
+    const [caption, setCaption] = useState('Best Day Ever! 🎂')
+    const [isGeneratingCaption, setIsGeneratingCaption] = useState(false)
+
+    const generateAICaption = async () => {
+        setIsGeneratingCaption(true)
+        try {
+            const res = await fetch('/api/ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: "Generate a short, viral-style romantic Instagram story caption for a birthday girl named Mohini. Use Hinglish and emojis. Keep it under 10 words." })
+            })
+            const data = await res.json()
+            if (data.result) setCaption(data.result.replace(/["']/g, ''))
+        } catch (e) {
+            console.error(e)
+            setCaption("My Whole Heart! ❤️")
+        } finally {
+            setIsGeneratingCaption(false)
+        }
+    }
 
     const generateStory = () => {
         if (!selectedImg || !canvasRef.current) return
@@ -75,7 +95,7 @@ export default function StoryGenerator({ gallery }: { gallery: { url: string }[]
             // Bottom Caption
             ctx.fillStyle = '#333'
             ctx.font = 'italic 50px sans-serif'
-            ctx.fillText('Best Day Ever! 🎂', 540, cardY + cardH - 80)
+            ctx.fillText(caption, 540, cardY + cardH - 80)
 
             // Sticker
             ctx.font = '150px Arial'
@@ -117,9 +137,28 @@ export default function StoryGenerator({ gallery }: { gallery: { url: string }[]
                 {gallery.length === 0 && <p className="text-zinc-500 text-sm">No photos available.</p>}
             </div>
 
-            <div className="flex gap-4 mb-6 z-10">
+            <div className="flex gap-4 mb-2 z-10">
                 <button onClick={() => setTemplate(0)} className={`px-4 py-1 rounded-full text-xs font-bold ${template === 0 ? 'bg-pink-500 text-white' : 'bg-zinc-800 text-zinc-400'}`}>{renderEmojiText("Romantic 💖")}</button>
                 <button onClick={() => setTemplate(1)} className={`px-4 py-1 rounded-full text-xs font-bold ${template === 1 ? 'bg-yellow-500 text-black' : 'bg-zinc-800 text-zinc-400'}`}>{renderEmojiText("Fun 🎉")}</button>
+            </div>
+
+            <div className="w-full mb-6 z-10 space-y-2">
+                <div className="flex items-center justify-between px-1">
+                    <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Caption</span>
+                    <button
+                        onClick={generateAICaption}
+                        disabled={isGeneratingCaption}
+                        className="text-[10px] text-pink-500 font-black flex items-center gap-1 hover:text-pink-400 disabled:opacity-50"
+                    >
+                        {isGeneratingCaption ? "Generating..." : <><SparklesIcon className="w-3 h-3" /> AI Magic</>}
+                    </button>
+                </div>
+                <input
+                    type="text"
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
+                    className="w-full bg-zinc-800 border-zinc-700 border rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-pink-500"
+                />
             </div>
 
             <button

@@ -78,7 +78,7 @@ const DEFAULT_QUESTIONS: QuizQuestion[] = [
         wrong: "Galat! Engagement ka scene yaad rakho bhai 😌"
     },
     {
-        q: "Engagement se pehle hum kaha mile the?",
+        q: "Pehli baar date pe hum kahan gaye the?",
         options: ["Kulkula Dham", "Restaurant", "Park", "Movie hall"],
         a: "Kulkula Dham",
         correct: "Perfect! Kulkula Dham = memory unlocked 🔓💖",
@@ -88,7 +88,7 @@ const DEFAULT_QUESTIONS: QuizQuestion[] = [
 
 // FREE AI ENGINE: NO API KEYS NEEDED
 const QUIZ_AI = {
-    generateSession: (count = 5) => {
+    generateSession: (count = 10) => {
         // Pool of potential questions (expanded for variety)
         const pool: QuizQuestion[] = [
             ...DEFAULT_QUESTIONS,
@@ -122,7 +122,7 @@ const QUIZ_AI = {
             }
         ];
 
-        // Shuffle and pick subset
+        // Shuffle and pick 10 subset
         const shuffled = [...pool].sort(() => 0.5 - Math.random());
         return shuffled.slice(0, count);
     }
@@ -136,16 +136,14 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
     const [quizStarted, setQuizStarted] = useState(false)
     const [questions, setQuestions] = useState<QuizQuestion[]>([])
 
-    // Initialize with random session when quiz starts
+    // Initialize with 10 questions when quiz starts
     useEffect(() => {
         if (quizStarted && questions.length === 0) {
-            setQuestions(QUIZ_AI.generateSession(5))
+            setQuestions(QUIZ_AI.generateSession(10))
         }
     }, [quizStarted, questions.length])
 
     const [isTransitioning, setIsTransitioning] = useState(false)
-
-
 
     // Reset transition state when question changes
     useEffect(() => {
@@ -213,9 +211,9 @@ export default function MohiniQuiz({ quizData }: { quizData?: string }) {
                 <div className="space-y-4">
                     <h2 className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter">
                         {renderEmojiText("Quiz About Mohini 😏💖")} <br />
-                        <span className="text-pink-500">(Roast Mode)</span>
+                        <span className="text-pink-500">(Master Edition)</span>
                     </h2>
-                    <p className="text-zinc-400 font-medium text-sm sm:text-base">Dekhte hain tum Mohini ko kitna jaante ho!</p>
+                    <p className="text-zinc-400 font-medium text-sm sm:text-base">10 Questions. Dekhte hain tum Mohini ko kitna jaante ho!</p>
                 </div>
                 <button
                     onClick={() => setQuizStarted(true)}

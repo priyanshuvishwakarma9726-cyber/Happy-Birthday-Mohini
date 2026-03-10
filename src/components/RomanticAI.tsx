@@ -46,43 +46,29 @@ export default function RomanticAI({ content }: { content?: any }) {
     const [output, setOutput] = useState('')
     const [isProcessing, setIsProcessing] = useState(false)
 
-    const romanticize = (inputText?: string) => {
+    const romanticize = async (inputText?: string) => {
         const targetText = inputText || text;
         if (!targetText) return;
 
-        setIsProcessing(true)
-        setTimeout(() => {
-            const inputLower = targetText.toLowerCase();
-
-            // Extract identified keys from input
-            const foundKeys = Object.keys(POETIC_ENGINE.vocab).filter(key =>
-                inputLower.includes(key)
-            );
-
-            // Select 3 unique poetic phrases based on found keys or defaults
-            const getPhrase = (index: number) => {
-                const key = foundKeys[index] || Object.keys(POETIC_ENGINE.vocab)[Math.floor(Math.random() * Object.keys(POETIC_ENGINE.vocab).length)];
-                const phrases = POETIC_ENGINE.vocab[key];
-                return phrases[Math.floor(Math.random() * phrases.length)];
-            };
-
-            const p1 = getPhrase(0);
-            const p2 = getPhrase(1);
-            const p3 = getPhrase(2);
-            const p4 = getPhrase(3);
-            const connector = POETIC_ENGINE.connectors[Math.floor(Math.random() * POETIC_ENGINE.connectors.length)];
-            const structure = POETIC_ENGINE.structures[Math.floor(Math.random() * POETIC_ENGINE.structures.length)];
-
-            let polished = structure
-                .replace('{connector}', connector)
-                .replace('{p1}', p1)
-                .replace('{p2}', p2)
-                .replace('{p3}', p3)
-                .replace('{p4}', p4);
-
-            setOutput(polished);
-            setIsProcessing(false)
-        }, 1500) // Fake AI delay
+        setIsProcessing(true);
+        try {
+            const res = await fetch('/api/ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: targetText })
+            });
+            const data = await res.json();
+            if (data.result) {
+                setOutput(data.result);
+            } else {
+                throw new Error("No result from AI");
+            }
+        } catch (err) {
+            console.error("Romanticize error:", err);
+            setOutput("In the quiet whispers of my soul, I want to say that I adore you with every fiber of my being. You are ethereal as a dream and I will love you through every heartbeat of time.");
+        } finally {
+            setIsProcessing(false);
+        }
     }
 
     // Voice Recognition (Browser API)

@@ -1,54 +1,57 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { renderEmojiText } from '@/lib/emoji-helper'
 import confetti from 'canvas-confetti'
 
 const DEFAULT_CAKE_WISHES = [
-    "May all your dreams come true, today and always. You deserve the world! 🌏💖"
+    "May all your dreams come true, today and always. You deserve the world! 🌏💖",
+    "Wishing you a year full of love, laughter, and everything you've ever wanted! ✨",
+    "You are the best thing that ever happened! Happy birthday! 💖",
+    "Happy Birthday Mohini! You're a law student now, but you'll always be my favorite princess. 👑",
+    "May this birthday be as sweet and amazing as you are. Love you! ❤️"
 ]
 
 export default function DigitalCake({ content }: { content?: any }) {
-    const wishes = (() => {
-        try {
-            if (!content?.cake_wishes) return DEFAULT_CAKE_WISHES;
-            const parsed = JSON.parse(content.cake_wishes);
-            return Array.isArray(parsed) ? (parsed.length > 0 ? parsed : DEFAULT_CAKE_WISHES) : [content.cake_wishes];
-        } catch (e) {
-            console.warn("DigitalCake: Failed to parse cake_wishes, using raw value as single wish.");
-            return content?.cake_wishes ? [content.cake_wishes] : DEFAULT_CAKE_WISHES;
-        }
-    })();
-
     const [currentWish, setCurrentWish] = useState("")
-
     const [candles, setCandles] = useState([true, true, true, true, true]) // 5 candles, true = lit
     const [wished, setWished] = useState(false)
 
+    // Load custom wishes safely
+    const cakeWishes = (function () {
+        if (!content?.cake_wishes) return DEFAULT_CAKE_WISHES;
+        if (Array.isArray(content.cake_wishes)) return content.cake_wishes;
+
+        try {
+            const parsed = JSON.parse(content.cake_wishes);
+            return Array.isArray(parsed) && parsed.length > 0 ? parsed : [String(content.cake_wishes)];
+        } catch (e) {
+            // If it's not valid JSON (like a plain string "Happy Bday"), use it as a single wish
+            return [String(content.cake_wishes)];
+        }
+    })();
+
     const blowCandle = (index: number) => {
         if (!candles[index]) return
-
         const newCandles = [...candles]
         newCandles[index] = false
         setCandles(newCandles)
-
-        // Play small puff sound if possible? Na, visual only.
     }
 
     useEffect(() => {
         if (candles.every(c => !c) && !wished) {
             setWished(true)
-            setCurrentWish(wishes[Math.floor(Math.random() * wishes.length)])
+            const randomWish = cakeWishes[Math.floor(Math.random() * cakeWishes.length)]
+            setCurrentWish(randomWish)
+
             confetti({
                 particleCount: 150,
                 spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#FFD700', '#FFA500', '#FF4500'] // Gold/Orange fire colors
+                colors: ['#FFD700', '#FFA500', '#FF4500']
             })
         }
-    }, [candles, wishes])
-
-
+    }, [candles, wished, cakeWishes])
 
     return (
         <div className="relative py-12 flex flex-col items-center justify-center">
@@ -90,17 +93,19 @@ export default function DigitalCake({ content }: { content?: any }) {
                 </div>
             </div>
 
-            {wished && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-12 text-center max-w-sm bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm"
-                >
-                    <p className="text-lg italic text-pink-200">
-                        "{renderEmojiText(currentWish)}"
-                    </p>
-                </motion.div>
-            )}
+            <AnimatePresence>
+                {wished && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-12 text-center max-w-sm bg-white/10 p-6 rounded-xl border border-white/20 backdrop-blur-sm"
+                    >
+                        <p className="text-lg italic text-pink-200">
+                            "{renderEmojiText(currentWish)}"
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     )
 }

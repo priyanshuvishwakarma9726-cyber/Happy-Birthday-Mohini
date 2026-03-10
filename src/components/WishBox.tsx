@@ -85,52 +85,71 @@ export default function WishBox() {
         if (!wish.trim()) return
 
         setLoading(true)
-        // Simulate 'AI' Processing
-        setTimeout(() => {
-            const autoReply = WISH_ENGINE.generateReply(wish);
+        try {
+            const res = await fetch('/api/wishbox', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: wish })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                setResult({
+                    message: data.data.message,
+                    autoReply: data.data.autoReply,
+                    createdAt: data.data.createdAt
+                })
+                setWish('')
+
+                // Confetti Burst
+                const duration = 3000;
+                const end = Date.now() + duration;
+
+                const frame = () => {
+                    confetti({
+                        particleCount: 2,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0, y: 0.5 },
+                        colors: ['#ec4899', '#ffffff'],
+                        shapes: ['heart'] as any,
+                        scalar: 2
+                    });
+                    confetti({
+                        particleCount: 2,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1, y: 0.5 },
+                        colors: ['#ec4899', '#ffffff'],
+                        shapes: ['heart'] as any,
+                        scalar: 2
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                };
+                frame();
+
+                // Smooth scroll to result
+                setTimeout(() => {
+                    resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                }, 100)
+            } else {
+                throw new Error("Failed to send wish");
+            }
+        } catch (err) {
+            console.error(err);
+            // Fallback
             setResult({
                 message: wish,
-                autoReply: autoReply,
+                autoReply: "Arre re! Universe thoda busy hai, par mere dil ne sun liya! Aapki har wish zarur puri hogi Mohini. ❤️✨",
                 createdAt: new Date().toLocaleTimeString()
             })
-            setWish('')
+        } finally {
             setLoading(false)
-
-            // 1. Confetti Burst
-            const duration = 3000;
-            const end = Date.now() + duration;
-
-            const frame = () => {
-                confetti({
-                    particleCount: 2,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0, y: 0.5 },
-                    colors: ['#ec4899', '#ffffff'],
-                    shapes: ['heart'] as any,
-                    scalar: 2
-                });
-                confetti({
-                    particleCount: 2,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1, y: 0.5 },
-                    colors: ['#ec4899', '#ffffff'],
-                    shapes: ['heart'] as any,
-                    scalar: 2
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            };
-            frame();
-
-            // Smooth scroll to result
-            setTimeout(() => {
-                resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            }, 100)
-        }, 2000)
+        }
     }
 
     return (

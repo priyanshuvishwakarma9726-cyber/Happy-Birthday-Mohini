@@ -232,15 +232,15 @@ export default function ARPhotoBooth({ onUploadSuccess }: { onUploadSuccess?: (n
                                 {/* CSS Overlays for Live Feed (More stable than canvas) */}
                                 {currentOverlay === 1 && (
                                     <div className="absolute inset-0 border-[15px] border-pink-500 pointer-events-none z-10 flex flex-col justify-between p-4">
-                                        <div className="text-pink-500 font-black text-center text-xl bg-white/10 backdrop-blur-sm p-2 rounded-lg">❤️ FOR MOHINI ❤️</div>
-                                        <div className="flex justify-between text-3xl"><span>❤️</span><span>❤️</span></div>
+                                        <div className="text-pink-500 font-black text-center text-xl bg-white/10 backdrop-blur-sm p-2 rounded-lg">{renderEmojiText("❤️ FOR MOHINI ❤️")}</div>
+                                        <div className="flex justify-between text-3xl"><span>{renderEmojiText("❤️")}</span><span>{renderEmojiText("❤️")}</span></div>
                                     </div>
                                 )}
                                 {currentOverlay === 2 && (
                                     <div className="absolute inset-0 bg-yellow-400/10 pointer-events-none z-10 flex flex-col justify-between p-10 text-5xl">
-                                        <div className="flex justify-between"><span>🎂</span><span>🎉</span></div>
+                                        <div className="flex justify-between"><span>{renderEmojiText("🎂")}</span><span>{renderEmojiText("🎉")}</span></div>
                                         <div className="text-yellow-400 font-black text-center text-2xl tracking-widest animate-pulse">PARTY TIME!</div>
-                                        <div className="flex justify-between"><span>✨</span><span>🎁</span></div>
+                                        <div className="flex justify-between"><span>{renderEmojiText("✨")}</span><span>{renderEmojiText("🎁")}</span></div>
                                     </div>
                                 )}
                                 {currentOverlay === 3 && (
@@ -312,7 +312,7 @@ export default function ARPhotoBooth({ onUploadSuccess }: { onUploadSuccess?: (n
                                 onClick={() => setCurrentOverlay(o.id)}
                                 className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${currentOverlay === o.id ? 'bg-pink-600 text-white shadow-lg' : 'bg-white/5 text-zinc-500 hover:text-white'}`}
                             >
-                                {o.icon} {o.name}
+                                {renderEmojiText(o.icon)} {o.name}
                             </button>
                         ))}
                     </div>

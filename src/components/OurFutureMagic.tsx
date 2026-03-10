@@ -41,24 +41,58 @@ export default function OurFutureMagic({ content }: { content?: any }) {
     const [currentGoal, setCurrentGoal] = useState<any>(null)
     const [isSpinning, setIsSpinning] = useState(false)
 
-    const revealDestiny = () => {
-        if (isSpinning) return
-        setIsSpinning(true)
-        setIndex(null)
+    const revealDestiny = async () => {
+        if (isSpinning) return;
+        setIsSpinning(true);
+        setIndex(null);
 
-        // Simulate spinning
-        setTimeout(() => {
-            const nextGoal = generateGoal();
+        try {
+            const prompt = "Generate a romantic future goal/dream for a couple. Format as a JSON object with 'title' (short, with emoji), 'desc' (romantic description in Hinglish, max 15 words) and 'icon' (a single emoji).";
+            const res = await fetch('/api/ai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, type: 'future' })
+            });
+            const data = await res.json();
+
+            if (!res.ok || !data.result) {
+                throw new Error(data.error || "No result from AI");
+            }
+
+            let nextGoal;
+            try {
+                // Try to parse the AI output if it's JSON-wrapped
+                const match = data.result.match(/\{.*\}/s);
+                nextGoal = match ? JSON.parse(match[0]) : JSON.parse(data.result);
+            } catch (pErr) {
+                console.error("AI Parse Error:", pErr);
+                // Fallback structured data if parsing fails
+                nextGoal = {
+                    title: "Forever Together ❤️",
+                    desc: "Walking through life holding your hand, forever and always.",
+                    icon: "❤️"
+                };
+            }
+
             setCurrentGoal(nextGoal);
-            setIndex(1); // Non-null value to trigger UI
-            setIsSpinning(false)
+            setIndex(1);
+        } catch (err) {
+            console.error("Destiny error:", err);
+            setCurrentGoal({
+                title: "Midnight Ice-Cream 🍦",
+                desc: "Uncountable midnight drives for your favorite treats in our dream car.",
+                icon: "🚗"
+            });
+            setIndex(1);
+        } finally {
+            setIsSpinning(false);
             confetti({
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.8 },
                 colors: ['#ec4899', '#a855f7', '#fb7185']
-            })
-        }, 1500)
+            });
+        }
     }
 
     return (
