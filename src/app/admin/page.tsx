@@ -103,12 +103,13 @@ export default function AdminPage() {
             await refreshContent()
 
             // 2. Fetch separate tables (memories, wishes, analytics, etc)
-            const [memRes, wishRes, statsRes, storyRes, propRes] = await Promise.all([
+            const [memRes, wishRes, statsRes, storyRes, propRes, wishboxRes] = await Promise.all([
                 fetch('/api/memories').then(r => r.json()),
                 fetch('/api/wishes?admin=true').then(r => r.json()),
                 fetch('/api/analytics').then(r => r.json()),
                 fetch('/api/love-story').then(r => r.json()),
-                fetch('/api/proposal').then(r => r.json())
+                fetch('/api/proposal').then(r => r.json()),
+                fetch('/api/wishbox').then(r => r.json())
             ])
 
             if (Array.isArray(memRes)) setMemories(memRes)
@@ -116,6 +117,7 @@ export default function AdminPage() {
             if (statsRes) setStats(statsRes)
             if (Array.isArray(storyRes)) setStoryCards(storyRes)
             if (propRes) setProposalAnswer(propRes)
+            if (Array.isArray(wishboxRes)) setWishboxWishes(wishboxRes)
         } catch (e) {
             console.error("Critical Load Failure:", e)
         }
@@ -471,6 +473,21 @@ export default function AdminPage() {
                                         <button onClick={async () => { await fetch('/api/wishes', { method: 'DELETE', body: JSON.stringify({ id: w.id }) }); setWishes(p => p.filter(x => x.id !== w.id)) }} className="absolute top-2 right-2 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></button>
                                         <p className="text-xs font-bold text-pink-400 mb-1">{w.name}</p>
                                         <p className="text-[11px] text-zinc-500 leading-tight">"{w.message}"</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Magic Wishes (WishBox) */}
+                        <section className="bg-zinc-900/30 rounded-3xl border border-white/5 overflow-hidden flex flex-col h-[400px]">
+                            <div className="p-4 bg-white/5 border-b border-indigo-500/20 flex justify-between items-center"><h3 className="font-bold text-xs uppercase tracking-widest text-indigo-400 flex items-center gap-2"><Sparkles className="w-4 h-4" /> Magic Wishes</h3><span className="text-[10px] text-indigo-500/50">{wishboxWishes.length}</span></div>
+                            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                                {wishboxWishes.map(w => (
+                                    <div key={w.id} className="p-4 bg-black/40 rounded-xl border border-indigo-500/20 relative group">
+                                        <button onClick={async () => { await fetch('/api/wishbox', { method: 'DELETE', body: JSON.stringify({ id: w.id }) }); setWishboxWishes(p => p.filter(x => x.id !== w.id)) }} className="absolute top-2 right-2 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></button>
+                                        <p className="text-sm font-bold text-white mb-2 italic">"{w.message}"</p>
+                                        <p className="text-[10px] text-indigo-400/80 font-mono">AutoReply: {w.auto_reply}</p>
+                                        <p className="text-[9px] text-zinc-600 mt-2">{new Date(w.created_at).toLocaleString()}</p>
                                     </div>
                                 ))}
                             </div>
