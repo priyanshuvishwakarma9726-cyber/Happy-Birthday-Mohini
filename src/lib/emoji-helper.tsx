@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react'
 
 // A comprehensive regex for modern emojis including sequences, modifiers, and variation selectors
-const EMOJI_REGEX = /((?:\p{Extended_Pictographic}(?:[\uFE0F\uFE0E]|\p{Emoji_Modifier})?(?:\u200D[\p{Extended_Pictographic}\p{Emoji_Presentation}](?:[\uFE0F\uFE0E]|\p{Emoji_Modifier})?)*)|(?:\p{Emoji_Presentation})|(?:\p{Emoji}\uFE0F)|(?:\u26A0\uFE0F)|(?:\u2728))/gu
+// Revised regex to be more aggressive in catching all types of emojis
+const EMOJI_REGEX = /([\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}\u{1F191}-\u{1F251}\u{1F004}\u{1F0CF}\u{1F170}-\u{1F171}\u{1F17E}-\u{1F17F}\u{1F18E}\u{3030}\u{2B50}\u{2B55}\u{2934}-\u{2935}\u{2B05}-\u{2B07}\u{2122}\u{2139}\u{24C2}\u{3297}\u{3299}\u{203C}\u{2049}\u{2194}-\u{2199}\u{21A9}-\u{21AA}\u{231A}-\u{231B}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{24C2}\u{25AA}-\u{25AB}\u{25B6}\u{25C0}\u{25FB}-\u{25FE}\u{2600}-\u{2604}\u{260E}\u{2611}\u{2614}-\u{2615}\u{2618}\u{261D}\u{2620}\u{2622}-\u{2623}\u{2626}\u{262A}\u{262E}-\u{262F}\u{2638}-\u{263A}]+)/gu
 
 /**
  * Replaces emojis in text with iOS-style images from emojicdn.elk.sh
