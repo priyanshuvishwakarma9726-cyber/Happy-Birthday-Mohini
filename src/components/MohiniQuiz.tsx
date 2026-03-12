@@ -71,11 +71,11 @@ const DEFAULT_QUESTIONS: QuizQuestion[] = [
         wrong: "Galat! Thoda wait karo, surprise aa raha 😌"
     },
     {
-        q: "Engagement se pehle hum kaha mile the?",
+        q: "Engagement ke baad hum kahan mile?",
         options: ["Mall", "Kulkula Dham", "Engagement function", "Online only 📱"],
         a: "Engagement function",
-        correct: "Correct! Shaadi vibes pehle hi shuru ho chuki thi 😏",
-        wrong: "Galat! Engagement ka scene yaad rakho bhai 😌"
+        correct: "Correct! Engagement ke baad wahi pehli mulaqat thhi! 😏",
+        wrong: "Galat! Yaadien thodi dhundhli hain kya? 😌"
     },
     {
         q: "Pehli baar date pe hum kahan gaye the?",
