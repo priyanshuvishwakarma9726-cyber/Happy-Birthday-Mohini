@@ -26,7 +26,7 @@ export default function BloomingRose({ content }: { content?: any }) {
     // Stage 2: Security Question
     const [inputText, setInputText] = useState("")
     const [inputError, setInputError] = useState("")
-    const requiredText = "Mai apne boyfriend ki sabse jyada sunti hu"
+    const requiredText = "Me Priyanshu ki har baat manungi Promise "
 
     // Stage 3: Fake Deletion
     const [terminalLines, setTerminalLines] = useState<string[]>([])
