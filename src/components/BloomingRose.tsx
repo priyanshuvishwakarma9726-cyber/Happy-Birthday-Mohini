@@ -232,15 +232,15 @@ export default function BloomingRose({ content }: { content?: any }) {
                             </div>
 
                             <div className="text-center w-full space-y-4">
-                                <h4 className="font-mono font-bold text-xl text-white select-none">{renderEmojiText("Face ID Authentication 👤🛡️")}</h4>
-                                <div className="w-full h-3 bg-zinc-900 rounded-full overflow-hidden shadow-inner border border-white/5">
-                                    <div className={`h-full transition-all duration-300 ${scanFailed ? 'bg-red-500 shadow-[0_0_10px_#ef4444]' : 'bg-blue-500 shadow-[0_0_10px_#3b82f6]'}`} style={{ width: `${scanProgress}%` }} />
+                                <h4 className="font-mono font-bold text-xl text-white select-none">{renderEmojiText("Face ID Authentication 👤 🛡️")}</h4>
+                                <div className="w-full h-2 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
+                                    <div className={`h-full transition-all duration-300 ${scanFailed ? 'bg-red-500' : 'bg-blue-500'}`} style={{ width: `${scanProgress}%` }} />
                                 </div>
-                                <div className={`font-mono text-sm h-12 flex flex-col justify-center ${scanFailed ? 'text-red-400 font-bold' : 'text-blue-400'}`}>
+                                <div className={`font-mono text-sm h-12 flex flex-col justify-center px-4 ${scanFailed ? 'text-red-400 font-bold' : 'text-blue-400'}`}>
                                     {scanFailed ? (
-                                        renderEmojiText("ERROR: Too much 'Nakhre' & 'Ego' detected. Identity match failed! 😤🚫💅")
+                                        renderEmojiText("ERROR: Too much 'Nakhre' & 'Ego' detected! 😤 🚫 💅")
                                     ) : (
-                                        renderEmojiText("Scanning for innocence... 🔍😇")
+                                        renderEmojiText("Scanning innocence... 🔍 😇")
                                     )}
                                 </div>
                             </div>

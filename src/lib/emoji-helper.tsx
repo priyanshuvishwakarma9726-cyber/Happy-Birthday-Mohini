@@ -31,8 +31,9 @@ export function renderEmojiText(text: any): ReactNode {
                 // Every odd index in the split result (when used with capturing group) is our match
                 if (i % 2 === 1) {
                     const match = part;
-                    // Skip purely numeric, spaces, or simple ASCII characters that might match \p{Emoji}
-                    if (/^[\d#*A-Za-z\s]+$/.test(match) || (match.length === 1 && match.charCodeAt(0) < 255)) {
+                    // Skip solo variation selectors, numeric characters, or very short ASCII
+                    // Added a check to skip matches shorter than 2 bytes if they are not common emojis.
+                    if (!match || match === '\uFE0F' || match === '\uFE0E' || /^[\d#*]+$/.test(match) || (match.length < 2 && !/[\u2600-\u26FF\u2700-\u27BF]/.test(match))) {
                         return match;
                     }
 
@@ -41,17 +42,19 @@ export function renderEmojiText(text: any): ReactNode {
                             key={i}
                             src={`https://emojicdn.elk.sh/${encodeURIComponent(match)}?style=apple`}
                             alt={match}
-                            className="emoji inline-block w-auto h-[1.2em] select-none pointer-events-none mx-[0.05em]"
+                            className="emoji inline-block w-auto h-[1.23em] select-none pointer-events-none mx-[0.05em]"
                             style={{
                                 display: 'inline-block',
                                 verticalAlign: 'middle',
                                 position: 'relative',
-                                top: '-0.05em'
+                                top: '-0.1em'
                             }}
                             loading="lazy"
                             onError={(e) => {
-                                // Fallback to showing nothing or the raw text if image fails
                                 (e.target as HTMLImageElement).style.display = 'none';
+                                // Show original text if image fails
+                                const span = (e.target as HTMLImageElement).parentElement?.querySelector(`span[data-emoji="${i}"]`);
+                                if (span) (span as HTMLElement).style.display = 'inline';
                             }}
                         />
                     );
