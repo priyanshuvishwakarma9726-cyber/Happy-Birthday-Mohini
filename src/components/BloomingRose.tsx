@@ -236,7 +236,7 @@ export default function BloomingRose({ content }: { content?: any }) {
                                 <div className="w-full h-2 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
                                     <div className={`h-full transition-all duration-300 ${scanFailed ? 'bg-red-500' : 'bg-blue-500'}`} style={{ width: `${scanProgress}%` }} />
                                 </div>
-                                <div className={`font-mono text-sm h-12 flex flex-col justify-center px-4 ${scanFailed ? 'text-red-400 font-bold' : 'text-blue-400'}`}>
+                                <div className={`font-mono text-sm h-12 flex flex-row flex-wrap items-center justify-center gap-1 px-4 ${scanFailed ? 'text-red-400 font-bold' : 'text-blue-400'}`}>
                                     {scanFailed ? (
                                         renderEmojiText("ERROR: Too much 'Nakhre' & 'Ego' detected! 😤 🚫 💅")
                                     ) : (
