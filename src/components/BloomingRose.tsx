@@ -95,15 +95,15 @@ export default function BloomingRose({ content }: { content?: any }) {
         setTerminalLines(["[SYSTEM] Connecting to Mohini's phone...", "[SYSTEM] Root access granted."])
         let step = 0
         const logs = [
-            "Scanning Myntra Wishlist... FAILED! Too much data.",
-            "Analyzing 'Nakhre' folder... WARNING: Extremely high levels.",
-            "Deleting boring Instagram Reels... 20%",
-            "Deleting Whatsapp chats (except mine)... 50%",
-            "Formatting useless gallery screenshots... 80%",
-            "Bypassing security... Done.",
-            "Sending money from her bank to boyfriend... Processing...",
-            "SUCCESS! Bank balance is now 0.",
-            "ERROR: Gift protocol corrupted. Attempting manual override..."
+            "Scanning Myntra Wishlist... 🛍️ FAILED! Too much data.",
+            "Analyzing 'Nakhre' folder... 💅 WARNING: Extremely high levels.",
+            "Deleting boring Instagram Reels... 🎬 20%",
+            "Deleting Whatsapp chats (except mine)... 💬 50%",
+            "Formatting useless gallery screenshots... 📸 80%",
+            "Bypassing security... 🛡️ Done.",
+            "Sending money from her bank to boyfriend... 💸 Processing...",
+            "SUCCESS! Bank balance is now 0. 🥳",
+            "ERROR: Gift protocol corrupted. ⚠️ Attempting manual override..."
         ]
 
         const interval = setInterval(() => {
@@ -232,15 +232,15 @@ export default function BloomingRose({ content }: { content?: any }) {
                             </div>
 
                             <div className="text-center w-full space-y-4">
-                                <h4 className="font-mono font-bold text-xl text-white">Face ID Authentication</h4>
-                                <div className="w-full h-2 bg-zinc-900 rounded-full overflow-hidden">
-                                    <div className={`h-full transition-all duration-300 ${scanFailed ? 'bg-red-500' : 'bg-blue-500'}`} style={{ width: `${scanProgress}%` }} />
+                                <h4 className="font-mono font-bold text-xl text-white">{renderEmojiText("Face ID Authentication 👤🛡️")}</h4>
+                                <div className="w-full h-3 bg-zinc-900 rounded-full overflow-hidden shadow-inner">
+                                    <div className={`h-full transition-all duration-300 ${scanFailed ? 'bg-red-500 shadow-[0_0_10px_#ef4444]' : 'bg-blue-500 shadow-[0_0_10px_#3b82f6]'}`} style={{ width: `${scanProgress}%` }} />
                                 </div>
                                 <p className={`font-mono text-sm h-12 flex flex-col justify-center ${scanFailed ? 'text-red-400 font-bold' : 'text-blue-400'}`}>
                                     {scanFailed ? (
-                                        renderEmojiText("ERROR: Too much 'Nakhre' & 'Ego' detected. Identity match failed! 😤")
+                                        renderEmojiText("ERROR: Too much 'Nakhre' & 'Ego' detected. Identity match failed! 😤🚫💅")
                                     ) : (
-                                        renderEmojiText("Scanning for innocence... 🔍")
+                                        renderEmojiText("Scanning for innocence... 🔍😇")
                                     )}
                                 </p>
                             </div>
@@ -304,10 +304,11 @@ export default function BloomingRose({ content }: { content?: any }) {
                                 </div>
                             </div>
 
-                            <div ref={terminalRef} className="p-4 h-[250px] overflow-y-auto space-y-2 text-xs text-red-400 md:text-sm scroll-smooth">
+                            <div ref={terminalRef} className="p-4 h-[250px] overflow-y-auto space-y-2 text-xs text-red-400 md:text-sm scroll-smooth bg-black/50">
                                 {terminalLines.map((line, idx) => (
                                     <div key={idx} className={(line || "").includes("ERROR") || (line || "").includes("WARNING") ? 'font-bold' : ''}>
-                                        <span className="text-green-500 mr-2">&gt;</span>{line}
+                                        <span className="text-green-500 mr-2 border-r border-green-500/20 pr-1">&gt;</span>
+                                        {renderEmojiText(line)}
                                     </div>
                                 ))}
                                 {!deletionComplete && (
