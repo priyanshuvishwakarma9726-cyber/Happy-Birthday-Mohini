@@ -551,9 +551,9 @@ export default function AdminPage() {
                                     {uploading ? 'Uploading...' : '+ Add Media'}
                                 </label>
                             </div>
-                            <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 sm:grid-cols-3 gap-3 custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 custom-scrollbar">
                                 {memories.map(m => (
-                                    <div key={m.id} className="relative aspect-square rounded-2xl overflow-hidden border border-white/10 bg-black group shadow-lg">
+                                    <div key={m.id} className="relative aspect-square sm:aspect-video lg:aspect-square rounded-[2rem] overflow-hidden border border-white/10 bg-black group shadow-2xl">
                                         {m.file_path ? (
                                             m.type === 'video' ? (
                                                 <video src={m.file_path} className="absolute inset-0 w-full h-full object-cover" />
@@ -561,34 +561,36 @@ export default function AdminPage() {
                                                 <img src={m.file_path} className="absolute inset-0 w-full h-full object-cover" />
                                             )
                                         ) : (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-zinc-800 text-zinc-600 text-[10px]">No Media</div>
+                                            <div className="absolute inset-0 flex items-center justify-center bg-zinc-800 text-zinc-600 text-xs">No Media</div>
                                         )}
                                         
-                                        {/* Hover Overlay */}
-                                        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-3 text-center space-y-2 z-10 backdrop-blur-sm">
-                                            <div className="w-full space-y-1">
-                                                <label className="text-[8px] uppercase font-black text-pink-500 block text-left px-1">Title</label>
+                                        {/* Hover/Active Overlay - Optimized for Touch & Mobile */}
+                                        <div className="absolute inset-0 bg-black/85 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-6 text-center space-y-4 z-10 backdrop-blur-md">
+                                            <div className="w-full space-y-2">
+                                                <label className="text-[10px] uppercase font-black text-pink-500 block text-left px-2 tracking-widest">Memory Title</label>
                                                 <input
-                                                    className="bg-zinc-900/80 text-white text-[11px] w-full border border-white/5 rounded-lg p-2 focus:border-pink-500 outline-none font-medium mb-1"
+                                                    className="bg-zinc-900 border border-white/10 text-white text-base w-full rounded-2xl p-4 focus:border-pink-500 outline-none font-bold"
                                                     value={m.title || ''}
-                                                    placeholder="Untitled"
+                                                    placeholder="Awesome Moment"
                                                     onChange={e => { const nm = memories.map(x => x.id === m.id ? { ...x, title: e.target.value } : x); setMemories(nm); }}
                                                     onBlur={async () => await fetch('/api/memories', { method: 'PUT', body: JSON.stringify({ ...m, action: 'update' }) })}
                                                 />
                                             </div>
-                                            <div className="w-full space-y-1">
-                                                <label className="text-[8px] uppercase font-black text-pink-500 block text-left px-1">Moment Description</label>
+                                            <div className="w-full space-y-2">
+                                                <label className="text-[10px] uppercase font-black text-pink-500 block text-left px-2 tracking-widest">The Story</label>
                                                 <textarea
-                                                    className="bg-zinc-900/80 text-white/90 text-[10px] w-full border border-white/5 rounded-lg p-2 focus:border-pink-500 outline-none resize-none h-20"
+                                                    className="bg-zinc-900 border border-white/10 text-white/90 text-sm w-full rounded-2xl p-4 focus:border-pink-500 outline-none resize-none h-32"
                                                     value={m.description || ''}
-                                                    placeholder="Describe this moment..."
+                                                    placeholder="Tell the story of this photo..."
                                                     onChange={e => { const nm = memories.map(x => x.id === m.id ? { ...x, description: e.target.value } : x); setMemories(nm); }}
                                                     onBlur={async () => await fetch('/api/memories', { method: 'PUT', body: JSON.stringify({ ...m, action: 'update' }) })}
                                                 />
                                             </div>
-                                            <button onClick={async (e) => { e.stopPropagation(); if (confirm('Delete this memory?')) { await fetch('/api/memories', { method: 'DELETE', body: JSON.stringify({ id: m.id }) }); setMemories(prev => prev.filter(x => x.id !== m.id)) } }} className="bg-red-500/80 hover:bg-red-600 text-white p-2 rounded-full transition-colors shadow-lg active:scale-90">
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
+                                            <div className="flex w-full gap-3 pt-2">
+                                                <button onClick={async (e) => { e.stopPropagation(); if (confirm('Delete this memory?')) { await fetch('/api/memories', { method: 'DELETE', body: JSON.stringify({ id: m.id }) }); setMemories(prev => prev.filter(x => x.id !== m.id)) } }} className="flex-1 bg-red-500 hover:bg-red-600 text-white py-4 rounded-2xl transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 font-bold uppercase text-xs">
+                                                    <Trash2 className="w-5 h-5" /> Delete Memory
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
