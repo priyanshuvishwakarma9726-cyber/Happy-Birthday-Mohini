@@ -26,7 +26,7 @@ export default function BloomingRose({ content }: { content?: any }) {
     // Stage 2: Security Question
     const [inputText, setInputText] = useState("")
     const [inputError, setInputError] = useState("")
-    const requiredText = "Me Priyanshu ki har baat manungi Promise "
+    const requiredText = "Me Priyanshu ki har baat manungi Promise"
 
     // Stage 3: Fake Deletion
     const [terminalLines, setTerminalLines] = useState<string[]>([])
@@ -80,7 +80,11 @@ export default function BloomingRose({ content }: { content?: any }) {
     // === STAGE 2 LOGIC ===
     const checkSecurity = (e: React.FormEvent) => {
         e.preventDefault()
-        if (inputText.toLowerCase().trim() === requiredText.toLowerCase()) {
+        
+        // Normalize: Lowercase, trim, and replace multiple spaces with one
+        const normalize = (str: string) => str.toLowerCase().trim().replace(/\s+/g, ' ');
+        
+        if (normalize(inputText) === normalize(requiredText)) {
             setStage(3)
             startFakeDeletion()
         } else {
