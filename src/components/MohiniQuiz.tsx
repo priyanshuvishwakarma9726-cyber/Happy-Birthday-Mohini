@@ -93,11 +93,11 @@ const QUIZ_AI = {
         const pool: QuizQuestion[] = [
             ...DEFAULT_QUESTIONS,
             {
-                q: "Mohini ka favorite actor kaun hai?",
-                options: ["Ranbir Kapoor", "Kartik Aaryan", "Shah Rukh Khan", "Sab ke sab fav hain 💀"],
-                a: "Sab ke sab fav hain 💀",
-                correct: "Sahi pakde hain! Inka choices switch hota rehta hai 😌",
-                wrong: "Galat! Inka mood swings actors par bhi apply hote hain 😏"
+                q: "Mohini ka favorite actor/hero kaun hai?",
+                options: ["Ranbir Kapoor", "Kartik Aaryan", "Shah Rukh Khan", "Sirf Priyanshu 😎❤️"],
+                a: "Sirf Priyanshu 😎❤️",
+                correct: "Bilkul sahi! Hero toh ek hi hai—Priyanshu! 👑💖",
+                wrong: "Galat! Actor koi bhi ho, hero toh sirf Priyanshu hi rahega! 😏"
             },
             {
                 q: "Agar Mohini gussa ho jaye toh kya dena chahiye?",
