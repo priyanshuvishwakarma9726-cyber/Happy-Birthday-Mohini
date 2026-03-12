@@ -49,6 +49,10 @@ export function renderEmojiText(text: any): ReactNode {
                                 top: '-0.05em'
                             }}
                             loading="lazy"
+                            onError={(e) => {
+                                // Fallback to showing nothing or the raw text if image fails
+                                (e.target as HTMLImageElement).style.display = 'none';
+                            }}
                         />
                     );
                 }
