@@ -551,44 +551,60 @@ export default function AdminPage() {
                                     {uploading ? 'Uploading...' : '+ Add Media'}
                                 </label>
                             </div>
-                            <div className="flex-1 overflow-y-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar">
                                 {memories.map(m => (
-                                    <div key={m.id} className="relative aspect-square sm:aspect-video lg:aspect-square rounded-[2rem] overflow-hidden border border-white/10 bg-black group shadow-2xl">
-                                        {m.file_path ? (
-                                            m.type === 'video' ? (
-                                                <video src={m.file_path} className="absolute inset-0 w-full h-full object-cover" />
+                                    <div key={m.id} className="relative w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-zinc-900 shadow-2xl flex flex-col">
+                                        {/* Image/Video Container with fixed aspect ratio */}
+                                        <div className="relative w-full aspect-[4/3] bg-black overflow-hidden border-b border-white/5">
+                                            {m.file_path ? (
+                                                m.type === 'video' ? (
+                                                    <video src={m.file_path} className="absolute inset-0 w-full h-full object-cover" />
+                                                ) : (
+                                                    <img src={m.file_path} className="absolute inset-0 w-full h-full object-cover" />
+                                                )
                                             ) : (
-                                                <img src={m.file_path} className="absolute inset-0 w-full h-full object-cover" />
-                                            )
-                                        ) : (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-zinc-800 text-zinc-600 text-xs">No Media</div>
-                                        )}
+                                                <div className="absolute inset-0 flex items-center justify-center text-zinc-600 text-xs">No Media</div>
+                                            )}
+                                        </div>
                                         
-                                        {/* Hover/Active Overlay - Optimized for Touch & Mobile */}
-                                        <div className="absolute inset-0 bg-black/85 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-6 text-center space-y-4 z-10 backdrop-blur-md">
-                                            <div className="w-full space-y-2">
-                                                <label className="text-[10px] uppercase font-black text-pink-500 block text-left px-2 tracking-widest">Memory Title</label>
+                                        {/* Editing Controls - Now Always Visible for better UX */}
+                                        <div className="p-6 space-y-4 bg-zinc-900/50">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] uppercase font-black text-pink-500 flex items-center gap-2 px-1 tracking-[0.2em]">
+                                                    <Sparkles className="w-3 h-3" /> Memory Title
+                                                </label>
                                                 <input
-                                                    className="bg-zinc-900 border border-white/10 text-white text-base w-full rounded-2xl p-4 focus:border-pink-500 outline-none font-bold"
+                                                    className="bg-black/40 border border-white/10 text-white text-base w-full rounded-2xl p-4 focus:border-pink-500 focus:ring-1 focus:ring-pink-500/30 outline-none font-bold transition-all"
                                                     value={m.title || ''}
-                                                    placeholder="Awesome Moment"
+                                                    placeholder="e.g. Our First Date"
                                                     onChange={e => { const nm = memories.map(x => x.id === m.id ? { ...x, title: e.target.value } : x); setMemories(nm); }}
                                                     onBlur={async () => await fetch('/api/memories', { method: 'PUT', body: JSON.stringify({ ...m, action: 'update' }) })}
                                                 />
                                             </div>
-                                            <div className="w-full space-y-2">
-                                                <label className="text-[10px] uppercase font-black text-pink-500 block text-left px-2 tracking-widest">The Story</label>
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] uppercase font-black text-pink-500 flex items-center gap-2 px-1 tracking-[0.2em]">
+                                                    <PenTool className="w-3 h-3" /> The Story
+                                                </label>
                                                 <textarea
-                                                    className="bg-zinc-900 border border-white/10 text-white/90 text-sm w-full rounded-2xl p-4 focus:border-pink-500 outline-none resize-none h-32"
+                                                    className="bg-black/40 border border-white/10 text-white/90 text-sm w-full rounded-2xl p-4 focus:border-pink-500 focus:ring-1 focus:ring-pink-500/30 outline-none resize-none h-28 transition-all"
                                                     value={m.description || ''}
-                                                    placeholder="Tell the story of this photo..."
+                                                    placeholder="Describe this beautiful moment..."
                                                     onChange={e => { const nm = memories.map(x => x.id === m.id ? { ...x, description: e.target.value } : x); setMemories(nm); }}
                                                     onBlur={async () => await fetch('/api/memories', { method: 'PUT', body: JSON.stringify({ ...m, action: 'update' }) })}
                                                 />
                                             </div>
-                                            <div className="flex w-full gap-3 pt-2">
-                                                <button onClick={async (e) => { e.stopPropagation(); if (confirm('Delete this memory?')) { await fetch('/api/memories', { method: 'DELETE', body: JSON.stringify({ id: m.id }) }); setMemories(prev => prev.filter(x => x.id !== m.id)) } }} className="flex-1 bg-red-500 hover:bg-red-600 text-white py-4 rounded-2xl transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 font-bold uppercase text-xs">
-                                                    <Trash2 className="w-5 h-5" /> Delete Memory
+                                            <div className="pt-2">
+                                                <button 
+                                                    onClick={async (e) => { 
+                                                        e.stopPropagation(); 
+                                                        if (confirm('Delete this memory?')) { 
+                                                            await fetch('/api/memories', { method: 'DELETE', body: JSON.stringify({ id: m.id }) }); 
+                                                            setMemories(prev => prev.filter(x => x.id !== m.id)) 
+                                                        } 
+                                                    }} 
+                                                    className="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white py-4 rounded-2xl transition-all border border-red-500/20 flex items-center justify-center gap-2 font-black uppercase text-xs tracking-widest"
+                                                >
+                                                    <Trash2 className="w-4 h-4" /> Delete Memory
                                                 </button>
                                             </div>
                                         </div>
