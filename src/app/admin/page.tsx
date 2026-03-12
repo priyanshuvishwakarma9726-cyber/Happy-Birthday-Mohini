@@ -565,24 +565,30 @@ export default function AdminPage() {
                                         )}
                                         
                                         {/* Hover Overlay */}
-                                        <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-4 text-center space-y-3 z-10 backdrop-blur-[2px]">
-                                            <input
-                                                className="bg-black/50 text-white text-[10px] text-center w-full border border-white/10 rounded-lg p-1.5 focus:border-pink-500 outline-none font-bold"
-                                                value={m.title || ''}
-                                                placeholder="Title"
-                                                onChange={e => { const nm = memories.map(x => x.id === m.id ? { ...x, title: e.target.value } : x); setMemories(nm); }}
-                                                onBlur={async () => await fetch('/api/memories', { method: 'PUT', body: JSON.stringify({ ...m, action: 'update' }) })}
-                                            />
-                                            <textarea
-                                                className="bg-black/50 text-white/70 text-[9px] text-center w-full border border-white/10 rounded-lg p-1.5 focus:border-pink-500 outline-none resize-none h-14"
-                                                value={m.description || ''}
-                                                placeholder="Description..."
-                                                onChange={e => { const nm = memories.map(x => x.id === m.id ? { ...x, description: e.target.value } : x); setMemories(nm); }}
-                                                onBlur={async () => await fetch('/api/memories', { method: 'PUT', body: JSON.stringify({ ...m, action: 'update' }) })}
-                                            />
-                                            <div className="flex gap-2">
-                                                <button onClick={async () => { if (confirm('Delete this memory?')) { await fetch('/api/memories', { method: 'DELETE', body: JSON.stringify({ id: m.id }) }); setMemories(prev => prev.filter(x => x.id !== m.id)) } }} className="bg-red-500 text-white p-2 rounded-xl hover:bg-red-600 transition-colors shadow-lg"><Trash2 className="w-4 h-4" /></button>
+                                        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-3 text-center space-y-2 z-10 backdrop-blur-sm">
+                                            <div className="w-full space-y-1">
+                                                <label className="text-[8px] uppercase font-black text-pink-500 block text-left px-1">Title</label>
+                                                <input
+                                                    className="bg-zinc-900/80 text-white text-[11px] w-full border border-white/5 rounded-lg p-2 focus:border-pink-500 outline-none font-medium mb-1"
+                                                    value={m.title || ''}
+                                                    placeholder="Untitled"
+                                                    onChange={e => { const nm = memories.map(x => x.id === m.id ? { ...x, title: e.target.value } : x); setMemories(nm); }}
+                                                    onBlur={async () => await fetch('/api/memories', { method: 'PUT', body: JSON.stringify({ ...m, action: 'update' }) })}
+                                                />
                                             </div>
+                                            <div className="w-full space-y-1">
+                                                <label className="text-[8px] uppercase font-black text-pink-500 block text-left px-1">Moment Description</label>
+                                                <textarea
+                                                    className="bg-zinc-900/80 text-white/90 text-[10px] w-full border border-white/5 rounded-lg p-2 focus:border-pink-500 outline-none resize-none h-20"
+                                                    value={m.description || ''}
+                                                    placeholder="Describe this moment..."
+                                                    onChange={e => { const nm = memories.map(x => x.id === m.id ? { ...x, description: e.target.value } : x); setMemories(nm); }}
+                                                    onBlur={async () => await fetch('/api/memories', { method: 'PUT', body: JSON.stringify({ ...m, action: 'update' }) })}
+                                                />
+                                            </div>
+                                            <button onClick={async (e) => { e.stopPropagation(); if (confirm('Delete this memory?')) { await fetch('/api/memories', { method: 'DELETE', body: JSON.stringify({ id: m.id }) }); setMemories(prev => prev.filter(x => x.id !== m.id)) } }} className="bg-red-500/80 hover:bg-red-600 text-white p-2 rounded-full transition-colors shadow-lg active:scale-90">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
