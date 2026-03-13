@@ -183,8 +183,8 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
     }
 
     // Coordination for Background Music
-    const handleMediaPlay = (playing: boolean) => {
-        setMusicPaused(playing)
+    const handleMediaPlay = (isMediaPlaying: boolean) => {
+        setMusicPaused(isMediaPlaying)
     }
     // ... (rest of state)
 

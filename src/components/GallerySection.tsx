@@ -40,7 +40,7 @@ export default function GallerySection({ items, title }: { items: GalleryItem[],
                                         loop
                                         playsInline
                                         controls={false}
-                                        preload="auto"
+                                        preload="metadata"
                                         onError={(e) => {
                                             const video = e.target as HTMLVideoElement;
                                             const container = video.parentElement;

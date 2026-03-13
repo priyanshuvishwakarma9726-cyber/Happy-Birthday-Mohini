@@ -89,7 +89,7 @@ export function VoiceMessage({ url, onPlayChange }: { url: string, onPlayChange?
                     className="absolute top-0 left-0 bottom-0 bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-100 ease-linear"
                 />
             </div>
-            <audio key={url} ref={audioRef} src={url} preload="auto" />
+            <audio key={url} ref={audioRef} src={url} preload="metadata" />
             <span className="text-xs text-zinc-500 font-mono shrink-0">Voice Note 🎙️</span>
         </div>
     )
@@ -97,7 +97,7 @@ export function VoiceMessage({ url, onPlayChange }: { url: string, onPlayChange?
 
 export function VideoPlayer({ url, play, onPlayChange }: { url: string, play: boolean, onPlayChange?: (playing: boolean) => void }) {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [muted, setMuted] = useState(false); // Unmuted by default if overlay logic allows
+    const [muted, setMuted] = useState(true); // Muted by default as per user request
 
     useEffect(() => {
         if (play && videoRef.current) {
@@ -141,7 +141,7 @@ export function VideoPlayer({ url, play, onPlayChange }: { url: string, play: bo
                 playsInline
                 controls={true}
                 muted={muted}
-                preload="auto"
+                preload="metadata"
                 onPlay={() => onPlayChange?.(true)}
                 onPause={() => onPlayChange?.(false)}
             />
