@@ -233,9 +233,6 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                 <FullScreenSparkles theme={currentTheme} />
 
                 <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={playing ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-                    transition={{ duration: 1.2, ease: "easeOut" }}
                     className="text-center z-10 p-4 relative w-full"
                 >
                     <TimeGreeting name={content.recipient_name?.split(' ')[0] || "Mohini"} />
@@ -250,36 +247,28 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                         <TypewriterText text={content.hero_title || "Happy Birthday Mohini ❤️"} speed={150} />
                     </h1>
 
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={playing ? { opacity: 1 } : { opacity: 0 }}
-                        transition={{ delay: 1, duration: 1 }}
-                        className="text-base md:text-2xl text-zinc-400 mt-4 max-w-xl mx-auto leading-relaxed px-4 italic"
-                    >
+                    <p className="text-base md:text-2xl text-zinc-400 mt-4 max-w-xl mx-auto leading-relaxed px-4 italic">
                         {renderEmojiText(content.hero_subtitle || "Ye website sirf tumhare liye ❤️")}
-                    </motion.p>
+                    </p>
                 </motion.div>
 
 
 
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={playing ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: 2, duration: 1 }}
+                <div
                     className="absolute bottom-10 animate-bounce cursor-pointer z-50 text-white"
                     onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
                 >
                     <p className="text-zinc-500 text-sm">{renderEmojiText(content.scroll_karo_text || "Scroll Karo 👇")}</p>
-                </motion.div>
+                </div>
             </section>
 
 
             {/* MINI GAMES ARCADE */}
             {
                 playing && flags.show_games && (
-                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }}>
+                    <div>
                         <MiniGamesSection gallery={localGallery} content={content} flags={flags} />
-                    </motion.div>
+                    </div>
                 )
             }
 
@@ -292,16 +281,16 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                             <div className="max-w-7xl mx-auto space-y-20">
                                 {/* Row 1: Rose & AR */}
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center overflow-hidden">
-                                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }} className="w-full">
+                                    <div className="w-full">
                                         <BloomingRose content={content} />
-                                    </motion.div>
-                                    <motion.div initial={{ opacity: 0, y: -50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8, delay: 0.2 }} className="space-y-12 w-full">
+                                    </div>
+                                    <div className="space-y-12 w-full">
                                         <RomanticAI content={content} /><OurFutureMagic content={content} />
-                                    </motion.div>
+                                    </div>
                                 </div>
 
                                 {/* Row 2: Digital Cake & Scratch Card */}
-                                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }} className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-zinc-900/40 p-6 sm:p-12 rounded-[3.5rem] border border-white/5">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-zinc-900/40 p-6 sm:p-12 rounded-[3.5rem] border border-white/5">
                                     <div className="text-center space-y-4 w-full h-full flex flex-col items-center justify-center">
                                         <DigitalCake content={content} />
                                     </div>
@@ -317,7 +306,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                                         </div>
                                         <p className="text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-[0.2em]">{renderEmojiText(content.scratch_subtext_1 || "Scratch to reveal your gift! 🎁")}</p>
                                     </div>
-                                </motion.div>
+                                </div>
                             </div>
                         </section>
 
@@ -329,10 +318,10 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
             {/* BIRTHDAY WISH BOX */}
             {
                 playing && flags.show_wishes && (
-                    <motion.div initial={{ opacity: 0, y: -50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }}>
+                    <div>
                         <WishBox />
                         <SectionDivider />
-                    </motion.div>
+                    </div>
                 )
             }
 
@@ -343,16 +332,16 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                         <section className="py-20 px-4 bg-zinc-950/50 relative">
                             <div className="max-w-4xl mx-auto space-y-12">
                                 {content.video_url && (
-                                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }}>
+                                    <div>
                                         <h2 className="text-3xl font-bold text-center mb-8 text-white">{renderEmojiText(content.video_title || content.media_title || "Our Memories 🎥")}</h2>
                                         <VideoPlayer url={content.video_url} play={playing} onPlayChange={handleMediaPlay} />
-                                    </motion.div>
+                                    </div>
                                 )}
                                 {content.voice_url && (
-                                    <motion.div initial={{ opacity: 0, y: -50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} className="pt-8 text-center">
+                                    <div className="pt-8 text-center">
                                         <h3 className="text-xl text-zinc-400 mb-4 flex items-center justify-center gap-2"><Music className="w-5 h-5" /> {renderEmojiText(content.audio_title || "Listen to this... 🎧")}</h3>
                                         <VoiceMessage url={content.voice_url} onPlayChange={handleMediaPlay} />
-                                    </motion.div>
+                                    </div>
                                 )}
                             </div>
                         </section>
@@ -364,22 +353,22 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
             {/* GALLERY - MOVED BELOW MEDIA */}
             {
                 playing && flags.show_gallery && (
-                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }}>
+                    <div>
                         <GallerySection items={localGallery} title={content.gallery_title} />
-                    </motion.div>
+                    </div>
                 )
             }
 
             {/* LOVE LETTER - MOVED BELOW MEDIA */}
             {
                 playing && flags.show_letter && content.long_letter_body && (
-                    <motion.div initial={{ opacity: 0, y: -50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }}>
+                    <div>
                         <LoveLetter
                             title={content.long_letter_title || "My Heart's Letter"}
                             body={content.long_letter_body}
                             gallery={localGallery.filter(i => i.type === 'image' || (i.type as string) === 'photo').slice(0, 4)}
                         />
-                    </motion.div>
+                    </div>
                 )
             }
 
@@ -395,7 +384,7 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
             {/* CARD STUDIO */}
             {
                 playing && flags.show_wishes && (
-                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }}>
+                    <div>
                         <CardStudio
                             recipientName={content.recipient_name || content.hero_title?.split('\n')[1]?.replace('❤️', '').trim() || "Mohini"}
                             letterBody={content.card_message || content.long_letter_body || "Happy Birthday!"}
@@ -403,28 +392,28 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                             title={content.gift_shop_title}
                             subtitle={content.gift_shop_subtitle}
                         />
-                    </motion.div>
+                    </div>
                 )
             }
 
             {/* GUEST WISHES */}
             {flags.show_wishes && (
-                <motion.div initial={{ opacity: 0, y: -50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }}>
+                <div>
                     <GuestWishes title={content.wishes_title} />
-                </motion.div>
+                </div>
             )}
 
             {/* LOVE TIMELINE */}
             {playing && (
-                <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }}>
+                <div>
                     <LoveTimeline />
-                </motion.div>
+                </div>
             )}
 
             {/* MESSAGE */}
             <section className="min-h-[60vh] flex items-center justify-center py-20 px-6 bg-zinc-950 relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-pink-900/20 via-transparent to-transparent opacity-50" />
-                <motion.div initial={{ opacity: 0, y: -50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }} className="max-w-3xl text-center space-y-8 z-10">
+                <div className="max-w-3xl text-center space-y-8 z-10">
                     <Heart className="w-16 h-16 text-pink-500 mx-auto fill-current animate-pulse opacity-80 filter drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]" />
                     <h2 className="text-3xl md:text-6xl font-black text-white tracking-tight">{renderEmojiText(content.message_title || "Ek Chhota Sa Message 💌")}</h2>
                     <div className="relative p-8 md:p-12 bg-zinc-900/50 backdrop-blur-xl rounded-3xl border border-white/5 shadow-2xl">
@@ -433,12 +422,12 @@ export default function HomeClient({ content, gallery, playlist, skipIntro = fal
                         </div>
                         <p className="text-4xl text-pink-400 mt-12 transform -rotate-2 inline-block drop-shadow-lg">- {renderEmojiText(content.message_sender || "YOUR LOVE")}</p>
                     </div>
-                </motion.div>
+                </div>
             </section>
 
-            <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 0.8 }}>
+            <div>
                 <CinematicEnd name={content.recipient_name || "Mohini"} />
-            </motion.div>
+            </div>
 
             {/* FOOTER & SECRET VAULT TRIGGER */}
             <motion.footer initial={{ opacity: 0, y: -50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.1 }} transition={{ duration: 1 }} className="py-12 text-center border-t border-zinc-900 mt-20 bg-black relative">

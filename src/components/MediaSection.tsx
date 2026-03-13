@@ -89,7 +89,7 @@ export function VoiceMessage({ url, onPlayChange }: { url: string, onPlayChange?
                     className="absolute top-0 left-0 bottom-0 bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-100 ease-linear"
                 />
             </div>
-            <audio key={url} ref={audioRef} src={url} preload="metadata" />
+            <audio key={url} ref={audioRef} src={url} preload="auto" />
             <span className="text-xs text-zinc-500 font-mono shrink-0">Voice Note 🎙️</span>
         </div>
     )
@@ -141,6 +141,7 @@ export function VideoPlayer({ url, play, onPlayChange }: { url: string, play: bo
                 playsInline
                 controls={true}
                 muted={muted}
+                preload="auto"
                 onPlay={() => onPlayChange?.(true)}
                 onPause={() => onPlayChange?.(false)}
             />
